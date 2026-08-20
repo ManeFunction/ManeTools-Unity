@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
+
+## [2.0.0-preview.1] - 2026-08-20
+
+Initial release of the extracted Unity codebase and Editor tools. Were moved and refactored out of the legacy Unity-coupled module. Versioning starts at 2.0.0 to mark that split; this is not a new project, it's just a fresh start.
+
+Below, you can find a list of changes, comparing with legacy ManeTools.
+
+### Added
+- 
+
+### Changed
+- Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
+- Reorganized extension classes for more clarity.
+- All custom Editor UI now uses `UI Toolkit` instead of legacy `IMGUI`.

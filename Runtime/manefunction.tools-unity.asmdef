@@ -1,0 +1,16 @@
+{
+    "name": "manefunction.tools-unity",
+    "rootNamespace": "Mane.Unity",
+    "references": [
+        "GUID:fa26e62171c924223971b71f53471f8a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

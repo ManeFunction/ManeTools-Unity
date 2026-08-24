@@ -12,9 +12,10 @@ Initial release of the extracted Unity codebase and Editor tools. Were moved and
 Below, you can find a list of changes, comparing with legacy ManeTools.
 
 ### Added
-- 
+- Added Mane Tools editor scene view overlay to keep all the editor features in one place.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
 - Reorganized extension classes for more clarity.
 - All custom Editor UI now uses `UI Toolkit` instead of legacy `IMGUI`.
+- Childen Transform Freezer is not a component anymore, now it's an editor toggle within new Mane Tools overlay panel.

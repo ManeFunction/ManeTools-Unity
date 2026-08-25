@@ -18,4 +18,6 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
 - Reorganized extension classes for more clarity.
 - All custom Editor UI now uses `UI Toolkit` instead of legacy `IMGUI`.
+- Project has 2 different singletons now: `ManeSingleton` and `UnitySingleton` - first one is non-dependent on Unity, and the 2nd one is an Unity component.
 - Childen Transform Freezer is not a component anymore, now it's an editor toggle within new Mane Tools overlay panel.
+- MainThreadDispatcher is a singleton now.

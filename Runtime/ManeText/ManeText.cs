@@ -7,7 +7,7 @@ namespace Mane.Unity.TextMesh
     [ExecuteInEditMode]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
-    [AddComponentMenu("Mane Tools/Mane Text")]
+    [AddComponentMenu("Mane Tools/Components/Mane Text")]
     public class ManeText : MonoBehaviour
     {
         private static readonly int AlphaColor = Shader.PropertyToID("_AlphaColor");

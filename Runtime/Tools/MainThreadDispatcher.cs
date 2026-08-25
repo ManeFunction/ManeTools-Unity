@@ -9,6 +9,7 @@ namespace Mane.Unity
     /// Access <see cref="UnitySingleton{T}.Instance"/> once from the main thread
     /// (or place the component in a scene) before calling <see cref="RunOnMainThread"/>.
     /// </summary>
+    [AddComponentMenu("Mane Tools/Singletons/Main Thread Dispatcher")]
     public sealed class MainThreadDispatcher : UnitySingleton<MainThreadDispatcher>
     {
         private readonly Queue<Action> _actions = new();

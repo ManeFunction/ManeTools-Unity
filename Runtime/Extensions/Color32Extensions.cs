@@ -24,32 +24,32 @@ namespace Mane.Unity
         public static string ToHex(this Color32 c) => 
             $"#{c.r:X2}{c.g:X2}{c.b:X2}{c.a:X2}";
 
-        public static float GetBrightness(this Color32 color)
+        public static float GetHSL_Lightness(this Color32 color)
         {
             Color c = color;
             
-            return c.GetBrightness();
+            return c.GetHSL_Lightness();
         }
 
-        public static float GetHue(this Color32 color)
+        public static float GetHSL_Hue(this Color32 color)
         {
             Color c = color;
             
-            return c.GetHue();
+            return c.GetHSL_Hue();
         }
 
-        public static float GetSaturation(this Color32 color)
+        public static float GetHSL_Saturation(this Color32 color)
         {
             Color c = color;
             
-            return c.GetSaturation();
+            return c.GetHSL_Saturation();
         }
 
-        public static float GetLight(this Color32 color)
+        public static float GetLuma(this Color32 color)
         {
             Color c = color;
             
-            return c.GetLight();
+            return c.GetLuma();
         }
 
         /// <summary>

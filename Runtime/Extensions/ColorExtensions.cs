@@ -5,7 +5,7 @@ namespace Mane.Unity
 {
     public static class ColorExtensions
     {
-        public static float GetBrightness(this Color color)
+        public static float GetHSL_Lightness(this Color color)
         {
             float r = color.r;
             float g = color.g;
@@ -21,11 +21,11 @@ namespace Mane.Unity
             return (l + m) * 0.5f;
         }
 
-        public static int GetHue(this Color color)
+        public static float GetHSL_Hue(this Color color)
         {
-            float r = color.r / 255f;
-            float g = color.g / 255f;
-            float b = color.b / 255f;
+            float r = color.r;
+            float g = color.g;
+            float b = color.b;
             
             float max = Mathf.Max(r, Mathf.Max(g, b));
             float min = Mathf.Min(r, Mathf.Min(g, b));
@@ -42,16 +42,16 @@ namespace Mane.Unity
                 else
                     hue = 4f + (r - g) / delta;
 
-                hue *= 60f;
+                hue /= 6f;
 
                 if (hue < 0f)
-                    hue += 360f;
+                    hue += 1f;
             }
 
-            return Mathf.RoundToInt(hue);
+            return hue;
         }
 
-        public static float GetSaturation(this Color color)
+        public static float GetHSL_Saturation(this Color color)
         {
             float result;
 
@@ -80,7 +80,7 @@ namespace Mane.Unity
             return result;
         }
 
-        public static float GetLight(this Color color) => color.r * .2f + color.g * .7f + color.b * .1f;
+        public static float GetLuma(this Color color) => color.r * .2f + color.g * .7f + color.b * .1f;
 
         /// <summary>
         /// Shift RGB color channels

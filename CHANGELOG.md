@@ -24,10 +24,11 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Childen Transform Freezer is not a component anymore, now it's an editor toggle within new Mane Tools overlay panel.
 - `PositionFollower` now has 2 different implementations.
 - MainThreadDispatcher is a singleton now.
-- All `Mane` menu items that opens different windows are now under `Window -> Mane`.
+- All `Mane` menu items that opens different windows are now under `Window -> Mane Tools`.
 - Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system).
 - Most of the custom hotkeys related menues (screenshoting, enabling / disabling GO, console clearing, ect.) are under `Edit` menu now.
-- Enable / Disable GO hotkey is F6 instead of F4 now (F4 is used for the Search panel by default).
+- `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
+- `Missing Reference Finder` now a context menue from `Assets` or `GameObject` menues instead of the separate window.
 
 ### Removed
 - Some components and tools was deleted. I think they were too specific for a generic package like this. Some of them was duplicates of existed functions that appars in the standard API last years.

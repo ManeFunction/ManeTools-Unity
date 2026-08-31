@@ -31,5 +31,54 @@ namespace Mane.Unity.Editor
                 AssetDatabase.Refresh();
             }
         }
+
+        private const string CheckMissedComponentsMenuPath = "Assets/Mane Tools/Check Missed Components";
+
+        [MenuItem(CheckMissedComponentsMenuPath, true)]
+        private static bool ValidateCheckMissedComponents() =>
+            Selection.GetFiltered<GameObject>(SelectionMode.Assets).Length > 0
+            || Selection.GetFiltered<SceneAsset>(SelectionMode.Assets).Length > 0;
+
+        [MenuItem(CheckMissedComponentsMenuPath, false, 47)]
+        private static void CheckMissedComponents()
+        {
+            GameObject[] gameObjects = Selection.GetFiltered<GameObject>(SelectionMode.Assets);
+            if (gameObjects.Length > 0)
+                MissingReferencesFinder.CheckGameObjects(gameObjects);
+
+            SceneAsset[] sceneAssets = Selection.GetFiltered<SceneAsset>(SelectionMode.Assets);
+            if (sceneAssets.Length == 0)
+                return;
+
+            List<Scene> loadedScenes = new();
+            List<string> scenesToOpen = new();
+            foreach (var sceneAsset in sceneAssets)
+            {
+                string path = AssetDatabase.GetAssetPath(sceneAsset);
+                Scene scene = SceneManager.GetSceneByPath(path);
+                if (scene.IsValid() && scene.isLoaded)
+                    loadedScenes.Add(scene);
+                else
+                    scenesToOpen.Add(path);
+            }
+
+            if (scenesToOpen.Count > 0
+                && !EditorUtility.DisplayDialog(
+                    "Check Missed Components",
+                    "Selected scene(s) will be opened to perform a scan. Continue?",
+                    "Yes", "No"))
+                scenesToOpen.Clear();
+
+            if (loadedScenes.Count > 0)
+                MissingReferencesFinder.CheckScenes(loadedScenes.ToArray());
+
+            foreach (var sceneToOpen in scenesToOpen)
+            {
+                Scene scene = EditorSceneManager.OpenScene(sceneToOpen, OpenSceneMode.Additive);
+                bool hadErrors = MissingReferencesFinder.CheckScenes(scene);
+                if (!hadErrors)
+                    EditorSceneManager.CloseScene(scene, true);
+            }
+        }
     }
 }

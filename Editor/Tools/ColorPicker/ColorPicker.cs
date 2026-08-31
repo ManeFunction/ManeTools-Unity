@@ -191,8 +191,7 @@ namespace Mane.Unity.Editor
             _saturationInt.SetValueWithoutNotify(Mathf.RoundToInt(saturation * 100f).ToString());
             _lightnessInt.SetValueWithoutNotify(Mathf.RoundToInt(lightness * 100f).ToString());
             _lumaField.SetValueWithoutNotify(FormatFloat(luma));
-            _codeField.SetValueWithoutNotify(
-                $"new Color({_color.r:n3}f, {_color.g:n3}f, {_color.b:n3}f, {_color.a:n3}f)");
+            _codeField.SetValueWithoutNotify(_color.ToCode());
 
             _syncing = false;
         }

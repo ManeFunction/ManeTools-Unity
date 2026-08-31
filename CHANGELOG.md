@@ -13,6 +13,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 
 ### Added
 - Added Mane Tools editor scene view overlay to keep all the editor features in one place.
+- Added 'Copy as a C# code' to color fields context menu.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
@@ -24,7 +25,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `PositionFollower` now has 2 different implementations.
 - MainThreadDispatcher is a singleton now.
 - All `Mane` menu items are now under `Window -> Mane`.
-- Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system)
+- Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system).
 
 ### Removed
 - Some components and tools was deleted. I think they were too specific for a generic package like this. Some of them was duplicates of existed functions that appars in the standard API last years.

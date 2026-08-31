@@ -1,0 +1,118 @@
+.picker-root {
+    padding: 2px 4px 6px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.picker-block {
+    border-width: 1px;
+    border-color: #555;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.header {
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-left: 2px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.color-swatch {
+    margin-bottom: 6px;
+    height: 22px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.color-swatch .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    margin: 0;
+}
+
+.value-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.value-row > .unity-base-field {
+    margin: 0 2px 0 0;
+}
+
+.value-float {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.value-int {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 56px;
+    min-width: 56px;
+    margin-right: 0;
+}
+
+.channel-float .unity-base-field__label {
+    flex-basis: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 16px;
+    min-width: 16px;
+    -unity-text-align: middle-right;
+    margin-right: 4px;
+}
+
+.hex-field .unity-base-field__label {
+    flex-basis: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 36px;
+    min-width: 36px;
+    -unity-text-align: middle-right;
+    margin-right: 4px;
+}
+
+.hex-field,
+.code-field {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.field-gap {
+    margin-top: 8px;
+}
+
+.code-field {
+    margin: 0;
+}
+
+.code-field .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    margin: 0;
+}
+
+.copy-field {
+    opacity: .7;
+}
+
+.copy-field .unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, .15);
+}
+
+.copy-field:hover,
+.copy-field:focus {
+    opacity: .7;
+}

@@ -23,6 +23,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Childen Transform Freezer is not a component anymore, now it's an editor toggle within new Mane Tools overlay panel.
 - `PositionFollower` now has 2 different implementations.
 - MainThreadDispatcher is a singleton now.
+- All `Mane` menu items are now under `Window -> Mane`.
 - Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system)
 
 ### Removed

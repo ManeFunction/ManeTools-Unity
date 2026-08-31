@@ -1,15 +1,21 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 namespace Mane.Unity.Editor
 {
     public static class AssetsTools
     {
-        [MenuItem("Assets/Force Reserialise Asset(s)", true)]
+        private const string SaveAssetsMenuPath = "Assets/Mane Tools/Force Reserialise Asset(s)";
+
+        [MenuItem(SaveAssetsMenuPath, true)]
         private static bool ValidateSaveAssets() => Selection.objects.Length > 0;
 
-        [MenuItem("Assets/Force Reserialise Asset(s)", false, 45)]
+        [MenuItem(SaveAssetsMenuPath, false, 45)]
         private static void SaveAssets()
         {
             AssetDatabase.ForceReserializeAssets(Selection.objects
@@ -19,7 +25,7 @@ namespace Mane.Unity.Editor
                 if (obj) EditorUtility.SetDirty(obj);
         }
         
-        [MenuItem("Assets/Force Reserialize All Assets", false, 46)]
+        [MenuItem("Assets/Mane Tools/Force Reserialize All Assets", false, 46)]
         private static void ForceSaveAssets()
         {
             if (EditorUtility.DisplayDialog(

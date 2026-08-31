@@ -32,7 +32,7 @@ namespace Mane.Unity.Editor
         private TextField _codeField;
         private bool _syncing;
 
-        [MenuItem("Window/Mane/Color Picker %&C", false, 2000)]
+        [MenuItem("Window/Mane Tools/Color Picker %&C", false, 2000)]
         public static void ShowWindow()
         {
             ColorPicker window = GetWindow<ColorPicker>();

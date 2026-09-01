@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="True">
+    <Style src="InfoBox.uss" />
+    <ui:VisualElement name="infoBox" class="message-box">
+        <ui:Image name="icon" class="message-icon" />
+        <ui:Label name="label" class="message-box-label" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -47,7 +47,19 @@ namespace Mane.Unity.Editor
         private static string GetFileName()
         {
             DateTime t = DateTime.Now;
-            return $"Screenshot_{t.Year}_{t.Month:00}_{t.Day:00}_{t.Hour:00}_{t.Minute:00}_{t.Second:00}.png";
+            return $"{GetProductName()}_{t.Year}-{t.Month:00}-{t.Day:00}_{t.Hour:00}-{t.Minute:00}-{t.Second:00}-{t.Millisecond:000}.png";
+        }
+
+        private static string GetProductName()
+        {
+            string name = Application.productName;
+            if (string.IsNullOrWhiteSpace(name))
+                return "Screenshot";
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+                name = name.Replace(c, '_');
+
+            return name;
         }
 
         private static string CreateDestktopPath(string fileName) =>

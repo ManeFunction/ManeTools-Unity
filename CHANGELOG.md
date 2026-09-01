@@ -30,6 +30,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Most of the custom hotkeys related menues (screenshoting, enabling / disabling GO, console clearing, ect.) are under `Edit` menu now.
 - `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
 - `Missing Reference Finder` now a context menue from `Assets` or `GameObject` menues instead of the separate window.
+- `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
 
 ### Removed
 - Some components and tools was deleted. I think they were too specific for a generic package like this. Some of them was duplicates of existed functions that appars in the standard API last years.

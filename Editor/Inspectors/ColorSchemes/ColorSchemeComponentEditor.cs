@@ -9,7 +9,7 @@ using UnityObject = UnityEngine.Object;
 namespace Mane.Unity.UI.Editor
 {
     [CustomEditor(typeof(ColorSchemeComponent), true)]
-    public class ColorSchemeComponentEditor : UnityEditor.Editor
+    public sealed class ColorSchemeComponentEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset xml;
         [SerializeField] private VisualTreeAsset rowXml;

@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     /// While enabled, transforming the selected object leaves its active children in world space.
     /// Inactive children follow the parent.
     /// </summary>
-    public static class ChildrenTransformFreezer
+    internal static class ChildrenTransformFreezer
     {
         private const string SessionKey = "ManeTools.FreezeChildren";
         private const int MaxOperationSnapshots = 128;
@@ -25,9 +25,9 @@ namespace Mane.Unity.Editor
 
         private static bool _applying;
 
-        public static event Action<bool> EnabledChanged;
+        internal static event Action<bool> EnabledChanged;
 
-        public static bool Enabled
+        internal static bool Enabled
         {
             get => SessionState.GetBool(SessionKey, false);
             set
@@ -108,9 +108,8 @@ namespace Mane.Unity.Editor
             Dragging.Clear();
             RebuildRoots();
 
-            for (int i = 0; i < Roots.Count; i++)
+            foreach (var transform in Roots)
             {
-                Transform transform = Roots[i];
                 if (transform == null)
                     continue;
 
@@ -229,17 +228,16 @@ namespace Mane.Unity.Editor
             }
 
             SelectedSet.Clear();
-            for (int i = 0; i < selected.Length; i++)
+            foreach (var selectedTransform in selected)
             {
-                if (selected[i] != null)
-                    SelectedSet.Add(selected[i]);
+                if (selectedTransform != null)
+                    SelectedSet.Add(selectedTransform);
             }
 
-            for (int i = 0; i < selected.Length; i++)
+            foreach (var selectedTransform in selected)
             {
-                Transform transform = selected[i];
-                if (transform != null && !HasSelectedAncestor(transform))
-                    Roots.Add(transform);
+                if (selectedTransform != null && !HasSelectedAncestor(selectedTransform))
+                    Roots.Add(selectedTransform);
             }
         }
 
@@ -284,23 +282,23 @@ namespace Mane.Unity.Editor
 
             Vector3 scaleShift = localScale.Divide(state.ParentLocalScale);
             FrozenChild[] children = state.Children;
-            for (int i = 0; i < children.Length; i++)
+            foreach (var frozenChild in children)
             {
-                Transform child = children[i].Transform;
+                Transform child = frozenChild.Transform;
                 if (child == null || !child.gameObject.activeInHierarchy)
                     continue;
 
-                child.localScale = children[i].LocalScale.Divide(scaleShift);
-                child.SetPositionAndRotation(children[i].WorldPosition, children[i].WorldRotation);
+                child.localScale = frozenChild.LocalScale.Divide(scaleShift);
+                child.SetPositionAndRotation(frozenChild.WorldPosition, frozenChild.WorldRotation);
             }
         }
 
         private static void MarkChildrenDirty(FreezeState state)
         {
             FrozenChild[] children = state.Children;
-            for (int i = 0; i < children.Length; i++)
+            foreach (var frozenChild in children)
             {
-                Transform child = children[i].Transform;
+                Transform child = frozenChild.Transform;
                 if (child != null)
                     EditorUtility.SetDirty(child);
             }

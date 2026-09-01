@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Mane.Unity.Editor
 {
-    public static class PrefabsTools
+    internal static class PrefabsTools
     {
         [MenuItem("GameObject/Prefab/Apply Prefab(s) Changes", true, 1500)]
         private static bool ApplyPrefabsChecker() => IsPrefabSelected();

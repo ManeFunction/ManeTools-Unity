@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace Mane.Unity.Editor
 {
-    public static class AssetsTools
+    internal static class AssetsTools
     {
         private const string SaveAssetsMenuPath = "Assets/Mane Tools/Force Reserialise Asset(s)";
 

@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     public static class EditorTools
     {
         [MenuItem("Edit/Clear Console _F8", false, 900)]
-        public static void ClearConsole()
+        private static void ClearConsole()
         {
             Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
             var type = assembly.GetType("UnityEditor.LogEntries");

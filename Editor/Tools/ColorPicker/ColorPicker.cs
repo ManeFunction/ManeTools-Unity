@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
-    public class ColorPicker : EditorWindow
+    public sealed class ColorPicker : EditorWindow
     {
         [SerializeField] private VisualTreeAsset xml;
         [SerializeField] private Color _color = Color.white;

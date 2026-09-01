@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Mane.Unity.Editor
 {
-    public static class RectTransformToAnchorsEditor
+    internal static class RectTransformToAnchorsEditor
     {
         [MenuItem("CONTEXT/RectTransform/Convert/Bake Transform to Anchors", false, 500)]
         private static void BakeToAnchors(MenuCommand command)

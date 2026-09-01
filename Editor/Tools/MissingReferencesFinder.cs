@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Mane.Unity.Editor
 {
-    public static class MissingReferencesFinder
+    internal static class MissingReferencesFinder
     {
         private const string MenuPath = "GameObject/Mane Tools/Check Missed Components";
 
@@ -55,7 +55,7 @@ namespace Mane.Unity.Editor
             return active.IsValid() && active.isLoaded;
         }
 
-        public static void CheckGameObjects(params GameObject[] gameObjects)
+        internal static void CheckGameObjects(params GameObject[] gameObjects)
         {
             if (gameObjects == null || gameObjects.Length == 0)
                 return;
@@ -64,7 +64,7 @@ namespace Mane.Unity.Editor
             LogDone();
         }
 
-        public static bool CheckScenes(params Scene[] scenes)
+        internal static bool CheckScenes(params Scene[] scenes)
         {
             if (scenes == null || scenes.Length == 0)
                 return false;

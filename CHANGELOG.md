@@ -14,6 +14,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 ### Added
 - Added Mane Tools editor scene view overlay to keep all the editor features in one place.
 - Added 'Copy as a C# code' to color fields context menu.
+- `Apply Transform values` to a prefab now works with `RectTransform`.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.

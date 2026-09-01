@@ -36,4 +36,6 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
 
 ### Removed
-- Some components and tools was deleted. I think they were too specific for a generic package like this. Some of them was duplicates of existed functions that appars in the standard API last years.
+- Intentionally droped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.
+- Dropped support of legacy `Text` component. Everyone uses `TextMesh Pro` for years anyway.
+- Some components and tools was deleted. I think they were too specific for a generic package like this, and some of them was duplicates of existed functions that appars in the standard API during last years.

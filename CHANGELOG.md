@@ -28,6 +28,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - All `Mane` menu items that opens different windows are now under `Window -> Mane Tools`.
 - Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system).
 - Most of the custom hotkeys related menues (screenshoting, enabling / disabling GO, console clearing, ect.) are under `Edit` menu now.
+- `Screenshoter` now available from the code via `Screenshot.Capture()` with optional custom path.
 - `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
 - `Missing Reference Finder` now a context menue from `Assets` or `GameObject` menues instead of the separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.

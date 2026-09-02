@@ -37,6 +37,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
 - `Missing Reference Finder` now a context menue from `Assets` or `GameObject` menues instead of the separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
+- `GetRequiredComponent` is `GetOrAddComponent` now, for clearance.
 
 ### Removed
 - Intentionally dropped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.

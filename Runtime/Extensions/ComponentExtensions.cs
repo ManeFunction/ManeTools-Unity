@@ -7,7 +7,7 @@ namespace Mane.Unity
         /// <summary>
         /// Get component or add it if no one was found.
         /// </summary>
-        public static T GetRequiredComponent<T>(this Component component) where T : Component => 
-            component.gameObject.GetRequiredComponent<T>();
+        public static T GetOrAddComponent<T>(this Component component) where T : Component => 
+            component.gameObject.GetOrAddComponent<T>();
     }
 }

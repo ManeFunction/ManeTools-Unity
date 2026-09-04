@@ -19,6 +19,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Added `EditorButton` feature to draw methods calling buttons within your editors.
 - Added optional conditions to the `InfoBox`.
 - `Apply Transform values` to a prefab now works with `RectTransform`.
+- Editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.

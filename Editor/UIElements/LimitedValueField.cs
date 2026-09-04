@@ -15,6 +15,15 @@ namespace Mane.Unity.Editor
         private string _negativeLabel = string.Empty;
         private string _zeroLabel = string.Empty;
 
+        public LimitedValueField()
+        {
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                RefreshDisplayedText();
+                schedule.Execute(RefreshDisplayedText);
+            });
+        }
+
         [UxmlAttribute("allow-negatives")]
         public bool AllowNegatives
         {
@@ -54,6 +63,14 @@ namespace Mane.Unity.Editor
         public override void SetValueWithoutNotify(int newValue)
         {
             base.SetValueWithoutNotify(Clamp(newValue));
+            RefreshDisplayedText();
+        }
+
+        private void RefreshDisplayedText()
+        {
+            string display = ValueToString(value);
+            if (text != display)
+                text = display;
         }
 
         protected override string ValueToString(int v)

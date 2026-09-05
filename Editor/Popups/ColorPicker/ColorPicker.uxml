@@ -5,8 +5,8 @@
     <Style src="ColorPicker.uss" />
 
     <ui:VisualElement class="picker-root">
-        <ui:VisualElement class="picker-block">
-            <ui:Label text="Color" class="header"/>
+        <ui:VisualElement class="mie-block">
+            <ui:Label text="Color" class="mie-header"/>
             <uie:ColorField name="colorField" class="color-swatch" show-alpha="true" show-eye-dropper="true" />
             <ui:VisualElement class="value-row">
                 <ui:FloatField name="rFloat" label="R" class="value-float channel-float" />
@@ -27,8 +27,8 @@
             <ui:TextField name="hexField" label="HEX" class="hex-field field-gap" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="picker-block">
-            <ui:Label text="HSL + Luma" class="header"/>
+        <ui:VisualElement class="mie-block">
+            <ui:Label text="HSL + Luma" class="mie-header"/>
             <ui:VisualElement class="value-row">
                 <ui:TextField name="hueFloat" label="H" tooltip="0–1" class="value-float channel-float copy-field" />
                 <ui:TextField name="hueInt" tooltip="Degrees" class="value-int copy-field" />
@@ -44,8 +44,11 @@
             <ui:TextField name="lumaField" label="Luma" class="hex-field field-gap copy-field" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="picker-block">
-            <ui:Label text="Code" class="header"/>
+        <ui:VisualElement class="mie-block">
+            <ui:VisualElement class="header-row">
+                <ui:Label text="Code" class="mie-header"/>
+                <ui:Button name="copyCodeButton" text="Copy" class="mie-button copy-code-button" tooltip="Copy" />
+            </ui:VisualElement>
             <ui:TextField name="codeField" class="code-field copy-field" />
         </ui:VisualElement>
     </ui:VisualElement>

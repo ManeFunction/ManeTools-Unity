@@ -34,6 +34,7 @@ namespace Mane.Unity.Editor
             else
             {
                 TemplateContainer container = tree.CloneTree();
+                ManeEditorStyles.Apply(container, ManeEditorStyles.Options.Sheet);
                 VisualElement box = container.Q<VisualElement>("infoBox");
                 box.Q<Label>("label").text = info.Message;
                 box.AddToClassList(TypeClass(info.Type));

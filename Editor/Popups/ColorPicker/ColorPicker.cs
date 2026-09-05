@@ -49,6 +49,7 @@ namespace Mane.Unity.Editor
                 return;
             }
             xml.CloneTree(rootVisualElement);
+            ManeEditorStyles.Apply(rootVisualElement, ManeEditorStyles.Options.Sheet);
             rootVisualElement.style.overflow = Overflow.Hidden;
             _colorField = rootVisualElement.Q<ColorField>("colorField");
             _rFloat = rootVisualElement.Q<FloatField>("rFloat");
@@ -68,8 +69,9 @@ namespace Mane.Unity.Editor
             _lightnessInt = rootVisualElement.Q<TextField>("lightnessInt");
             _lumaField = rootVisualElement.Q<TextField>("lumaField");
             _codeField = rootVisualElement.Q<TextField>("codeField");
+            Button copyCodeButton = rootVisualElement.Q<Button>("copyCodeButton");
 
-            if (_colorField == null || _hexField == null || _codeField == null ||
+            if (_colorField == null || _hexField == null || _codeField == null || copyCodeButton == null ||
                 _rFloat == null || _gFloat == null || _bFloat == null || _aFloat == null ||
                 _rInt == null || _gInt == null || _bInt == null || _aInt == null ||
                 _hueFloat == null || _saturationFloat == null || _lightnessFloat == null ||
@@ -92,6 +94,8 @@ namespace Mane.Unity.Editor
             BindChannel(_bFloat, _bInt, (ref Color color, float value) => color.b = value);
             BindChannel(_aFloat, _aInt, (ref Color color, float value) => color.a = value);
             _hexField.RegisterValueChangedCallback(evt => ApplyHex(evt.newValue));
+            copyCodeButton.clicked += () =>
+                EditorGUIUtility.systemCopyBuffer = _color.ToCode();
 
             RefreshFields();
             rootVisualElement.schedule.Execute(TryPasteClipboard).Every(200);

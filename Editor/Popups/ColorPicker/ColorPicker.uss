@@ -4,28 +4,8 @@
     flex-shrink: 0;
 }
 
-.picker-block {
-    border-width: 1px;
-    border-color: #555;
-    padding: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding-bottom: 4px;
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
-.header {
-    font-size: 14px;
-    -unity-font-style: bold;
-    margin-left: 2px;
-    margin-bottom: 5px;
-    flex-shrink: 0;
-}
-
 .color-swatch {
     margin-bottom: 6px;
-    height: 22px;
     flex-grow: 0;
     flex-shrink: 0;
 }
@@ -91,6 +71,27 @@
 
 .field-gap {
     margin-top: 8px;
+}
+
+.header-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.header-row > .mie-header {
+    margin-bottom: 0;
+}
+
+.copy-code-button {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 18px;
+    margin: 0;
+    padding: 0 6px;
+    font-size: 11px;
 }
 
 .code-field {

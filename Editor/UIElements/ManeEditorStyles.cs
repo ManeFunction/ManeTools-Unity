@@ -8,7 +8,7 @@ namespace Mane.Unity.Editor
 {
     /// <summary>
     /// Shared Mane editor USS and inspector field layout.
-    /// Call <see cref="Apply(VisualElement)"/> from CreateInspectorGUI after cloning UXML.
+    /// Applied by <see cref="ManeEditor"/>, or call <see cref="Apply(VisualElement)"/> yourself.
     /// </summary>
     public static class ManeEditorStyles
     {

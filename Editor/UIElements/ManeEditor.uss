@@ -5,9 +5,8 @@
     --mie-button-bg: #333;
     --mie-button-hover: #444;
     --mie-button-active: #555;
-    --mie-label-width: 100px;
-    /* Outer label minus nested frame (1px border + 5px padding) so inputs share one left edge */
-    --mie-nested-label-width: 94px;
+    --mie-label-width: 115px;
+    --mie-nested-label-width: 109px;
 }
 
 .mie-root.mie-labels-150 {
@@ -53,6 +52,34 @@
     font-size: 14px;
     -unity-font-style: bold;
     margin-left: 5px;
+}
+
+/* Foldout version of mie-block — no extra indent, header matches mie-header */
+.mie-collapsible > .unity-foldout__toggle {
+    margin: 0 0 0 2px;
+    padding: 0;
+}
+
+.mie-collapsible > .unity-foldout__toggle .unity-toggle__text {
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-left: 0;
+}
+
+.mie-collapsible > .unity-foldout__content {
+    margin-top: 5px;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.mie-collapsible.mie-collapsible--collapsed {
+    padding-bottom: 6px;
+}
+
+.mie-collapsible.mie-collapsible--collapsed > .unity-foldout__content {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: none;
 }
 
 /* Body under a header toggle — no extra horizontal inset, so fields match mie-block */
@@ -213,4 +240,27 @@
 .mie-fields .mie-header-toggle .unity-base-field__input {
     margin-left: 0;
     flex-grow: 0;
+}
+
+.mie-fields .mie-collapsible > .unity-foldout__toggle {
+    flex-grow: 0;
+}
+
+.mie-fields .mie-collapsible > .unity-foldout__toggle .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-fields .mie-collapsible > .unity-foldout__toggle .unity-base-field__input {
+    margin-left: 0;
+    flex-grow: 0;
+}
+
+.mie-fields .unity-event__container {
+    margin-top: 5px;
+    margin-right: -2px;
 }

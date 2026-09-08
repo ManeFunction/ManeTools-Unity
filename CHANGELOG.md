@@ -18,7 +18,8 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Added 'Copy as a C# code' to color fields context menu.
 - Added `EditorButton` feature to draw methods calling buttons within your editors.
 - Added optional conditions to the `InfoBox`.
-- `Apply Transform values` to a prefab now works with `RectTransform`.
+- `Apply Transform values` to a prefab now works properly with `RectTransform`.
+- Added `Mane Tools overlay panel` for the `Scene View`.
 - Editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
 - All `UI Toolkit` styles was aggregated to this package, so I can use them from one place. Now you can use them as well, if you want to style your inspectors the same way I do.
 
@@ -29,7 +30,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Reorganized extension classes for more clarity.
 - All custom Editor UI now uses `UI Toolkit` instead of legacy `IMGUI`.
 - Project has 3 different singletons now: `ManeSingleton` for domain code usage (non-Unity), `UnitySingleton` is based on a Unity component, when you need it on a scene, and `ScriptableSingleton` that is data driven and based on `ScriptableObject`.
-- `Childen Transform Freezer` is not a component anymore, now it's an editor toggle within new Mane Tools overlay panel.
+- `Childen Transform Freezer` is not a component anymore, now it's an editor toggle within new `Mane Tools overlay panel`.
 - `PositionFollower` now has 2 different implementations.
 - `MainThreadDispatcher` is a singleton now.
 - All `Mane` menu items that opens different windows are now under `Window -> Mane Tools`.
@@ -37,9 +38,10 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Most of the custom hotkeys related menues (screenshoting, enabling / disabling GO, console clearing, ect.) are under `Edit` menu now.
 - `Screenshoter` now available from the code via `Screenshot.Capture()` with optional custom path.
 - `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
-- `Missing Reference Finder` now a context menue from `Assets` or `GameObject` menues instead of the separate window.
+- `Missing Reference Finder` now a context menu from `Assets` or `GameObject` menues instead of the separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
 - `GetRequiredComponent` is `GetOrAddComponent` now, for clearance.
+- `ArrayElements` attribute renamed to `CollectionItemName`.
 
 ### Removed
 - Intentionally dropped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.

@@ -39,6 +39,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `Screenshoter` now available from the code via `Screenshot.Capture()` with optional custom path.
 - `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
 - `Missing Reference Finder` now a context menu from `Assets` or `GameObject` menues instead of the separate window.
+- `Asset Reference Finder` now a context menu from `Assets` menu instead of the separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
 - `GetRequiredComponent` is `GetOrAddComponent` now, for clearance.
 - `ArrayElements` attribute renamed to `CollectionItemName`.

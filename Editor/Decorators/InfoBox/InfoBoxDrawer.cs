@@ -18,9 +18,6 @@ namespace Mane.Unity.Editor
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic |
             BindingFlags.DeclaredOnly;
 
-        private static FieldInfo _serializedPropertyField;
-        private static PropertyInfo _inspectorSerializedObject;
-
         public override VisualElement CreatePropertyGUI()
         {
             InfoBoxAttribute info = (InfoBoxAttribute)attribute;
@@ -69,7 +66,7 @@ namespace Mane.Unity.Editor
 
                 void TryBind()
                 {
-                    SerializedProperty property = GetBoundProperty(root);
+                    SerializedProperty property = root.GetBoundSerializedProperty();
                     if (property?.serializedObject == null)
                     {
                         if (retries++ < 10)
@@ -205,42 +202,6 @@ namespace Mane.Unity.Editor
             }
 
             return null;
-        }
-
-        private static SerializedProperty GetBoundProperty(VisualElement element)
-        {
-            _serializedPropertyField ??= typeof(PropertyField).GetField("m_SerializedProperty",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-
-            for (VisualElement current = element; current != null; current = current.parent)
-            {
-                if (current is not PropertyField field)
-                    continue;
-
-                if (_serializedPropertyField?.GetValue(field) is SerializedProperty bound)
-                    return bound;
-
-                if (string.IsNullOrEmpty(field.bindingPath))
-                    continue;
-
-                SerializedObject serializedObject = GetInspectorSerializedObject(field);
-                SerializedProperty fromPath = serializedObject?.FindProperty(field.bindingPath);
-                if (fromPath != null)
-                    return fromPath;
-            }
-
-            return null;
-        }
-
-        private static SerializedObject GetInspectorSerializedObject(VisualElement element)
-        {
-            InspectorElement inspector = element.GetFirstAncestorOfType<InspectorElement>();
-            if (inspector == null)
-                return null;
-
-            _inspectorSerializedObject ??= typeof(InspectorElement).GetProperty("serializedObject",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return _inspectorSerializedObject?.GetValue(inspector) as SerializedObject;
         }
 
         private static string TypeClass(InfoBoxType type) => type switch

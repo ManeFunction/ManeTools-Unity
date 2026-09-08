@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
 namespace Mane.Unity.Editor
 {
@@ -56,6 +57,27 @@ namespace Mane.Unity.Editor
             }
 
             return field;
+        }
+
+        public static bool IsPropertyDefault(this SerializedProperty property)
+        {
+            object value;
+            try
+            {
+                value = property.boxedValue;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+
+            return value switch
+            {
+                null => true,
+                string s => string.IsNullOrEmpty(s),
+                Quaternion q => q == Quaternion.identity,
+                _ => Equals(value, value.GetType().IsValueType ? Activator.CreateInstance(value.GetType()) : null)
+            };
         }
     }
 }

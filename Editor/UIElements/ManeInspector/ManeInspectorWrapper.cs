@@ -1,5 +1,4 @@
 using System.Reflection;
-using Mane.Unity;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -25,10 +24,10 @@ namespace Mane.Unity.Editor
                 ManeInspectorLayout.Fill(root, serializedObject);
                 root.TrackSerializedObjectValue(serializedObject, _ => ManeEditorStyles.RefreshFieldLayout(root));
             }
+            else if (ManeInspectorLayout.HasFoldout(serializedObject))
+                ManeInspectorLayout.FillDefault(root, serializedObject);
             else
-            {
                 InspectorElement.FillDefaultInspector(root, serializedObject, this);
-            }
 
             EditorButton.AddTo(root, this);
             return root;

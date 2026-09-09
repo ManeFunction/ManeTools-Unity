@@ -1,0 +1,46 @@
+/* Foldout version of mie-block — no extra indent, header matches mie-header */
+
+.mie-foldout-block > .unity-foldout__toggle {
+    margin: 0 0 0 2px;
+    padding: 0;
+}
+
+.mie-foldout-block > .unity-foldout__toggle .unity-toggle__text {
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-left: 0;
+}
+
+.mie-foldout-block > .unity-foldout__content {
+    margin-top: 5px;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.mie-foldout-block.mie-foldout-block--collapsed {
+    padding-bottom: 6px;
+}
+
+.mie-foldout-block.mie-foldout-block--collapsed > .unity-foldout__content {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: none;
+}
+
+.mie-foldout-block > .unity-foldout__toggle.unity-base-field {
+    flex-grow: 0;
+}
+
+.mie-foldout-block > .unity-foldout__toggle .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-foldout-block > .unity-foldout__toggle .unity-base-field__input {
+    margin-left: 0;
+    flex-grow: 0;
+}

@@ -51,7 +51,6 @@ namespace Mane.Unity.Editor
                     box.styleSheets.Add(sheet);
             }
 
-            ManeEditorStyles.Apply(box, ManeEditorStyles.Options.Sheet);
             return box;
         }
 

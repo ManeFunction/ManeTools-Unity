@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Mane.Unity.Editor
 {
     [CustomPropertyDrawer(typeof(LayerSelectorAttribute))]
-    internal sealed class LayerSelectorPropertyDrawer : PropertyDrawer
+    internal sealed class LayerSelectorDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

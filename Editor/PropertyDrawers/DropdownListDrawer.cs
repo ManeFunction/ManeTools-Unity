@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Mane.Unity.Editor
 {
     [CustomPropertyDrawer(typeof(DropdownListAttribute))]
-    internal sealed class DropdownListPropertyDrawer : PropertyDrawer
+    internal sealed class DropdownListDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,7 +24,6 @@ namespace Mane.Unity.Editor
         }
 
         private const string AlignedFieldClass = "unity-base-field__aligned";
-        private const string SheetFileName = "ManeEditor.uss";
 
         private static StyleSheet _sheet;
 
@@ -73,33 +70,8 @@ namespace Mane.Unity.Editor
                 root.styleSheets.Add(sheet);
         }
 
-        private static StyleSheet Sheet
-        {
-            get
-            {
-                if (_sheet != null)
-                    return _sheet;
-
-                string[] guids = AssetDatabase.FindAssets($"t:MonoScript {nameof(ManeEditorStyles)}");
-                foreach (string guid in guids)
-                {
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-                    MonoScript script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-                    if (script == null || script.GetClass() != typeof(ManeEditorStyles))
-                        continue;
-
-                    string folder = Path.GetDirectoryName(path);
-                    if (string.IsNullOrEmpty(folder))
-                        break;
-
-                    _sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(
-                        Path.Combine(folder, SheetFileName).Replace('\\', '/'));
-                    break;
-                }
-
-                return _sheet;
-            }
-        }
+        private static StyleSheet Sheet =>
+            _sheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), "ManeEditor.uss");
 
         private static void DisableInspectorLabelAlignment(VisualElement root)
         {

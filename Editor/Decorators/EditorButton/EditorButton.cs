@@ -15,6 +15,8 @@ namespace Mane.Unity.Editor
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic |
             BindingFlags.DeclaredOnly;
 
+        private static StyleSheet _sheet;
+
         public static void AddTo(VisualElement inspectorRoot, UnityEditor.Editor editor)
         {
             if (inspectorRoot == null || editor == null || editor.targets == null || editor.targets.Length == 0)
@@ -28,13 +30,14 @@ namespace Mane.Unity.Editor
             if (buttons.Count == 0)
                 return;
 
-            VisualElement container = new VisualElement
-            {
-                style =
-                {
-                    marginTop = 4
-                }
-            };
+            bool maneStyle = inspectorRoot.ClassListContains(ManeEditorStyles.RootClass);
+            VisualElement container = new();
+            container.AddToClassList("mie-editor-buttons");
+            if (maneStyle)
+                AddSheet(inspectorRoot);
+            else
+                container.style.marginTop = 4;
+
             inspectorRoot.Add(container);
 
             UnityObject[] targets = editor.targets;
@@ -43,17 +46,34 @@ namespace Mane.Unity.Editor
             foreach ((MethodInfo method, string label) in buttons)
             {
                 MethodInfo capturedMethod = method;
-                Button button = new Button(() => Invoke(capturedMethod, targets, serializedObject))
+                Button button = new(() => Invoke(capturedMethod, targets, serializedObject))
                 {
-                    text = label,
-                    style =
-                    {
-                        marginRight = -3
-                    }
+                    text = label
                 };
+                if (maneStyle)
+                    button.AddToClassList("mie-button");
+                else
+                    button.style.marginRight = -3;
+
                 container.Add(button);
             }
         }
+
+        private static void AddSheet(VisualElement root)
+        {
+            StyleSheet sheet = Sheet;
+            if (sheet == null)
+            {
+                Debug.LogError("EditorButton.uss was not found next to EditorButton.");
+                return;
+            }
+
+            if (!root.styleSheets.Contains(sheet))
+                root.styleSheets.Add(sheet);
+        }
+
+        private static StyleSheet Sheet =>
+            _sheet ??= UIElementsTools.LoadUSS(typeof(EditorButton));
 
         private static List<(MethodInfo method, string label)> Collect(Type type)
         {

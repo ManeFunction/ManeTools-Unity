@@ -1,0 +1,16 @@
+/* EditorButton row under ManeStyle inspectors — flush to mie-block frame */
+.mie-root > .mie-editor-buttons {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.mie-root > .mie-editor-buttons > .mie-button {
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 2px;
+    padding: 0 6px;
+    height: 18px;
+    font-size: 11px;
+    align-self: stretch;
+}

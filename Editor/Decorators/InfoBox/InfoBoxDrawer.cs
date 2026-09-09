@@ -36,23 +36,23 @@ namespace Mane.Unity.Editor
             }
 
             TemplateContainer container = tree.CloneTree();
-            ManeEditorStyles.Apply(container, ManeEditorStyles.Options.Sheet);
             VisualElement box = container.Q<VisualElement>("infoBox");
+            if (box == null)
+                return new Label(message);
+
             box.Q<Label>("label").text = message;
             box.AddToClassList(TypeClass(type));
-            return container;
-        }
+            box.RemoveFromHierarchy();
 
-        public override float GetHeight()
-        {
-            InfoBoxAttribute info = (InfoBoxAttribute)attribute;
-            float width = EditorGUIUtility.currentViewWidth;
-            if (width < 1f)
-                width = 200f;
+            for (int i = 0; i < container.styleSheets.count; i++)
+            {
+                StyleSheet sheet = container.styleSheets[i];
+                if (!box.styleSheets.Contains(sheet))
+                    box.styleSheets.Add(sheet);
+            }
 
-            return Mathf.Max(
-                EditorGUIUtility.singleLineHeight * 2f,
-                EditorStyles.helpBox.CalcHeight(new GUIContent(info.Message), width));
+            ManeEditorStyles.Apply(box, ManeEditorStyles.Options.Sheet);
+            return box;
         }
 
         private static void BindShowCondition(VisualElement root, string showCondition, bool invert)

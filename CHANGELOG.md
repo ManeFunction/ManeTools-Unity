@@ -45,6 +45,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `ArrayElements` attribute renamed to `CollectionItemName`.
 - `DropdownList` attribute now works not only with public methods, but also with privates and properties.
 - `DropdownList` options (when they are getting dynamically from the code) can now be refreshed from the context menu.
+- `Layer` attribute renamed to `LayerSelector`.
 
 ### Removed
 - Intentionally dropped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.

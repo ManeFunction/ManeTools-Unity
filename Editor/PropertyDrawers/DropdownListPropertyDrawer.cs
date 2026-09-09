@@ -14,14 +14,7 @@ namespace Mane.Unity.Editor
         {
             SerializedProperty tracked = property.Copy();
             if (tracked.propertyType is not SerializedPropertyType.String and not SerializedPropertyType.Integer)
-            {
-                VisualElement root = new();
-                root.Add(InfoBoxDrawer.Create(
-                    $"[DropdownList] can only be applied to string or int fields.\n'{tracked.displayName}' is {tracked.propertyType}.",
-                    InfoBoxType.Warning));
-                root.Add(new PropertyField(tracked));
-                return root;
-            }
+                return Decorations.CreateUnsupportedFieldTypeWarning(tracked, "DropdownList", "string or int");
 
             DropdownListAttribute info = (DropdownListAttribute)attribute;
             string[] list = info.GetStrings(property.serializedObject.targetObject);

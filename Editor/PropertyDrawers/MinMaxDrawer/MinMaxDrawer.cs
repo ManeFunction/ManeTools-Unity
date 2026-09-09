@@ -2,6 +2,7 @@ using System;
 using Mane.DotNet;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
@@ -11,6 +12,8 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(MinMaxDouble))]
     internal sealed class MinMaxDrawer : PropertyDrawer
     {
+        private static StyleSheet _sheet;
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             SerializedProperty a = property.FindPropertyRelative(nameof(MinMaxInt.A));
@@ -125,12 +128,12 @@ namespace Mane.Unity.Editor
         private static VisualElement CreateComposite(string label, VisualElement min, VisualElement max)
         {
             VisualElement root = new();
-            ManeEditorStyles.Apply(root, ManeEditorStyles.Options.Sheet);
             root.AddToClassList(BaseField<float>.ussClassName);
             root.AddToClassList(BaseField<float>.alignedFieldUssClassName);
             root.AddToClassList("unity-composite-field");
             root.AddToClassList(Vector2Field.ussClassName);
             root.AddToClassList("mie-minmax-field");
+            ApplySheet(root);
 
             Label propertyLabel = new(label);
             propertyLabel.AddToClassList(BaseField<float>.labelUssClassName);
@@ -148,5 +151,21 @@ namespace Mane.Unity.Editor
             root.Add(input);
             return root;
         }
+
+        private static void ApplySheet(VisualElement root)
+        {
+            StyleSheet sheet = Sheet;
+            if (sheet == null)
+            {
+                Debug.LogError("MinMaxDrawer.uss was not found next to MinMaxDrawer.");
+                return;
+            }
+
+            if (!root.styleSheets.Contains(sheet))
+                root.styleSheets.Add(sheet);
+        }
+
+        private static StyleSheet Sheet =>
+            _sheet ??= UIElementsTools.LoadUSS(typeof(MinMaxDrawer));
     }
 }

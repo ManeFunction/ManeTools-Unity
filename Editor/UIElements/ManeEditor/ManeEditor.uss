@@ -92,14 +92,6 @@
     max-width: none;
 }
 
-.mie-minmax-field.unity-composite-field .unity-composite-field__field > .unity-base-field__label {
-    flex-basis: auto;
-    width: auto;
-    min-width: 28px;
-    max-width: none;
-    flex-shrink: 0;
-}
-
 .mie-fields .unity-composite-field__field > .unity-base-field__input {
     margin-left: 2px;
 }

@@ -50,28 +50,28 @@
 }
 
 /* Foldout version of mie-block — no extra indent, header matches mie-header */
-.mie-collapsible > .unity-foldout__toggle {
+.mie-foldout-block > .unity-foldout__toggle {
     margin: 0 0 0 2px;
     padding: 0;
 }
 
-.mie-collapsible > .unity-foldout__toggle .unity-toggle__text {
+.mie-foldout-block > .unity-foldout__toggle .unity-toggle__text {
     font-size: 14px;
     -unity-font-style: bold;
     margin-left: 0;
 }
 
-.mie-collapsible > .unity-foldout__content {
+.mie-foldout-block > .unity-foldout__content {
     margin-top: 5px;
     margin-left: 0;
     padding-left: 0;
 }
 
-.mie-collapsible.mie-collapsible--collapsed {
+.mie-foldout-block.mie-foldout-block--collapsed {
     padding-bottom: 6px;
 }
 
-.mie-collapsible.mie-collapsible--collapsed > .unity-foldout__content {
+.mie-foldout-block.mie-foldout-block--collapsed > .unity-foldout__content {
     margin-top: 0;
     margin-bottom: 0;
     display: none;
@@ -142,7 +142,6 @@
     min-width: 28px;
     max-width: none;
     flex-shrink: 0;
-    margin-right: 2px;
 }
 
 .mie-fields .unity-composite-field__field > .unity-base-field__input {
@@ -210,11 +209,11 @@
     flex-grow: 0;
 }
 
-.mie-fields .mie-collapsible > .unity-foldout__toggle {
+.mie-fields .mie-foldout-block > .unity-foldout__toggle {
     flex-grow: 0;
 }
 
-.mie-fields .mie-collapsible > .unity-foldout__toggle .unity-base-field__label {
+.mie-fields .mie-foldout-block > .unity-foldout__toggle .unity-base-field__label {
     display: none;
     width: 0;
     min-width: 0;
@@ -223,7 +222,7 @@
     padding: 0;
 }
 
-.mie-fields .mie-collapsible > .unity-foldout__toggle .unity-base-field__input {
+.mie-fields .mie-foldout-block > .unity-foldout__toggle .unity-base-field__input {
     margin-left: 0;
     flex-grow: 0;
 }

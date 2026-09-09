@@ -10,15 +10,15 @@ namespace Mane.Unity.Editor
     /// (<see cref="VisualElement.name"/>, or <see cref="Foldout.text"/> if name is empty).
     /// </summary>
     [UxmlElement]
-    public partial class CollapsibleBlock : Foldout
+    public partial class FoldoutBlock : Foldout
     {
-        public const string UssClassName = "mie-collapsible";
-        private const string PrefPrefix = "Mane.Editor.Collapsible.";
+        public const string UssClassName = "mie-foldout-block";
+        private const string PrefPrefix = "Mane.Editor.FoldoutBlock.";
 
         private bool _collapsedByDefault;
         private bool _appliedStoredState;
 
-        public CollapsibleBlock()
+        public FoldoutBlock()
         {
             AddToClassList("mie-block");
             AddToClassList(UssClassName);
@@ -55,7 +55,7 @@ namespace Mane.Unity.Editor
         }
 
         private void ApplyCollapsedStyle(bool expanded) =>
-            EnableInClassList("mie-collapsible--collapsed", !expanded);
+            EnableInClassList(UssClassName + "--collapsed", !expanded);
 
         private void SaveState(bool expanded)
         {

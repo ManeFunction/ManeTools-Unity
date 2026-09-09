@@ -22,7 +22,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - Added `Mane Tools overlay panel` for the `Scene View`.
 - Editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
 - All `UI Toolkit` styles was aggregated to this package, so I can use them from one place. Now you can use them as well, if you want to style your inspectors the same way I do.
-- Added custom style attribute `ManeStyle` that you can apply to the component or scriptable object to make it follow this package custom inspector styles. In that case `Space` attribute splits visual blocks, `Header` added a header to this split, and custom `Collapsible("Header")` create a collapsible block, the same you can see in ThreeStatesToggle.
+- Added custom style attribute `ManeStyle` that you can apply to the component or scriptable object to make it follow this package custom inspector styles. In that case `Space` attribute splits visual blocks, `Header` added a header to this split, and custom `Foldout("Header")` create a foldout block, the same you can see in `ThreeStatesToggle`.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.

@@ -9,11 +9,6 @@
     --mie-nested-label-width: 109px;
 }
 
-.mie-root.mie-labels-150 {
-    --mie-label-width: 150px;
-    --mie-nested-label-width: 144px;
-}
-
 /* Bordered section */
 .mie-block {
     border-width: 1px;

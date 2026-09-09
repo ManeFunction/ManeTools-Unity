@@ -14,7 +14,6 @@ namespace Mane.Unity.Editor
     {
         public const string RootClass = "mie-root";
         public const string FieldsClass = "mie-fields";
-        public const string WideLabelsClass = "mie-labels-150";
 
         [Flags]
         public enum Options
@@ -51,11 +50,6 @@ namespace Mane.Unity.Editor
                 DisableInspectorLabelAlignment(root);
                 root.schedule.Execute(() => DisableInspectorLabelAlignment(root));
             }
-        }
-
-        public static void UseWideLabels(VisualElement root)
-        {
-            root?.AddToClassList(WideLabelsClass);
         }
 
         public static void RefreshFieldLayout(VisualElement root)

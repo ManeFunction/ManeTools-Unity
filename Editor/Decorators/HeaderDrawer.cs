@@ -1,18 +1,18 @@
-using UnityEditor;
-using UnityEngine;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
-    [CustomPropertyDrawer(typeof(HeaderAttribute))]
-    internal sealed class HeaderDrawer : DecoratorDrawer
+    internal static class HeaderDrawer
     {
-        public override VisualElement CreatePropertyGUI()
+        public static VisualElement Create(string text)
         {
-            VisualElement marker = new();
-            marker.AddToClassList(ManeInspectorLayout.HeaderDecoratorClass);
-            marker.style.display = DisplayStyle.None;
-            return marker;
+            Label label = new(text);
+            label.AddToClassList("mie-header");
+            return label;
         }
+
+        public static void HideUnityDecorator(PropertyField field) =>
+            UnityDecoratorHider.HideImgui(field);
     }
 }

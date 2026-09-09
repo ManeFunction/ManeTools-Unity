@@ -60,17 +60,6 @@ namespace Mane.Unity.Editor
             DisableInspectorLabelAlignment(root);
         }
 
-        public static bool IsApplied(VisualElement element)
-        {
-            for (VisualElement current = element; current != null; current = current.parent)
-            {
-                if (current.ClassListContains(RootClass))
-                    return true;
-            }
-
-            return false;
-        }
-
         private static void AddSheet(VisualElement root)
         {
             StyleSheet sheet = Sheet;

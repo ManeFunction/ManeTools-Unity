@@ -1,18 +1,9 @@
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+using UnityEditor.UIElements;
 namespace Mane.Unity.Editor
 {
-    [CustomPropertyDrawer(typeof(SpaceAttribute))]
-    internal sealed class SpaceDrawer : DecoratorDrawer
+    internal static class SpaceDrawer
     {
-        public override VisualElement CreatePropertyGUI()
-        {
-            VisualElement marker = new();
-            marker.AddToClassList(ManeInspectorLayout.SpaceDecoratorClass);
-            marker.style.display = DisplayStyle.None;
-            return marker;
-        }
+        public static void HideUnityDecorator(PropertyField field) =>
+            UnityDecoratorHider.HideImgui(field);
     }
 }

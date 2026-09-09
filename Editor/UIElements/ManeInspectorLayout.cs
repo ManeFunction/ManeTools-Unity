@@ -8,23 +8,17 @@ namespace Mane.Unity.Editor
     /// <summary>
     /// Builds a default UITK inspector: fields grouped into <c>mie-block</c>s.
     /// <see cref="SpaceAttribute"/> starts a new block; <see cref="HeaderAttribute"/> does the same
-    /// and adds a <c>mie-header</c> label. The built-in Header/Space decorators are hidden at the
-    /// top level so they do not duplicate that chrome.
+    /// and adds a <c>mie-header</c> label. Unity's built-in Header/Space drawers are hidden on those
+    /// fields so they do not duplicate that chrome.
     /// </summary>
     public static class ManeInspectorLayout
     {
-        public const string HeaderDecoratorClass = "mie-header-decorator";
-        public const string SpaceDecoratorClass = "mie-space-decorator";
-
-        private const string DecoratorContainerClass = "unity-decorator-drawers-container";
         private const string BlockClass = "mie-block";
-        private const string HeaderClass = "mie-header";
         private const string ScriptPath = "m_Script";
 
         public static void Fill(VisualElement root, SerializedObject serializedObject)
         {
             VisualElement block = null;
-            bool hasDataField = false;
 
             SerializedProperty iterator = serializedObject.GetIterator();
             bool enterChildren = true;
@@ -40,7 +34,7 @@ namespace Mane.Unity.Editor
                 bool hasHeader = headers.Length > 0;
                 bool hasSpace = property.GetAttributes<SpaceAttribute>().Length > 0;
 
-                if (block == null || ((hasHeader || hasSpace) && hasDataField))
+                if (block == null || hasHeader || hasSpace)
                 {
                     block = CreateBlock();
                     root.Add(block);
@@ -49,17 +43,16 @@ namespace Mane.Unity.Editor
                 if (hasHeader)
                 {
                     foreach (HeaderAttribute header in headers)
-                    {
-                        Label label = new(header.header);
-                        label.AddToClassList(HeaderClass);
-                        block.Add(label);
-                    }
+                        block.Add(HeaderDrawer.Create(header.header));
                 }
 
                 PropertyField field = CreateField(property);
-                HideTopLevelHeaderSpaceDecorators(field);
+                if (hasHeader)
+                    HeaderDrawer.HideUnityDecorator(field);
+                if (hasSpace)
+                    SpaceDrawer.HideUnityDecorator(field);
+
                 block.Add(field);
-                hasDataField = true;
             }
         }
 
@@ -78,61 +71,6 @@ namespace Mane.Unity.Editor
             };
             field.Bind(property.serializedObject);
             return field;
-        }
-
-        private static void HideTopLevelHeaderSpaceDecorators(PropertyField field)
-        {
-            field.RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                int retries = 0;
-
-                void TryHide()
-                {
-                    VisualElement container = FindDirectDecoratorContainer(field);
-                    if (container == null)
-                    {
-                        if (retries++ < 10)
-                            field.schedule.Execute(TryHide);
-                        return;
-                    }
-
-                    bool anyVisible = false;
-                    foreach (VisualElement child in container.Children())
-                    {
-                        if (child.ClassListContains(HeaderDecoratorClass) ||
-                            child.ClassListContains(SpaceDecoratorClass) ||
-                            child is IMGUIContainer)
-                        {
-                            child.style.display = DisplayStyle.None;
-                            continue;
-                        }
-
-                        anyVisible = true;
-                    }
-
-                    if (!anyVisible)
-                        container.style.display = DisplayStyle.None;
-                }
-
-                TryHide();
-            });
-        }
-
-        private static VisualElement FindDirectDecoratorContainer(PropertyField field)
-        {
-            foreach (VisualElement child in field.Children())
-            {
-                if (child.ClassListContains(DecoratorContainerClass))
-                    return child;
-
-                foreach (VisualElement grandchild in child.Children())
-                {
-                    if (grandchild.ClassListContains(DecoratorContainerClass))
-                        return grandchild;
-                }
-            }
-
-            return null;
         }
     }
 }

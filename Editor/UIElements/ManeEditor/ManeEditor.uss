@@ -33,22 +33,6 @@
     flex-shrink: 0;
 }
 
-.mie-header-toggle {
-    margin: 0 0 0 2px;
-    padding: 0;
-}
-
-.mie-header-toggle .unity-toggle__input {
-    margin: 0;
-    padding: 0;
-}
-
-.mie-header-toggle .unity-toggle__text {
-    font-size: 14px;
-    -unity-font-style: bold;
-    margin-left: 5px;
-}
-
 /* Foldout version of mie-block — no extra indent, header matches mie-header */
 .mie-foldout-block > .unity-foldout__toggle {
     margin: 0 0 0 2px;
@@ -188,25 +172,6 @@
     width: var(--mie-nested-label-width);
     min-width: var(--mie-nested-label-width);
     max-width: var(--mie-nested-label-width);
-}
-
-/* Section header checkbox sits on the block padding, not the field column */
-.mie-fields .mie-header-toggle {
-    flex-grow: 0;
-}
-
-.mie-fields .mie-header-toggle .unity-base-field__label {
-    display: none;
-    width: 0;
-    min-width: 0;
-    max-width: 0;
-    margin: 0;
-    padding: 0;
-}
-
-.mie-fields .mie-header-toggle .unity-base-field__input {
-    margin-left: 0;
-    flex-grow: 0;
 }
 
 .mie-fields .mie-foldout-block > .unity-foldout__toggle {

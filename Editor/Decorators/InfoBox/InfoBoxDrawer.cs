@@ -10,7 +10,7 @@ using UnityObject = UnityEngine.Object;
 namespace Mane.Unity.Editor
 {
     [CustomPropertyDrawer(typeof(InfoBoxAttribute))]
-    internal sealed class InfoBoxDrawer : ManeDecorator<InfoBoxDrawer>
+    public sealed class InfoBoxDrawer : ManeDecorator<InfoBoxDrawer>
     {
         protected override string XmlFileName => "InfoBox";
 
@@ -21,25 +21,26 @@ namespace Mane.Unity.Editor
         public override VisualElement CreatePropertyGUI()
         {
             InfoBoxAttribute info = (InfoBoxAttribute)attribute;
-            VisualTreeAsset tree = Xml;
-            VisualElement root;
+            VisualElement root = Create(info.Message, info.Type);
+            BindShowCondition(root, info.ShowCondition, info.InvertCondition);
+            return root;
+        }
+
+        public static VisualElement Create(string message, InfoBoxType type = InfoBoxType.Info)
+        {
+            VisualTreeAsset tree = new InfoBoxDrawer().Xml;
             if (tree == null)
             {
                 Debug.LogError("InfoBox UXML is not assigned.");
-                root = new Label(info.Message);
-            }
-            else
-            {
-                TemplateContainer container = tree.CloneTree();
-                ManeEditorStyles.Apply(container, ManeEditorStyles.Options.Sheet);
-                VisualElement box = container.Q<VisualElement>("infoBox");
-                box.Q<Label>("label").text = info.Message;
-                box.AddToClassList(TypeClass(info.Type));
-                root = container;
+                return new Label(message);
             }
 
-            BindShowCondition(root, info.ShowCondition, info.InvertCondition);
-            return root;
+            TemplateContainer container = tree.CloneTree();
+            ManeEditorStyles.Apply(container, ManeEditorStyles.Options.Sheet);
+            VisualElement box = container.Q<VisualElement>("infoBox");
+            box.Q<Label>("label").text = message;
+            box.AddToClassList(TypeClass(type));
+            return container;
         }
 
         public override float GetHeight()

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
-    internal abstract class ManeDecorator<TDrawer> : DecoratorDrawer
+    public abstract class ManeDecorator<TDrawer> : DecoratorDrawer
         where TDrawer : ManeDecorator<TDrawer>
     {
         private static VisualTreeAsset _xml;

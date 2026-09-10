@@ -134,3 +134,28 @@
     min-width: var(--mie-nested-label-width);
     max-width: var(--mie-nested-label-width);
 }
+
+.mie-fields .unity-list-view .unity-scroll-view .mie-serialize-interface__type,
+.mie-fields .unity-collection-view .unity-scroll-view .mie-serialize-interface__type {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.mie-fields .unity-list-view__item .mie-serialize-interface__type > .unity-base-field__label,
+.mie-fields .unity-collection-view__item .mie-serialize-interface__type > .unity-base-field__label {
+    display: none;
+    flex-basis: 0;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-fields .unity-list-view__item .mie-serialize-interface__type > .unity-base-field__input,
+.mie-fields .unity-collection-view__item .mie-serialize-interface__type > .unity-base-field__input {
+    margin-left: 0;
+    flex-grow: 1;
+    min-width: 0;
+}

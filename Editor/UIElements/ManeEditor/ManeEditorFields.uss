@@ -82,3 +82,104 @@
 .mie-fields .mie-minmax-field {
     margin-right: -2px;
 }
+
+/* Lists — Unity inspector chrome, not the 115px field column */
+.mie-fields .unity-list-view,
+.mie-fields .unity-collection-view {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.mie-fields .unity-list-view .unity-scroll-view,
+.mie-fields .unity-collection-view .unity-scroll-view {
+    flex-grow: 0;
+    min-height: 0;
+}
+
+.mie-fields .unity-list-view__foldout-header > .unity-foldout__toggle {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-height: 22px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.mie-fields .unity-list-view__foldout-header > .unity-foldout__toggle > .unity-base-field__input {
+    margin-left: 0;
+    flex-grow: 0;
+}
+
+.mie-fields .unity-list-view__foldout-header > .unity-foldout__toggle > .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    flex-basis: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-fields .unity-list-view__foldout-header > .unity-foldout__toggle .unity-toggle__text {
+    flex-grow: 1;
+    flex-basis: auto;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-left: 0;
+}
+
+.mie-fields .unity-list-view__foldout-header > .unity-foldout__content {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.mie-fields .unity-list-view__size-field > .unity-base-field__label {
+    display: none;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    flex-basis: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-fields .unity-list-view__size-field {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 40px;
+    max-width: 50px;
+    height: 18px;
+    min-height: 18px;
+}
+
+.mie-fields .unity-list-view__size-field > .unity-base-field__input {
+    margin-left: 0;
+    min-width: 0;
+}
+
+.mie-fields .unity-list-view .unity-scroll-view .unity-base-field,
+.mie-fields .unity-collection-view .unity-scroll-view .unity-base-field {
+    flex-grow: 0;
+    align-self: stretch;
+}
+
+.mie-fields .unity-list-view__item .unity-base-field__label,
+.mie-fields .unity-list-view__item .unity-property-field__label,
+.mie-fields .unity-collection-view__item .unity-base-field__label,
+.mie-fields .unity-collection-view__item .unity-property-field__label {
+    flex-basis: var(--mie-nested-label-width);
+    width: var(--mie-nested-label-width);
+    min-width: var(--mie-nested-label-width);
+    max-width: var(--mie-nested-label-width);
+}
+
+.mie-fields .unity-list-view__footer {
+    flex-grow: 0;
+}
+
+.mie-fields .unity-list-view__reorderable-item__container {
+    margin: 0 0 0 -10px;
+}

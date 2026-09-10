@@ -1,0 +1,136 @@
+/* Header is an aligned BaseField. Children sit in a column below it, not inside the field row. */
+
+.mie-serialize-interface {
+    flex-grow: 1;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.mie-serialize-interface__field {
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-self: stretch;
+    align-items: center;
+    min-width: 0;
+    margin: 0 0 0 2px;
+    position: relative;
+    overflow: visible;
+}
+
+.mie-serialize-interface--fields > .mie-serialize-interface__field.unity-base-field {
+    flex-grow: 0;
+}
+
+.mie-serialize-interface__field > .unity-base-field__input {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    align-self: center;
+}
+
+.mie-serialize-interface__arrow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    min-width: 12px;
+    max-width: 12px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: transparent;
+}
+
+.mie-serialize-interface--fields .mie-serialize-interface__arrow {
+    flex-grow: 0;
+    width: 12px;
+    min-width: 12px;
+    max-width: 12px;
+}
+
+.mie-serialize-interface__arrow > .unity-base-field__label,
+.mie-serialize-interface__arrow > .unity-toggle__text {
+    display: none;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-serialize-interface__arrow > .unity-base-field__input {
+    flex-grow: 0;
+    margin: 0;
+}
+
+.mie-serialize-interface--foldout > .unity-base-field__label {
+    padding-left: 15px;
+}
+
+.mie-serialize-interface__type {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    margin: 0 -2px 0 0;
+    padding: 0;
+}
+
+.mie-serialize-interface__type > .unity-base-field__label {
+    display: none;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-serialize-interface__type > .unity-base-field__input {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+.mie-serialize-interface__children {
+    flex-grow: 0;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.mie-serialize-interface--fields > .mie-serialize-interface__field > .unity-base-field__input {
+    margin-left: 12px;
+}
+
+.mie-serialize-interface--fields .mie-serialize-interface__arrow > .unity-base-field__label,
+.mie-serialize-interface--fields .mie-serialize-interface__arrow > .unity-toggle__text,
+.mie-serialize-interface--fields .mie-serialize-interface__type > .unity-base-field__label {
+    display: none;
+    flex-basis: 0;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-serialize-interface--fields .mie-serialize-interface__arrow > .unity-base-field__input {
+    margin-left: 0;
+    flex-grow: 0;
+}
+
+.mie-serialize-interface--fields .mie-serialize-interface__type > .unity-base-field__input {
+    margin-left: 0;
+}
+
+.mie-serialize-interface--fields .mie-serialize-interface__children .unity-base-field__label,
+.mie-serialize-interface--fields .mie-serialize-interface__children .unity-property-field__label {
+    flex-basis: var(--mie-nested-label-width);
+    width: var(--mie-nested-label-width);
+    min-width: var(--mie-nested-label-width);
+    max-width: var(--mie-nested-label-width);
+}

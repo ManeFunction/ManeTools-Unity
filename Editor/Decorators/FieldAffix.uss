@@ -1,0 +1,52 @@
+/* Prefix/postfix chips next to the input — width follows text, like Min/Max/X/Y. */
+
+.mie-affix-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    min-width: 0;
+}
+
+.mie-affix-row > .unity-base-field__input,
+.mie-affix-row > .unity-composite-field__input {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.mie-affix-row--fields {
+    margin-left: 12px;
+}
+
+.mie-affix-row--fields > .unity-base-field__input {
+    margin-left: 0;
+}
+
+.mie-prefix,
+.mie-postfix {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    min-width: auto;
+    max-width: none;
+    overflow: visible;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -unity-text-align: middle-left;
+}
+
+.mie-prefix {
+    margin-left: 0;
+    margin-right: 2px;
+}
+
+.mie-postfix {
+    margin-left: 2px;
+    margin-right: 0;
+}

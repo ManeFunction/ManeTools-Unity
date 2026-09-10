@@ -131,7 +131,7 @@
     margin-left: 0;
 }
 
-.mie-fields .unity-list-view__foldout-header > .unity-list-view__size-field {
+.mie-fields .unity-list-view > .unity-list-view__size-field {
     margin-right: 4px;
 }
 

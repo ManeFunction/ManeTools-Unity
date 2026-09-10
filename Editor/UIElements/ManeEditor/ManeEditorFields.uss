@@ -140,16 +140,6 @@
     padding-left: 0;
 }
 
-.mie-fields .unity-list-view__size-field > .unity-base-field__label {
-    display: none;
-    width: 0;
-    min-width: 0;
-    max-width: 0;
-    flex-basis: 0;
-    margin: 0;
-    padding: 0;
-}
-
 .mie-fields .unity-list-view__size-field {
     flex-grow: 0;
     flex-shrink: 0;

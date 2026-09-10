@@ -48,6 +48,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `DropdownList` attribute now works not only with public methods, but also with privates and properties.
 - `DropdownList` options (when they are getting dynamically from the code) can now be refreshed from the context menu.
 - `Layer` attribute renamed to `LayerSelector`.
+- `SerializeReferenceInterface` attribute was renamed to `SerializeInterface`.
 
 ### Removed
 - Intentionally dropped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.

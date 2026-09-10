@@ -131,6 +131,10 @@
     margin-left: 0;
 }
 
+.mie-fields .unity-list-view__foldout-header > .unity-list-view__size-field {
+    margin-right: 4px;
+}
+
 .mie-fields .unity-list-view__foldout-header > .unity-foldout__content {
     margin-left: 0;
     padding-left: 0;

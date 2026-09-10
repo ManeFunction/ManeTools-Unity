@@ -6,7 +6,7 @@ namespace Mane.Unity
     {
         public string Text { get; }
 
-        public PostfixAttribute(string text)
+        public PostfixAttribute(string text) : base(applyToCollection: true)
         {
             Text = text;
         }

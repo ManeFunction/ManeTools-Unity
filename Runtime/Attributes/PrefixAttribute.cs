@@ -6,7 +6,7 @@ namespace Mane.Unity
     {
         public string Text { get; }
 
-        public PrefixAttribute(string text)
+        public PrefixAttribute(string text) : base(applyToCollection: true)
         {
             Text = text;
         }

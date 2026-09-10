@@ -1,3 +1,5 @@
+using System.Reflection;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +15,9 @@ namespace Mane.Unity.Editor
         private const string BaseFieldClass = "unity-base-field";
         private const string InputClass = "unity-base-field__input";
         private const string ChipFieldClass = "unity-composite-field__field";
+
+        private static readonly FieldInfo LabelField = typeof(PropertyField)
+            .GetField("m_Label", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static StyleSheet _sheet;
 
@@ -41,6 +46,13 @@ namespace Mane.Unity.Editor
 
         private static void Apply(PropertyField host, string text, bool prefix)
         {
+            SerializedProperty property = host.GetBoundSerializedProperty();
+            if (property is { isArray: true })
+            {
+                ApplyCollectionTitle(host, property);
+                return;
+            }
+
             VisualElement field = FindBaseField(host);
             VisualElement input = FindInput(field);
             if (input == null)
@@ -57,6 +69,37 @@ namespace Mane.Unity.Editor
                 row.Insert(0, chip);
             else
                 row.Add(chip);
+        }
+
+        private static void ApplyCollectionTitle(PropertyField host, SerializedProperty property)
+        {
+            string title =
+                $"{property.GetAttribute<PrefixAttribute>()?.Text}{property.displayName}{property.GetAttribute<PostfixAttribute>()?.Text}";
+
+            // Public label setter calls Rebind() and rebuilds the list. Decorators run after
+            // Bind(), so write the backing field and the live ListView header instead.
+            LabelField?.SetValue(host, title);
+
+            BaseListView list = FindListView(host);
+            if (list != null)
+                list.headerTitle = title;
+        }
+
+        private static BaseListView FindListView(VisualElement root)
+        {
+            foreach (VisualElement child in root.hierarchy.Children())
+            {
+                if (child is BaseListView list)
+                    return list;
+                if (child is PropertyField)
+                    continue;
+
+                BaseListView nested = FindListView(child);
+                if (nested != null)
+                    return nested;
+            }
+
+            return null;
         }
 
         private static VisualElement EnsureRow(VisualElement field, VisualElement input)

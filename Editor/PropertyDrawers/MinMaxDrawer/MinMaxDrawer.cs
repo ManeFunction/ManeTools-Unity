@@ -58,6 +58,7 @@ namespace Mane.Unity.Editor
             field.AddToClassList("unity-composite-field__field");
             if (name == "unity-x-input")
                 field.AddToClassList("unity-composite-field__field--first");
+            field.RemoveFromClassList(BaseField<float>.alignedFieldUssClassName);
             return field;
         }
 
@@ -127,19 +128,6 @@ namespace Mane.Unity.Editor
 
         private static VisualElement CreateComposite(string label, VisualElement min, VisualElement max)
         {
-            VisualElement root = new();
-            root.AddToClassList(BaseField<float>.ussClassName);
-            root.AddToClassList(BaseField<float>.alignedFieldUssClassName);
-            root.AddToClassList("unity-composite-field");
-            root.AddToClassList(Vector2Field.ussClassName);
-            root.AddToClassList("mie-minmax-field");
-            ApplySheet(root);
-
-            Label propertyLabel = new(label);
-            propertyLabel.AddToClassList(BaseField<float>.labelUssClassName);
-            propertyLabel.AddToClassList("unity-composite-field__label");
-            propertyLabel.AddToClassList(Vector2Field.labelUssClassName);
-
             VisualElement input = new();
             input.AddToClassList(BaseField<float>.inputUssClassName);
             input.AddToClassList("unity-composite-field__input");
@@ -147,9 +135,22 @@ namespace Mane.Unity.Editor
             input.Add(min);
             input.Add(max);
 
-            root.Add(propertyLabel);
-            root.Add(input);
+            MinMaxField root = new(label, input);
+            ApplySheet(root);
             return root;
+        }
+
+        private sealed class MinMaxField : BaseField<int>
+        {
+            public MinMaxField(string label, VisualElement visualInput) : base(label, visualInput)
+            {
+                AddToClassList(alignedFieldUssClassName);
+                AddToClassList("unity-composite-field");
+                AddToClassList(Vector2Field.ussClassName);
+                AddToClassList("mie-minmax-field");
+                labelElement.AddToClassList("unity-composite-field__label");
+                labelElement.AddToClassList(Vector2Field.labelUssClassName);
+            }
         }
 
         private static void ApplySheet(VisualElement root)

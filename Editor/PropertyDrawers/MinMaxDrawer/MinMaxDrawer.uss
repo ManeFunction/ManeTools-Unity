@@ -1,11 +1,15 @@
-/* Default inspector — ManeStyle overrides margin in ManeEditor.uss */
-
-.mie-fields .mie-minmax-field {
-    margin-right: -2px;
-}
+/* Default inspector — Unity-aligned row that can shrink. ManeStyle layout lives in ManeEditorFields.uss. */
 
 .mie-minmax-field {
     margin-right: -6px;
+    min-width: 0;
+}
+
+.mie-minmax-field > .unity-base-field__input,
+.mie-minmax-field .unity-composite-field__input,
+.mie-minmax-field .unity-composite-field__field {
+    min-width: 0;
+    flex-shrink: 1;
 }
 
 .mie-minmax-field.unity-composite-field .unity-composite-field__field > .unity-base-field__label {

@@ -24,8 +24,11 @@ namespace Mane.Unity.Editor
         }
 
         private const string AlignedFieldClass = "unity-base-field__aligned";
+        private const string SheetFileName = "ManeEditor.uss";
+        private const string FieldsSheetFileName = "ManeEditorFields.uss";
 
         private static StyleSheet _sheet;
+        private static StyleSheet _fieldsSheet;
 
         public static void Apply(VisualElement root) => Apply(root, Options.Inspector);
 
@@ -37,10 +40,13 @@ namespace Mane.Unity.Editor
             root.AddToClassList(RootClass);
 
             if ((options & Options.Sheet) != 0)
-                AddSheet(root);
+                AddSheet(root, Sheet, SheetFileName);
 
             if ((options & Options.FieldLayout) != 0)
+            {
                 root.AddToClassList(FieldsClass);
+                AddSheet(root, FieldsSheet, FieldsSheetFileName);
+            }
 
             if ((options & Options.DisableInspectorAlignment) != 0)
             {
@@ -57,12 +63,11 @@ namespace Mane.Unity.Editor
             DisableInspectorLabelAlignment(root);
         }
 
-        private static void AddSheet(VisualElement root)
+        private static void AddSheet(VisualElement root, StyleSheet sheet, string fileName)
         {
-            StyleSheet sheet = Sheet;
             if (sheet == null)
             {
-                Debug.LogError("ManeEditor.uss was not found next to ManeEditorStyles.");
+                Debug.LogError($"{fileName} was not found next to ManeEditorStyles.");
                 return;
             }
 
@@ -71,7 +76,10 @@ namespace Mane.Unity.Editor
         }
 
         private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), "ManeEditor.uss");
+            _sheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), SheetFileName);
+
+        private static StyleSheet FieldsSheet =>
+            _fieldsSheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), FieldsSheetFileName);
 
         private static void DisableInspectorLabelAlignment(VisualElement root)
         {

@@ -13,10 +13,9 @@
 .mie-block {
     border-width: 1px;
     border-color: var(--mie-border);
-    padding: 5px;
+    padding: 5px 9px 4px 5px;
     margin-top: 5px;
     margin-bottom: 5px;
-    padding-bottom: 4px;
     flex-shrink: 0;
 }
 

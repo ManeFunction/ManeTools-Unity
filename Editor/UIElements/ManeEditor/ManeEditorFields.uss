@@ -76,7 +76,6 @@
 
 .mie-fields .unity-event__container {
     margin-top: 5px;
-    margin-right: -2px;
 }
 
 .mie-fields .mie-minmax-field {
@@ -102,7 +101,7 @@
     flex-shrink: 0;
     min-height: 22px;
     height: 22px;
-    margin: 0;
+    margin: 0 -4px 0 1px;
     padding: 0;
     align-items: center;
 }
@@ -132,7 +131,7 @@
 }
 
 .mie-fields .unity-list-view > .unity-list-view__size-field {
-    margin-right: 4px;
+    margin: 2px -1px 0 0;
 }
 
 .mie-fields .unity-list-view__foldout-header > .unity-foldout__content {
@@ -176,4 +175,24 @@
 
 .mie-fields .unity-list-view__reorderable-item__container {
     margin: 0 0 0 -10px;
+}
+
+.mie-fields .unity-collection-view__scroll-view {
+    margin-right: -5px;
+}
+
+.mie-fields .unity-list-view__footer > .unity-button {
+    height: 18px;
+}
+
+.mie-fields .unity-list-view__footer > .unity-button:hover {
+    background-color: #00000000;
+}
+
+.mie-fields #unity-list-view__add-button:hover {
+    color: #35BD40;
+}
+
+.mie-fields #unity-list-view__remove-button:hover {
+    color: #FF4747;
 }

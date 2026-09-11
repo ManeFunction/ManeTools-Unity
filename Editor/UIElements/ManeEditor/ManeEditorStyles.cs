@@ -46,6 +46,7 @@ namespace Mane.Unity.Editor
             {
                 root.AddToClassList(FieldsClass);
                 AddSheet(root, FieldsSheet, FieldsSheetFileName);
+                root.schedule.Execute(() => StyleListViewFooterButtons(root));
             }
 
             if ((options & Options.DisableInspectorAlignment) != 0)
@@ -61,6 +62,7 @@ namespace Mane.Unity.Editor
                 return;
 
             DisableInspectorLabelAlignment(root);
+            StyleListViewFooterButtons(root);
         }
 
         private static void AddSheet(VisualElement root, StyleSheet sheet, string fileName)
@@ -80,6 +82,14 @@ namespace Mane.Unity.Editor
 
         private static StyleSheet FieldsSheet =>
             _fieldsSheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), FieldsSheetFileName);
+
+        private static void StyleListViewFooterButtons(VisualElement root)
+        {
+            root.Query<Button>(name: BaseListView.footerRemoveButtonName).ForEach(button =>
+            {
+                button.text = "–";
+            });
+        }
 
         private static void DisableInspectorLabelAlignment(VisualElement root)
         {

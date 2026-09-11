@@ -9,12 +9,14 @@ namespace Mane.Unity.Editor
         public static VisualElement CreateUnsupportedFieldTypeWarning(
             SerializedProperty property,
             string attributeName,
-            string expectedTypes)
+            string expectedTypes) =>
+            CreateWarningField(property,
+                $"[{attributeName}] can only be applied to {expectedTypes} fields.\n'{property.displayName}' is {property.propertyType}.");
+
+        public static VisualElement CreateWarningField(SerializedProperty property, string message)
         {
             VisualElement root = new();
-            root.Add(InfoBoxDrawer.Create(
-                $"[{attributeName}] can only be applied to {expectedTypes} fields.\n'{property.displayName}' is {property.propertyType}.",
-                InfoBoxType.Warning));
+            root.Add(InfoBoxDrawer.Create(message, InfoBoxType.Warning));
             root.Add(new PropertyField(property));
             return root;
         }

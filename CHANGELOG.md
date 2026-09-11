@@ -14,13 +14,14 @@ Initial release of the extracted Unity codebase and Editor tools. Were moved and
 Below, you can find a list of changes, comparing with legacy ManeTools.
 
 ### Added
+- Added `InterfaceOnly` attribute to declare a fields with MonoBehaviour + Interface requirements.
 - Added Mane Tools editor scene view overlay to keep all the editor features in one place.
 - Added 'Copy as a C# code' to color fields context menu.
 - Added `EditorButton` feature to draw methods calling buttons within your editors.
 - Added optional conditions to the `InfoBox`.
 - `Apply Transform values` to a prefab now works properly with `RectTransform`.
 - Added `Mane Tools overlay panel` for the `Scene View`.
-- Editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
+- Added editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
 - All `UI Toolkit` styles was aggregated to this package, so I can use them from one place. Now you can use them as well, if you want to style your inspectors the same way I do.
 - Added custom style attribute `ManeStyle` that you can apply to the component or scriptable object to make it follow this package custom inspector styles. In that case `Space` attribute splits visual blocks, `Header` added a header to this split, and custom `Foldout("Header")` create a foldout block, the same you can see in `ThreeStatesToggle`.
 - Added `Prefix` property decorator, alongside old `Postfix` one.

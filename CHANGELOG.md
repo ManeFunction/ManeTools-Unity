@@ -24,6 +24,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - All `UI Toolkit` styles was aggregated to this package, so I can use them from one place. Now you can use them as well, if you want to style your inspectors the same way I do.
 - Added custom style attribute `ManeStyle` that you can apply to the component or scriptable object to make it follow this package custom inspector styles. In that case `Space` attribute splits visual blocks, `Header` added a header to this split, and custom `Foldout("Header")` create a foldout block, the same you can see in `ThreeStatesToggle`.
 - Added `Prefix` property decorator, alongside old `Postfix` one.
+- Added `ItemNameFromString` attribute, to set collections element names like `ItemNameFromField`, but using `Custom string {0}`.
 
 ### Changed
 - Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
@@ -44,7 +45,7 @@ Below, you can find a list of changes, comparing with legacy ManeTools.
 - `Asset Reference Finder` now a context menu from `Assets` menu instead of the separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
 - `GetRequiredComponent` is `GetOrAddComponent` now, for clearance.
-- `ArrayElements` attribute renamed to `CollectionItemName`.
+- `ArrayElements` attribute renamed to `ItemNameFromField`.
 - `DropdownList` attribute now works not only with public methods, but also with privates and properties.
 - `DropdownList` options (when they are getting dynamically from the code) can now be refreshed from the context menu.
 - `Layer` attribute renamed to `LayerSelector`.

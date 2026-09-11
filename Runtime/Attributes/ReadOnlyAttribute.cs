@@ -2,5 +2,5 @@
 
 namespace Mane.Unity
 {
-    public class ReadOnlyAttribute : PropertyAttribute { }
+    public sealed class ReadOnlyAttribute : PropertyAttribute { }
 }

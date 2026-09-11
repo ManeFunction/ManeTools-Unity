@@ -2,5 +2,5 @@
 
 namespace Mane.Unity
 {
-    public class LayerSelectorAttribute : PropertyAttribute { }
+    public sealed class LayerSelectorAttribute : PropertyAttribute { }
 }

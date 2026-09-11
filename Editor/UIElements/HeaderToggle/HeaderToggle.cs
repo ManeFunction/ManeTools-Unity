@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     /// When a sibling <c>contentContainer</c> (or <c>mie-content</c>) exists, it is shown only while checked.
     /// </summary>
     [UxmlElement]
-    public partial class HeaderToggle : Toggle
+    public sealed partial class HeaderToggle : Toggle
     {
         public const string UssClassName = "mie-header-toggle";
         private const string AlignedFieldClass = "unity-base-field__aligned";

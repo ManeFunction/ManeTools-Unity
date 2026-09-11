@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
-    public class DropdownListAttribute : PropertyAttribute
+    public sealed class DropdownListAttribute : PropertyAttribute
     {
         private const BindingFlags MemberFlags =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance |

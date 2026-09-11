@@ -11,7 +11,7 @@ namespace Mane.Unity.Editor
     /// (<see cref="VisualElement.name"/>, or <see cref="Foldout.text"/> if name is empty).
     /// </summary>
     [UxmlElement]
-    public partial class FoldoutBlock : Foldout
+    public sealed partial class FoldoutBlock : Foldout
     {
         public const string UssClassName = "mie-foldout-block";
         private const string PrefPrefix = "Mane.Editor.FoldoutBlock.";

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
-    public class InfoBoxAttribute : PropertyAttribute
+    public sealed class InfoBoxAttribute : PropertyAttribute
     {
         public string Message { get; }
         public InfoBoxType Type { get; }

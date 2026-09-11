@@ -4,5 +4,5 @@ using UnityEngine;
 namespace Mane.Unity
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class SerializeInterfaceAttribute : PropertyAttribute { }
+    public sealed class SerializeInterfaceAttribute : PropertyAttribute { }
 }

@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     /// Empty labels show the numeric value.
     /// </summary>
     [UxmlElement]
-    public partial class LimitedValueField : IntegerField
+    public sealed partial class LimitedValueField : IntegerField
     {
         private bool _allowNegatives;
         private string _negativeLabel = string.Empty;

@@ -2,7 +2,7 @@
 
 namespace Mane.Unity
 {
-    public class AvailableIfAttribute : PropertyAttribute
+    public sealed class AvailableIfAttribute : PropertyAttribute
     {
         public bool IsAvailable { get; }
         public string PropertyName { get; }

@@ -5,6 +5,9 @@
     --mie-button-bg: #333;
     --mie-button-hover: #444;
     --mie-button-active: #555;
+    --mie-accent: #2a6cb8;
+    --mie-accent-hover: #3a7cc8;
+    --mie-accent-muted: #2a6cb866;
     --mie-label-width: 115px;
     --mie-nested-label-width: 109px;
 }

@@ -1,0 +1,191 @@
+.mie-calendar {
+    padding: 8px;
+    width: 310px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: stretch;
+}
+
+.mie-calendar-mode {
+    flex-direction: row;
+    margin: 0 0 6px;
+    border-width: 1px;
+    border-color: var(--mie-border);
+    background-color: #252525;
+    padding: 1px;
+}
+
+.mie-calendar-mode__button {
+    flex-grow: 1;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-radius: 0;
+    background-color: #00000000;
+    color: #888;
+}
+
+.mie-calendar-mode__button:hover {
+    background-color: #333;
+    color: #ddd;
+}
+
+.mie-calendar-mode__button--active {
+    background-color: var(--mie-accent);
+    color: #fff;
+    -unity-font-style: bold;
+}
+
+.mie-calendar-mode__button--active:hover {
+    background-color: var(--mie-accent-hover);
+    color: #fff;
+}
+
+.mie-calendar-nav {
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 6px;
+}
+
+.mie-calendar-nav__button {
+    width: 28px;
+    min-width: 28px;
+    height: 20px;
+    margin: 0 2px 0 0;
+    padding: 0;
+}
+
+.mie-calendar-nav > #nextYear {
+    margin-right: 0;
+}
+
+.mie-calendar-title {
+    flex-grow: 1;
+    -unity-font-style: bold;
+    font-size: 14px;
+    -unity-text-align: middle-center;
+}
+
+.mie-calendar-grid-root {
+    flex-shrink: 0;
+}
+
+.mie-calendar-weekdays,
+.mie-calendar-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.mie-calendar-weekday {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    height: 18px;
+    margin: 1px;
+    padding: 0;
+    font-size: 11px;
+    color: #aaa;
+    -unity-text-align: middle-center;
+}
+
+.mie-calendar-grid > .mie-button.mie-calendar-day {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    height: 24px;
+    margin: 1px;
+    padding: 0;
+    font-size: 12px;
+}
+
+.mie-button.mie-calendar-day--outside {
+    opacity: 0.35;
+    color: #9a9a9a;
+    background-color: #2a2a2a;
+}
+
+.mie-button.mie-calendar-day--outside:hover {
+    opacity: 0.55;
+}
+
+.mie-calendar-day--today {
+    border-width: 1px;
+    border-color: var(--mie-border);
+}
+
+.mie-button.mie-calendar-day--outside.mie-calendar-day--in-range,
+.mie-button.mie-calendar-day--outside.mie-calendar-day--selected {
+    opacity: 0.7;
+}
+
+.mie-button.mie-calendar-day--in-range,
+.mie-button.mie-calendar-day--in-range:hover {
+    background-color: var(--mie-accent-muted);
+}
+
+.mie-button.mie-calendar-day--selected,
+.mie-button.mie-calendar-day--selected:hover {
+    background-color: var(--mie-accent);
+    color: #fff;
+}
+
+.mie-calendar-time {
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+.mie-calendar-time > .unity-base-field__label {
+    min-width: 52px;
+    width: 52px;
+}
+
+.mie-nested-block.mie-calendar-summary {
+    margin: 8px 0 0;
+}
+
+.mie-calendar-summary__row {
+    flex-direction: row;
+    align-items: center;
+    margin: 1px 0;
+}
+
+.mie-calendar-summary__label {
+    width: 40px;
+    min-width: 40px;
+    color: #aaa;
+}
+
+.mie-calendar-summary__value {
+    flex-grow: 1;
+    min-width: 0;
+    white-space: nowrap;
+    -unity-font-style: bold;
+}
+
+.mie-calendar-footer {
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 0 0;
+    padding: 0;
+}
+
+.mie-calendar-footer-spacer {
+    flex-grow: 1;
+}
+
+.mie-calendar-footer > .mie-button {
+    height: 20px;
+    margin: 0 0 0 4px;
+    padding: 0 8px;
+}
+
+.mie-calendar-footer > #today {
+    margin-left: 0;
+}
+
+.mie-calendar-footer > #ok {
+    margin-right: 0;
+}

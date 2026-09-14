@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:mie="Mane.Unity.Editor"
+         editor-extension-mode="True">
+    <Style src="CalendarPopup.uss" />
+    <ui:VisualElement class="mie-calendar">
+        <ui:VisualElement name="modeRow" class="mie-calendar-mode">
+            <ui:Button name="startMode" text="Start" class="mie-calendar-mode__button" />
+            <ui:Button name="endMode" text="End" class="mie-calendar-mode__button" />
+        </ui:VisualElement>
+        <ui:VisualElement class="mie-calendar-nav">
+            <ui:Button name="prevYear" text="«" class="mie-button mie-calendar-nav__button" />
+            <ui:Button name="prevMonth" text="‹" class="mie-button mie-calendar-nav__button" />
+            <ui:Label name="monthTitle" class="mie-calendar-title" />
+            <ui:Button name="nextMonth" text="›" class="mie-button mie-calendar-nav__button" />
+            <ui:Button name="nextYear" text="»" class="mie-button mie-calendar-nav__button" />
+        </ui:VisualElement>
+        <mie:CalendarGrid name="grid" />
+        <ui:SliderInt name="hour" label="Hour" low-value="0" high-value="23" show-input-field="true" class="mie-calendar-time" />
+        <ui:SliderInt name="minute" label="Minute" low-value="0" high-value="59" show-input-field="true" class="mie-calendar-time" />
+        <ui:VisualElement class="mie-nested-block mie-calendar-summary">
+            <ui:VisualElement class="mie-calendar-summary__row">
+                <ui:Label text="UTC" class="mie-calendar-summary__label" />
+                <ui:Label name="utcValue" class="mie-calendar-summary__value" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mie-calendar-summary__row">
+                <ui:Label text="Local" class="mie-calendar-summary__label" />
+                <ui:Label name="localValue" class="mie-calendar-summary__value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="mie-calendar-footer">
+            <ui:Button name="today" text="Today" class="mie-button" />
+            <ui:VisualElement class="mie-calendar-footer-spacer" />
+            <ui:Button name="cancel" text="Cancel" class="mie-button" />
+            <ui:Button name="ok" text="OK" class="mie-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

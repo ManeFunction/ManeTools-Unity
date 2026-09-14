@@ -14,6 +14,7 @@ Initial release of the extracted Unity codebase and Editor tools. Were moved and
 Below, you can find a list of changes, comparing with legacy ManeTools.
 
 ### Added
+- Added `SerializableDateTime` and `SerializableDateTimeRange` types for a date data formats, and `Calendar` - editor date selection control.
 - Added `InterfaceOnly` attribute to declare a fields with MonoBehaviour + Interface requirements.
 - Added Mane Tools editor scene view overlay to keep all the editor features in one place.
 - Added 'Copy as a C# code' to color fields context menu.

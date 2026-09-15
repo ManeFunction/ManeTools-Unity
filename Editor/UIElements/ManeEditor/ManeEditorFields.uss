@@ -169,6 +169,29 @@
     max-width: var(--mie-nested-label-width);
 }
 
+/* Scroller/Slider are BaseFields, not inspector rows. The 115px label column
+   shoves the thumb off the track (bar stays, dragger disappears). */
+.mie-fields .unity-scroller {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.mie-fields .unity-scroller .unity-base-field__label {
+    display: none;
+    flex-basis: 0;
+    flex-grow: 0;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mie-fields .unity-scroller .unity-base-field__input {
+    margin-left: 0;
+    min-width: 0;
+}
+
 .mie-fields .unity-list-view__footer {
     flex-grow: 0;
 }

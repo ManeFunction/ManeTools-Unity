@@ -107,10 +107,7 @@ namespace Mane.Unity.Editor
             field.schedule.Execute(Refresh);
             RegisterDragFilter(field, info.InterfaceType, fieldType);
 
-            VisualElement root = new();
-            root.Add(field);
-            root.Add(warning);
-            return root;
+            return Decorations.WithHostDecorator(field, warning);
         }
 
         private Type GetReferencedType()

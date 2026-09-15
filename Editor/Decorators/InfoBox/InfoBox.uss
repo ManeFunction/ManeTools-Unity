@@ -9,6 +9,7 @@
     margin-top: 4px;
     margin-bottom: 2px;
     flex-shrink: 0;
+    min-width: 0;
 }
 
 .message-icon {
@@ -25,6 +26,7 @@
     flex-wrap: wrap;
     white-space: normal;
     overflow: hidden;
+    min-width: 0;
     padding-right: 20px;
     text-overflow: ellipsis;
     -unity-overflow-clip-box: padding-box;

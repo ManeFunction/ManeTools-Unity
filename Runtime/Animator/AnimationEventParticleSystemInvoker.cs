@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Mane.Unity.Animator
 {
+    [ManeStyle]
     [AddComponentMenu("Mane Tools/Animator/Event Particle System Invoker")]
     public class AnimationEventParticleSystemInvoker : MonoBehaviour
     {

@@ -1,4 +1,3 @@
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,7 +7,7 @@ namespace Mane.Unity.Editor
 {
     /// <summary>
     /// Fallback inspector for types that do not have a more specific editor.
-    /// Mane block layout is used only when the type has <see cref="ManeStyleAttribute"/>.
+    /// Mane block layout is used when the inspected type or the editor has <see cref="ManeStyleAttribute"/>.
     /// </summary>
     internal abstract class ManeInspectorWrapper : UnityEditor.Editor
     {
@@ -18,7 +17,7 @@ namespace Mane.Unity.Editor
             if (serializedObject.targetObject != null)
                 root.userData = serializedObject.targetObject.GetType();
 
-            if (UseManeStyle())
+            if (ManeEditorStyles.HasManeStyle(this))
             {
                 ManeEditorStyles.Apply(root);
                 ManeInspectorLayout.Fill(root, serializedObject);
@@ -31,18 +30,6 @@ namespace Mane.Unity.Editor
 
             EditorButton.AddTo(root, this);
             return root;
-        }
-
-        private bool UseManeStyle()
-        {
-            foreach (Object targetObject in targets)
-            {
-                if (targetObject == null ||
-                    targetObject.GetType().GetCustomAttribute<ManeStyleAttribute>(true) == null)
-                    return false;
-            }
-
-            return targets.Length > 0;
         }
     }
 

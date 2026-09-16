@@ -8,6 +8,7 @@ namespace Mane.Unity
     /// X is lag in world units, last key is "far enough" for full weight;
     /// Y is the catch-up factor (0 = stay, 1 = snap this frame).
     /// </summary>
+    [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/Position Follower (by distance)")]
     public class PositionFollowerByDistance : MonoBehaviour
     {

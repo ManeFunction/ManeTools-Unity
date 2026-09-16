@@ -6,6 +6,7 @@ namespace Mane.Unity
     /// Moves this transform toward a target each frame with a constant catch-up factor.
     /// <see cref="Speed"/> is applied as-is (0 = stay, 1 = snap this frame).
     /// </summary>
+    [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/Position Follower (simple)")]
     public class PositionFollowerSimple : MonoBehaviour
     {

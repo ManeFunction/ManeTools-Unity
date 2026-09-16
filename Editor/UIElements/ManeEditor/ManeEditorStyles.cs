@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Mane.Unity.Editor
 {
@@ -29,6 +31,24 @@ namespace Mane.Unity.Editor
 
         private static StyleSheet _sheet;
         private static StyleSheet _fieldsSheet;
+
+        public static bool HasManeStyle(UnityEditor.Editor editor)
+        {
+            if (editor == null || editor.targets == null || editor.targets.Length == 0)
+                return false;
+
+            if (editor.GetType().GetCustomAttribute<ManeStyleAttribute>(true) != null)
+                return true;
+
+            foreach (Object targetObject in editor.targets)
+            {
+                if (targetObject == null ||
+                    targetObject.GetType().GetCustomAttribute<ManeStyleAttribute>(true) == null)
+                    return false;
+            }
+
+            return true;
+        }
 
         public static void Apply(VisualElement root) => Apply(root, Options.Inspector);
 

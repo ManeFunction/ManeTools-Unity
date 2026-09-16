@@ -4,6 +4,7 @@ using UnityAnimator = UnityEngine.Animator;
 
 namespace Mane.Unity.Animator
 {
+    [ManeStyle]
     public class AnimatorRandomizer : StateMachineBehaviour
     {
         [Header("Leave condition empty for always true behaviour.")]

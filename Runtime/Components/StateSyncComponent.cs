@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
+    [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/State Sync Component")]
     public sealed class StateSyncComponent : MonoBehaviour
     {

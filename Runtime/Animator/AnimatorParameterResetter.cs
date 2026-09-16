@@ -4,6 +4,7 @@ using UnityAnimator = UnityEngine.Animator;
 
 namespace Mane.Unity.Animator
 {
+    [ManeStyle]
     public class AnimatorParameterResetter : StateMachineBehaviour
     {
         [SerializeField] private ParameterType _type;

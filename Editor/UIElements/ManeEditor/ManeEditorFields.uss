@@ -75,7 +75,15 @@
 }
 
 .mie-fields .unity-event__container {
-    margin-top: 5px;
+    margin: 2px 0 0 0;
+}
+
+.mie-fields .unity-list-view__header {
+    margin-right: -5px;
+}
+
+.mie-fields .unity-foldout__input > .unity-foldout__text {
+    margin-left: 0;
 }
 
 .mie-fields .mie-minmax-field {

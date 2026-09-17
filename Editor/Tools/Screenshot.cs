@@ -56,10 +56,7 @@ namespace Mane.Unity.Editor
             if (string.IsNullOrWhiteSpace(name))
                 return "Screenshot";
 
-            foreach (char c in Path.GetInvalidFileNameChars())
-                name = name.Replace(c, '_');
-
-            return name;
+            return Path.GetInvalidFileNameChars().Aggregate(name, (current, c) => current.Replace(c, '_'));
         }
 
         private static string CreateDestktopPath(string fileName) =>

@@ -129,11 +129,7 @@ namespace Mane.Unity
  
             return vClosestPoint;
         }
-        
-        public static bool IsInsideRectangle(this Vector2 p, Rect rect) =>
-            p.IsInsideRectangle(rect.min, new Vector2(rect.xMin, rect.yMax),
-                                rect.max, new Vector2(rect.xMax, rect.yMin));
-        
+
         // Thanks to Saeed Amiri (https://stackoverflow.com/questions/4243042/c-sharp-point-in-polygon)
         /// <summary>
         /// Define polygon with points CW or CCW, works with convex polygons

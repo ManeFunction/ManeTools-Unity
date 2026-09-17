@@ -7,8 +7,6 @@ namespace Mane.Unity
     /// ScriptableObject singleton. The first access to <see cref="Instance"/> uses a loaded
     /// asset if one exists, otherwise creates a hidden runtime instance, unless
     /// <see cref="SetInstance"/> was called first.
-    /// Assign an asset on a serialized field and pass it to <see cref="GetOrCreate"/>
-    /// to clone that editor default for play mode instead of mutating the asset.
     /// </summary>
     /// <typeparam name="T">Concrete singleton type.</typeparam>
     public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
@@ -82,9 +80,8 @@ namespace Mane.Unity
         {
             T[] loaded = Resources.FindObjectsOfTypeAll<T>();
             T runtime = null;
-            for (int i = 0; i < loaded.Length; i++)
+            foreach (var candidate in loaded)
             {
-                T candidate = loaded[i];
                 if (candidate == null)
                     continue;
 

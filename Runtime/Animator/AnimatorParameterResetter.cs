@@ -18,9 +18,7 @@ namespace Mane.Unity.Animator
         {
             get
             {
-                if (_parameterHash == null)
-                    _parameterHash = UnityAnimator.StringToHash(_parameter);
-
+                _parameterHash ??= UnityAnimator.StringToHash(_parameter);
                 return _parameterHash.Value;
             }
         }

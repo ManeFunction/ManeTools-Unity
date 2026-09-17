@@ -9,8 +9,8 @@ namespace Mane.Unity
     {
         [SerializeField] private GameObject[] _bind;
 
-        private void OnEnable() => _bind.ForEach(b => b.SetActive(true));
+        private void OnEnable() => _bind?.ForEach(b => { if (b) b.SetActive(true); });
 
-        private void OnDisable() => _bind.ForEach(b => b.SetActive(false));
+        private void OnDisable() => _bind?.ForEach(b => { if (b) b.SetActive(false); });
     }
 }

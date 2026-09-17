@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Helpers for finding components on a loaded <see cref="Scene"/>.
+    /// </summary>
     public static class SceneExtensions
     {
         /// <summary>

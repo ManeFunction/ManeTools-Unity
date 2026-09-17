@@ -16,6 +16,9 @@ namespace Mane.Unity.Editor
         private const string BlockClass = "mie-block";
         private const string ScriptPath = "m_Script";
 
+        /// <summary>
+        /// Fills <paramref name="root"/> with ManeStyle blocks, headers, and foldouts.
+        /// </summary>
         public static void Fill(VisualElement root, SerializedObject serializedObject)
         {
             VisualElement block = null;
@@ -58,6 +61,9 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// True if any visible field has <see cref="FoldoutAttribute"/>.
+        /// </summary>
         public static bool HasFoldout(SerializedObject serializedObject)
         {
             if (serializedObject?.targetObject == null)
@@ -78,6 +84,9 @@ namespace Mane.Unity.Editor
             return false;
         }
 
+        /// <summary>
+        /// Fills <paramref name="root"/> with Unity default fields, using a stock foldout for <see cref="FoldoutAttribute"/>.
+        /// </summary>
         public static void FillDefault(VisualElement root, SerializedObject serializedObject)
         {
             VisualElement container = root;

@@ -1,15 +1,22 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Captures the Game view to a PNG (Edit menu / F10).
+    /// </summary>
     public static class Screenshot
     {
         [MenuItem("Edit/Take Game Screenshot _F10", false, 910)]
         private static void CaptureHotkey() => Capture();
 
+        /// <summary>
+        /// Writes a screenshot to <paramref name="path"/>, or to the desktop when path is empty.
+        /// </summary>
         public static void Capture(string path = null)
         {
             string filePath = ResolvePath(path);

@@ -8,12 +8,18 @@ using UnityObject = UnityEngine.Object;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Inspector field for <see cref="InterfaceOnlyAttribute"/> object references.
+    /// </summary>
     [CustomPropertyDrawer(typeof(InterfaceOnlyAttribute))]
     public sealed class InterfaceOnlyDrawer : PropertyDrawer
     {
         private const string DisplayLabelClass = "unity-object-field-display__label";
         private const string AcceptDropClass = "unity-object-field-display--accept-drop";
 
+        /// <summary>
+        /// Builds an object field that only accepts the required interface.
+        /// </summary>
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             SerializedProperty tracked = property.Copy();

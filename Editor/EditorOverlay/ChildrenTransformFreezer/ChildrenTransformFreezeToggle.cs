@@ -5,13 +5,22 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Scene view toggle that freezes child transforms while moving the selection.
+    /// </summary>
     [EditorToolbarElement(Id, typeof(SceneView))]
     public sealed class ChildrenTransformFreezeToggle : EditorToolbarToggle
     {
+        /// <summary>
+        /// Overlay toolbar element id.
+        /// </summary>
         public const string Id = "ManeTools/FreezeChildren";
 
         private const string IconsRoot = "Packages/com.manefunction.tools-unity/Editor/Icons/";
 
+        /// <summary>
+        /// Creates the toolbar toggle and binds it to the freezer enabled state.
+        /// </summary>
         public ChildrenTransformFreezeToggle()
         {
             tooltip = "Freeze children: transform the selection without moving its active children";

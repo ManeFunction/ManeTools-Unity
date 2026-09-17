@@ -2,6 +2,9 @@
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Helpers for <see cref="Component"/> lookup.
+    /// </summary>
     public static class ComponentExtensions
     {
         /// <summary>

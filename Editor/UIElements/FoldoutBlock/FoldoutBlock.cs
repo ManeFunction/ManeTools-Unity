@@ -13,6 +13,9 @@ namespace Mane.Unity.Editor
     [UxmlElement]
     public sealed partial class FoldoutBlock : Foldout
     {
+        /// <summary>
+        /// USS class on the foldout root.
+        /// </summary>
         public const string UssClassName = "mie-foldout-block";
         private const string PrefPrefix = "Mane.Editor.FoldoutBlock.";
 
@@ -21,6 +24,9 @@ namespace Mane.Unity.Editor
         private bool _collapsedByDefault;
         private bool _appliedStoredState;
 
+        /// <summary>
+        /// Creates a foldout block and restores stored expanded state on attach.
+        /// </summary>
         public FoldoutBlock()
         {
             AddToClassList("mie-block");
@@ -37,6 +43,9 @@ namespace Mane.Unity.Editor
             });
         }
 
+        /// <summary>
+        /// Initial collapsed state when no EditorPrefs value is stored.
+        /// </summary>
         [UxmlAttribute("collapsed-by-default")]
         public bool CollapsedByDefault
         {

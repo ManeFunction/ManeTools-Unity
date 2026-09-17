@@ -16,12 +16,18 @@ namespace Mane.Unity
         [SerializeField, Tooltip("X is a distance range to the target. Y is catch-up factor (0 = stay, 1 = snap).")]
         private AnimationCurve _animationCurve = AnimationCurve.Linear(10f, 0f, 100f, .3f);
 
+        /// <summary>
+        /// Transform to follow.
+        /// </summary>
         public Transform Target
         {
             get => _target;
             set => _target = value;
         }
 
+        /// <summary>
+        /// Catch-up curve sampled by world distance to the target.
+        /// </summary>
         public AnimationCurve AnimationCurve
         {
             get => _animationCurve;

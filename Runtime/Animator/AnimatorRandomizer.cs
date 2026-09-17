@@ -4,12 +4,18 @@ using UnityAnimator = UnityEngine.Animator;
 
 namespace Mane.Unity.Animator
 {
+    /// <summary>
+    /// On state enter, sets a selector int to a random variant for the first matching condition.
+    /// </summary>
     [ManeStyle]
     public class AnimatorRandomizer : StateMachineBehaviour
     {
         [Header("Leave condition empty for always true behaviour.")]
         [SerializeField] private SwitchCondition[] _conditions;
 
+        /// <summary>
+        /// Applies the first matching <see cref="SwitchCondition"/>, then continues the state enter.
+        /// </summary>
         public override void OnStateEnter(UnityAnimator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             foreach (SwitchCondition condition in _conditions)
@@ -27,6 +33,9 @@ namespace Mane.Unity.Animator
         }
 
         
+        /// <summary>
+        /// Optional bool gate and the int parameter that receives a random variant index.
+        /// </summary>
         [Serializable]
         public class SwitchCondition
         {
@@ -37,6 +46,9 @@ namespace Mane.Unity.Animator
             private int? _selectorParameterHash;
             private int? _conditionParameterHash;
             
+            /// <summary>
+            /// Hashed int parameter that stores the chosen variant.
+            /// </summary>
             public int SelectorParameter
             {
                 get
@@ -47,6 +59,9 @@ namespace Mane.Unity.Animator
                 }
             }
             
+            /// <summary>
+            /// Hashed bool that must be true, or null to always match.
+            /// </summary>
             public int? ConditionParameter
             {
                 get
@@ -59,6 +74,9 @@ namespace Mane.Unity.Animator
                 }
             }
             
+            /// <summary>
+            /// Exclusive upper bound for the random variant index.
+            /// </summary>
             public int TotalVariants => _totalVariants;
         }
     }

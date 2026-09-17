@@ -9,6 +9,9 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Adds inspector buttons for methods marked with <see cref="EditorButtonAttribute"/>.
+    /// </summary>
     public static class EditorButton
     {
         private const BindingFlags MethodFlags =
@@ -17,6 +20,9 @@ namespace Mane.Unity.Editor
 
         private static StyleSheet _sheet;
 
+        /// <summary>
+        /// Appends buttons for the inspected type to <paramref name="inspectorRoot"/>.
+        /// </summary>
         public static void AddTo(VisualElement inspectorRoot, UnityEditor.Editor editor)
         {
             if (inspectorRoot == null || editor == null || editor.targets == null || editor.targets.Length == 0)

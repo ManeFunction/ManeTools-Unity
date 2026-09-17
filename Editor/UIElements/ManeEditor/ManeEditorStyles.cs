@@ -12,16 +12,45 @@ namespace Mane.Unity.Editor
     /// </summary>
     public static class ManeEditorStyles
     {
+        /// <summary>
+        /// USS class on the inspector root.
+        /// </summary>
         public const string RootClass = "mie-root";
+
+        /// <summary>
+        /// USS class that enables Mane field layout.
+        /// </summary>
         public const string FieldsClass = "mie-fields";
 
+        /// <summary>
+        /// What <see cref="Apply(VisualElement, Options)"/> should attach.
+        /// </summary>
         [Flags]
         public enum Options
         {
+            /// <summary>
+            /// Root class only.
+            /// </summary>
             None = 0,
+
+            /// <summary>
+            /// Shared Mane editor stylesheet.
+            /// </summary>
             Sheet = 1,
+
+            /// <summary>
+            /// Field layout stylesheet and list footer styling.
+            /// </summary>
             FieldLayout = 2,
+
+            /// <summary>
+            /// Strip Unity inspector label alignment.
+            /// </summary>
             DisableInspectorAlignment = 4,
+
+            /// <summary>
+            /// Stylesheet, field layout, and alignment strip.
+            /// </summary>
             Inspector = Sheet | FieldLayout | DisableInspectorAlignment
         }
 
@@ -32,6 +61,9 @@ namespace Mane.Unity.Editor
         private static StyleSheet _sheet;
         private static StyleSheet _fieldsSheet;
 
+        /// <summary>
+        /// True when the editor type or every inspected target has <see cref="ManeStyleAttribute"/>.
+        /// </summary>
         public static bool HasManeStyle(UnityEditor.Editor editor)
         {
             if (editor == null || editor.targets == null || editor.targets.Length == 0)
@@ -50,8 +82,14 @@ namespace Mane.Unity.Editor
             return true;
         }
 
+        /// <summary>
+        /// Applies <see cref="Options.Inspector"/> to <paramref name="root"/>.
+        /// </summary>
         public static void Apply(VisualElement root) => Apply(root, Options.Inspector);
 
+        /// <summary>
+        /// Applies the selected styles to <paramref name="root"/>.
+        /// </summary>
         public static void Apply(VisualElement root, Options options)
         {
             if (root == null)
@@ -76,6 +114,9 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// Re-strips inspector alignment and restyles list footer buttons.
+        /// </summary>
         public static void RefreshFieldLayout(VisualElement root)
         {
             if (root == null)

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Shared polling loop for wait-until / wait-while yield instructions.
+    /// </summary>
     public abstract class WaitForSecondsUntilBase : CustomYieldInstruction
     {
         private readonly Func<bool> _predicate;
@@ -11,6 +14,12 @@ namespace Mane.Unity
         private bool _checkPredicateFirst;
         private float _elapsedTime;
 
+        /// <summary>
+        /// Creates a timed predicate poller.
+        /// </summary>
+        /// <param name="predicate">Condition checked on each interval.</param>
+        /// <param name="waitSeconds">Seconds between checks.</param>
+        /// <param name="checkPredicateFirst">Also check once before the first wait.</param>
         protected WaitForSecondsUntilBase(Func<bool> predicate, float waitSeconds, bool checkPredicateFirst = false)
         {
             _predicate = predicate;

@@ -4,6 +4,9 @@ using UnityAnimator = UnityEngine.Animator;
 
 namespace Mane.Unity.Animator
 {
+    /// <summary>
+    /// Resets an animator parameter to its default when this state is entered.
+    /// </summary>
     [ManeStyle]
     public class AnimatorParameterResetter : StateMachineBehaviour
     {
@@ -14,6 +17,9 @@ namespace Mane.Unity.Animator
         private int? _parameterHash;
 
 
+        /// <summary>
+        /// Hashed name of the parameter to reset.
+        /// </summary>
         public int ParameterHash
         {
             get
@@ -24,6 +30,9 @@ namespace Mane.Unity.Animator
         }
 
 
+        /// <summary>
+        /// Resets the configured parameter, then continues the state enter.
+        /// </summary>
         public override void OnStateEnter(UnityAnimator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             switch (_type)
@@ -45,10 +54,24 @@ namespace Mane.Unity.Animator
         }
 
 
+        /// <summary>
+        /// Animator parameter type to reset.
+        /// </summary>
         public enum ParameterType
         {
+            /// <summary>
+            /// Reset to false.
+            /// </summary>
             Bool = 0,
+
+            /// <summary>
+            /// Reset to 0.
+            /// </summary>
             Int = 1,
+
+            /// <summary>
+            /// Reset to 0.
+            /// </summary>
             Float = 2,
         }
     }

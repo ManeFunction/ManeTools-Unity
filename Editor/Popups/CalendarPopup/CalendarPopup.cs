@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Popup calendar for a UTC date or a <see cref="SerializableDateTimeRange"/>.
+    /// </summary>
     public sealed class CalendarPopup : EditorWindow
     {
         private const float WindowWidth = 310f;
@@ -66,12 +69,18 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// Opens a date picker starting at <paramref name="current"/>.
+        /// </summary>
         public static void Show(DateTime current, Action<DateTime> onDateSelected)
         {
             CalendarPopup window = GetWindow<CalendarPopup>(true, "Date", true);
             window.ConfigureDate(current, onDateSelected);
         }
 
+        /// <summary>
+        /// Opens a range picker starting at <paramref name="current"/>.
+        /// </summary>
         public static void ShowRange(
             SerializableDateTimeRange current,
             Action<SerializableDateTimeRange> onRangeSelected)

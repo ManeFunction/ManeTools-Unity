@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Helpers for <see cref="Color"/> channels, HSL, and hex.
+    /// </summary>
     public static class ColorExtensions
     {
+        /// <summary>
+        /// Returns HSL lightness in [0, 1].
+        /// </summary>
         public static float GetHSL_Lightness(this Color color)
         {
             float r = color.r;
@@ -21,6 +27,9 @@ namespace Mane.Unity
             return (l + m) * 0.5f;
         }
 
+        /// <summary>
+        /// Returns HSL hue in [0, 1].
+        /// </summary>
         public static float GetHSL_Hue(this Color color)
         {
             float r = color.r;
@@ -51,6 +60,9 @@ namespace Mane.Unity
             return hue;
         }
 
+        /// <summary>
+        /// Returns HSL saturation in [0, 1].
+        /// </summary>
         public static float GetHSL_Saturation(this Color color)
         {
             float result;
@@ -80,6 +92,9 @@ namespace Mane.Unity
             return result;
         }
 
+        /// <summary>
+        /// Returns a rough luma estimate (0.2R + 0.7G + 0.1B).
+        /// </summary>
         public static float GetLuma(this Color color) => color.r * .2f + color.g * .7f + color.b * .1f;
 
         /// <summary>
@@ -90,6 +105,9 @@ namespace Mane.Unity
             Mathf.Clamp01(c.g + shift), 
             Mathf.Clamp01(c.b + shift), c.a);
 
+        /// <summary>
+        /// Returns an <c>#RRGGBBAA</c> hex string.
+        /// </summary>
         public static string ToHex(this Color c)
         {
             Color32 c32 = c;
@@ -98,6 +116,9 @@ namespace Mane.Unity
         }
         
 
+        /// <summary>
+        /// Returns a copy with red set to <paramref name="r"/>.
+        /// </summary>
         public static Color SetR(this Color c, float r)
         {
             c.r = r;
@@ -105,6 +126,9 @@ namespace Mane.Unity
             return c;
         }
 
+        /// <summary>
+        /// Returns a copy with green set to <paramref name="g"/>.
+        /// </summary>
         public static Color SetG(this Color c, float g)
         {
             c.g = g;
@@ -112,6 +136,9 @@ namespace Mane.Unity
             return c;
         }
 
+        /// <summary>
+        /// Returns a copy with blue set to <paramref name="b"/>.
+        /// </summary>
         public static Color SetB(this Color c, float b)
         {
             c.b = b;
@@ -119,6 +146,9 @@ namespace Mane.Unity
             return c;
         }
 
+        /// <summary>
+        /// Returns a copy with alpha set to <paramref name="a"/>.
+        /// </summary>
         public static Color SetA(this Color c, float a)
         {
             c.a = a;
@@ -126,6 +156,9 @@ namespace Mane.Unity
             return c;
         }
         
+        /// <summary>
+        /// Returns a copy with RGB set from the given channels.
+        /// </summary>
         public static Color SetRGB(this Color c, float r, float g, float b)
         {
             c.r = r;
@@ -135,6 +168,9 @@ namespace Mane.Unity
             return c;
         }
         
+        /// <summary>
+        /// Returns a copy with RGB taken from <paramref name="rgb"/>, keeping this alpha.
+        /// </summary>
         public static Color SetRGB(this Color c, Color rgb)
         {
             c.r = rgb.r;

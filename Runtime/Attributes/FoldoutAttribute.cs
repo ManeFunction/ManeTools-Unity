@@ -9,11 +9,18 @@ namespace Mane.Unity
     /// Following fields stay in that foldout until the next <see cref="HeaderAttribute"/>,
     /// <see cref="SpaceAttribute"/>, or <see cref="FoldoutAttribute"/>.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class FoldoutAttribute : PropertyAttribute
     {
+        /// <summary>
+        /// Foldout header text.
+        /// </summary>
         public string Header { get; }
 
+        /// <summary>
+        /// Starts a foldout with the given header.
+        /// </summary>
+        /// <param name="headerName">Foldout header text.</param>
         public FoldoutAttribute(string headerName)
         {
             Header = headerName;

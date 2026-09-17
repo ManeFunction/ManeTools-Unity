@@ -6,11 +6,20 @@ using UnityObject = UnityEngine.Object;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Loads USS/UXML assets next to a script.
+    /// </summary>
     public static class UIElementsTools
     {
+        /// <summary>
+        /// Loads a stylesheet next to <paramref name="scriptType"/>. Defaults to <c>TypeName.uss</c>.
+        /// </summary>
         public static StyleSheet LoadUSS(Type scriptType, string fileName = null) =>
             LoadNextToScript<StyleSheet>(scriptType, fileName, ".uss");
 
+        /// <summary>
+        /// Loads a visual tree next to <paramref name="scriptType"/>. Defaults to <c>TypeName.uxml</c>.
+        /// </summary>
         public static VisualTreeAsset LoadUXML(Type scriptType, string fileName = null) =>
             LoadNextToScript<VisualTreeAsset>(scriptType, fileName, ".uxml");
 

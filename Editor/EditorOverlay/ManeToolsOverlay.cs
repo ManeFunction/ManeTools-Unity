@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Scene view overlay hosting Mane Tools toolbar items.
+    /// </summary>
     [Icon("Packages/com.manefunction.tools-unity/Editor/Icons/InkedKettle@2x.png")]
     [Overlay(typeof(SceneView), "ManeTools", "Mane Tools")]
     public sealed class ManeToolsOverlay : ToolbarOverlay

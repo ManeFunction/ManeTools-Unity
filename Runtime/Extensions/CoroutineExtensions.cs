@@ -5,8 +5,14 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Helpers for wrapping tasks, delayed invokes, and stopping coroutines.
+    /// </summary>
     public static class CoroutineExtensions
     {
+        /// <summary>
+        /// Yields until <paramref name="task"/> completes, then invokes <paramref name="callback"/>.
+        /// </summary>
         public static IEnumerator ToCoroutine<T>(this Task<T> task, Action<bool, T> callback)
         {
             while (!task.IsCompleted)
@@ -24,6 +30,9 @@ namespace Mane.Unity
             callback?.Invoke(true, task.Result);
         }
 
+        /// <summary>
+        /// Invokes <paramref name="action"/> after <paramref name="delay"/> seconds, or immediately if delay is 0.
+        /// </summary>
         public static Coroutine Delayed(this MonoBehaviour target, Action action, float delay)
         {
             if (action == null) return null;
@@ -46,6 +55,9 @@ namespace Mane.Unity
             }
         }
 
+        /// <summary>
+        /// Invokes <paramref name="action"/> after <paramref name="frames"/> frames, or immediately if 0.
+        /// </summary>
         public static Coroutine DelayedFrames(this MonoBehaviour target, Action action, int frames)
         {
             if (action == null) return null;
@@ -71,6 +83,9 @@ namespace Mane.Unity
             }
         }
 
+        /// <summary>
+        /// Stops <paramref name="coroutine"/> and clears the reference. Returns false if there was nothing to stop.
+        /// </summary>
         public static bool TryKillCoroutine(this MonoBehaviour target, ref Coroutine coroutine)
         {
             if (coroutine == null || !target) return false;

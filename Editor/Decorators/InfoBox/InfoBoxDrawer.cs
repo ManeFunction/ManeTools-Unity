@@ -9,6 +9,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Draws <see cref="InfoBoxAttribute"/> and builds standalone info boxes.
+    /// </summary>
     [CustomPropertyDrawer(typeof(InfoBoxAttribute))]
     public sealed class InfoBoxDrawer : ManeDecorator<InfoBoxDrawer>
     {
@@ -18,6 +21,9 @@ namespace Mane.Unity.Editor
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic |
             BindingFlags.DeclaredOnly;
 
+        /// <summary>
+        /// Builds the info box and binds an optional show condition.
+        /// </summary>
         public override VisualElement CreatePropertyGUI()
         {
             InfoBoxAttribute info = (InfoBoxAttribute)attribute;
@@ -26,6 +32,9 @@ namespace Mane.Unity.Editor
             return root;
         }
 
+        /// <summary>
+        /// Creates a standalone info box of the given type.
+        /// </summary>
         public static VisualElement Create(string message, InfoBoxType type = InfoBoxType.Info)
         {
             VisualTreeAsset tree = new InfoBoxDrawer().Xml;

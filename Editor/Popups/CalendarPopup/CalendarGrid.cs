@@ -3,11 +3,25 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Month grid used by <see cref="CalendarPopup"/>.
+    /// </summary>
     [UxmlElement]
     public sealed partial class CalendarGrid : VisualElement
     {
+        /// <summary>
+        /// USS class on the grid root.
+        /// </summary>
         public const string UssClassName = "mie-calendar-grid-root";
+
+        /// <summary>
+        /// Number of day cells (6 weeks).
+        /// </summary>
         public const int Cells = 42;
+
+        /// <summary>
+        /// Days per week, Monday first.
+        /// </summary>
         public const int Columns = 7;
 
         private static readonly string[] DayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
@@ -23,17 +37,23 @@ namespace Mane.Unity.Editor
         private int _month;
         private DateTime? _hover;
 
+        /// <summary>
+        /// Raised when a day cell is clicked.
+        /// </summary>
         public event Action<DateTime> DayClicked;
 
+        /// <summary>
+        /// Builds weekday labels and day buttons.
+        /// </summary>
         public CalendarGrid()
         {
             AddToClassList(UssClassName);
 
             VisualElement weekdays = new();
             weekdays.AddToClassList("mie-calendar-weekdays");
-            for (int i = 0; i < DayNames.Length; i++)
+            foreach (var dayName in DayNames)
             {
-                Label day = new(DayNames[i]);
+                Label day = new(dayName);
                 day.AddToClassList("mie-calendar-weekday");
                 weekdays.Add(day);
             }
@@ -58,6 +78,9 @@ namespace Mane.Unity.Editor
             Add(grid);
         }
 
+        /// <summary>
+        /// Fills cells for <paramref name="year"/>/<paramref name="month"/> and applies selection/range highlights.
+        /// </summary>
         public void Bind(int year, int month, DateTime selected, DateTime rangeStart, DateTime rangeEnd,
             bool rangeMode, bool editingStart)
         {

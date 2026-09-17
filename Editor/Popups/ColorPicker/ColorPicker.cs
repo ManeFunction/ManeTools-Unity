@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Editor window for inspecting and converting a color.
+    /// </summary>
     public sealed class ColorPicker : EditorWindow
     {
         [SerializeField] private VisualTreeAsset xml;
@@ -32,6 +35,9 @@ namespace Mane.Unity.Editor
         private TextField _codeField;
         private bool _syncing;
 
+        /// <summary>
+        /// Opens the color picker window.
+        /// </summary>
         [MenuItem("Window/Mane Tools/Color Picker %&C", false, 2000)]
         public static void ShowWindow()
         {

@@ -15,6 +15,9 @@ namespace Mane.Unity.Editor
         private string _negativeLabel = string.Empty;
         private string _zeroLabel = string.Empty;
 
+        /// <summary>
+        /// Creates a field with default labels.
+        /// </summary>
         public LimitedValueField()
         {
             RegisterCallback<AttachToPanelEvent>(_ =>
@@ -24,6 +27,9 @@ namespace Mane.Unity.Editor
             });
         }
 
+        /// <summary>
+        /// When true, -1 is allowed (shown as <see cref="NegativeLabel"/> when set).
+        /// </summary>
         [UxmlAttribute("allow-negatives")]
         public bool AllowNegatives
         {
@@ -38,6 +44,9 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// Optional display string for -1. Empty shows the number.
+        /// </summary>
         [UxmlAttribute("negative-label")]
         public string NegativeLabel
         {
@@ -49,6 +58,9 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// Optional display string for 0. Empty shows the number.
+        /// </summary>
         [UxmlAttribute("zero-label")]
         public string ZeroLabel
         {
@@ -60,6 +72,9 @@ namespace Mane.Unity.Editor
             }
         }
 
+        /// <summary>
+        /// Sets the value without sending a change event, clamping and refreshing labels.
+        /// </summary>
         public override void SetValueWithoutNotify(int newValue)
         {
             base.SetValueWithoutNotify(Clamp(newValue));

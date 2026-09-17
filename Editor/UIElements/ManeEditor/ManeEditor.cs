@@ -14,6 +14,9 @@ namespace Mane.Unity.Editor
     {
         [SerializeField] private VisualTreeAsset xml;
 
+        /// <summary>
+        /// Builds the inspector from the assigned UXML.
+        /// </summary>
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement root = new();

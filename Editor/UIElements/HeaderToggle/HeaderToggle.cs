@@ -11,12 +11,18 @@ namespace Mane.Unity.Editor
     [UxmlElement]
     public sealed partial class HeaderToggle : Toggle
     {
+        /// <summary>
+        /// USS class on the toggle root.
+        /// </summary>
         public const string UssClassName = "mie-header-toggle";
         private const string AlignedFieldClass = "unity-base-field__aligned";
         private const string ContentName = "contentContainer";
 
         private static StyleSheet _sheet;
 
+        /// <summary>
+        /// Creates a header toggle and wires content visibility.
+        /// </summary>
         public HeaderToggle()
         {
             AddToClassList(UssClassName);
@@ -37,6 +43,9 @@ namespace Mane.Unity.Editor
             });
         }
 
+        /// <summary>
+        /// Sets the value without sending a change event and updates sibling content visibility.
+        /// </summary>
         public override void SetValueWithoutNotify(bool newValue)
         {
             base.SetValueWithoutNotify(newValue);

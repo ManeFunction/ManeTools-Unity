@@ -14,12 +14,18 @@ namespace Mane.Unity
         [SerializeField, Range(0f, 1f), Tooltip("Catch-up factor (0 = stay, 1 = snap).")]
         private float _speed = .2f;
 
+        /// <summary>
+        /// Transform to follow.
+        /// </summary>
         public Transform Target
         {
             get => _target;
             set => _target = value;
         }
 
+        /// <summary>
+        /// Catch-up factor (0 = stay, 1 = snap this frame).
+        /// </summary>
         public float Speed
         {
             get => _speed;

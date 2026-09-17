@@ -3,6 +3,10 @@ using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Decorator drawer that loads UXML next to the concrete drawer type.
+    /// </summary>
+    /// <typeparam name="TDrawer">Concrete drawer type used to locate the UXML.</typeparam>
     public abstract class ManeDecorator<TDrawer> : DecoratorDrawer
         where TDrawer : ManeDecorator<TDrawer>
     {

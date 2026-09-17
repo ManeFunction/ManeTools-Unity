@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Mane.Unity
 {
+    /// <summary>
+    /// Mirrors this object's enabled state onto bound GameObjects.
+    /// </summary>
     [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/State Sync Component")]
     public sealed class StateSyncComponent : MonoBehaviour

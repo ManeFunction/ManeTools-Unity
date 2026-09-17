@@ -6,17 +6,26 @@ using UnityEngine;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Helpers for reading attributes and default values from a <see cref="SerializedProperty"/>.
+    /// </summary>
     public static class SerializedPropertyExtensions
     {
         private const BindingFlags FieldFlags =
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
 
+        /// <summary>
+        /// First attribute of type <typeparamref name="T"/> on the backing field.
+        /// </summary>
         public static T GetAttribute<T>(this SerializedProperty property) where T : Attribute
         {
             FieldInfo field = GetFieldInfoFromProperty(property);
             return field?.GetCustomAttribute<T>();
         }
 
+        /// <summary>
+        /// All attributes of type <typeparamref name="T"/> on the backing field.
+        /// </summary>
         public static T[] GetAttributes<T>(this SerializedProperty property) where T : Attribute
         {
             FieldInfo field = GetFieldInfoFromProperty(property);
@@ -82,6 +91,9 @@ namespace Mane.Unity.Editor
             return null;
         }
 
+        /// <summary>
+        /// True when the boxed value is a type default, empty string, or identity quaternion.
+        /// </summary>
         public static bool IsPropertyDefault(this SerializedProperty property)
         {
             object value;

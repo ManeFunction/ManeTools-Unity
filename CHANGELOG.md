@@ -9,51 +9,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [2.0.0-preview.1] - 2026-08-29
 
-Initial release of the extracted Unity codebase and Editor tools. Were moved and refactored out of the legacy Unity-coupled module. Versioning starts at 2.0.0 to mark that split; this is not a new project, it's just a fresh start.
+Initial release of the extracted Unity codebase and Editor tools. Types were moved and refactored out of the legacy Unity-coupled module. Versioning starts at 2.0.0 to mark that split; this is not a new project, it is just a fresh start.
 
-Below, you can find a list of changes, comparing with legacy ManeTools.
+Below, you can find a list of changes compared with legacy ManeTools.
 
 ### Added
-- Added `SerializableDateTime` and `SerializableDateTimeRange` types for a date data formats, and `Calendar` - editor date selection control.
-- Added `InterfaceOnly` attribute to declare a fields with MonoBehaviour + Interface requirements.
-- Added Mane Tools editor scene view overlay to keep all the editor features in one place.
-- Added 'Copy as a C# code' to color fields context menu.
-- Added `EditorButton` feature to draw methods calling buttons within your editors.
-- Added optional conditions to the `InfoBox`.
+- Added `SerializableDateTime` and `SerializableDateTimeRange` types for date data, and `Calendar` - an editor date selection control.
+- Added the `InterfaceOnly` attribute to declare fields that require a `MonoBehaviour` plus an interface.
+- Added a Mane Tools editor Scene View overlay to keep editor features in one place.
+- Added 'Copy as C# code' to color fields' context menu.
+- Added `EditorButton` to draw method-calling buttons in inspectors.
+- Added optional conditions to `InfoBox`.
 - `Apply Transform values` to a prefab now works properly with `RectTransform`.
-- Added `Mane Tools overlay panel` for the `Scene View`.
-- Added editor `LimitedValueField` as a custom `IntField` with custom lables and limitations for non-positive values.
-- All `UI Toolkit` styles was aggregated to this package, so I can use them from one place. Now you can use them as well, if you want to style your inspectors the same way I do.
-- Added custom style attribute `ManeStyle` that you can apply to the component or scriptable object to make it follow this package custom inspector styles. In that case `Space` attribute splits visual blocks, `Header` added a header to this split, and custom `Foldout("Header")` create a foldout block, the same you can see in `ThreeStatesToggle`.
-- Added `Prefix` property decorator, alongside old `Postfix` one.
-- Added `ItemNameFromString` attribute, to set collections element names like `ItemNameFromField`, but using `Custom string {0}`.
+- Added editor `LimitedValueField` as a custom `IntField` with custom labels and limits for non-positive values.
+- All `UI Toolkit` styles were aggregated into this package, so they can be reused from one place. You can use them as well if you want to style your inspectors the same way.
+- Added the custom style attribute `ManeStyle` that you can apply to a component or Scriptable Object to follow this package's inspector styles. In that case `Space` splits visual blocks, `Header` adds a header to the split, and custom `Foldout("Header")` creates a foldout block, the same as in `ThreeStatesToggle`.
+- Added a `Prefix` property decorator, alongside the existing `Postfix` one.
+- Added the `ItemNameFromString` attribute, to set collection element names like `ItemNameFromField`, but using a custom format string `{0}`.
 
 ### Changed
-- Moved .NET related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so it can be used with a domain code, without any Unity references.
-- Moved UI (`uGUI`) related components and tools to the separate library [ManeTools-UnityUI](https://github.com/ManeFunction/ManeTools-UnityUI.git), as `uGUI` is a package, that can be not represented in the project.
-- `TextMesh` renamed to `ManeText` now to not confused with the legacy Unity component, and also moved to the separate module [ManeTools-Text](https://github.com/ManeFunction/ManeTools-Text.git).
+- Moved .NET-related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so they can be used from domain code without Unity references.
+- Moved UI (`uGUI` and `TMPro`) related components and tools to the separate library [ManeTools-UnityUI](https://github.com/ManeFunction/ManeTools-UnityUI.git), because `uGUI` is a package that may not be in the project, and `TextMesh Pro` is part of the `uGUI` package now.
+- `TextMesh` was renamed to `ManeText` so it is not confused with the legacy Unity component, and moved to the separate module [ManeTools-Text](https://github.com/ManeFunction/ManeTools-Text.git), because honestly it's needed in very rare cases nowadays.
 - Reorganized extension classes for more clarity.
 - All custom Editor UI now uses `UI Toolkit` instead of legacy `IMGUI`.
-- Project has 3 different singletons now: `ManeSingleton` for domain code usage (non-Unity), `UnitySingleton` is based on a Unity component, when you need it on a scene, and `ScriptableSingleton` that is data driven and based on `ScriptableObject`.
-- `Childen Transform Freezer` is not a component anymore, now it's an editor toggle within new `Mane Tools overlay panel`.
+- The project has 3 different singletons now: `ManeSingleton` for domain code (non-Unity), `UnitySingleton` based on a Unity component when you need it on a scene, and `ScriptableSingleton` that is data-driven and based on `ScriptableObject`.
+- `Children Transform Freezer` is not a component anymore; it is an editor toggle in the `Mane Tools` overlay panel.
 - `PositionFollower` now has 2 different implementations.
 - `MainThreadDispatcher` is a singleton now.
-- All `Mane` menu items that opens different windows are now under `Window -> Mane Tools`.
-- Tuned `Color` extensions and `Color Picker` to show and work with different values properly (ground everything to `HSL + Luma` system).
-- Most of the custom hotkeys related menues (screenshoting, enabling / disabling GO, console clearing, ect.) are under `Edit` menu now.
-- `Screenshoter` now available from the code via `Screenshot.Capture()` with optional custom path.
-- `Enable / Disable GO hotkey` is F6 instead of F4 now (F4 is used for the Search panel by default).
-- `Missing Reference Finder` now a context menu from `Assets` or `GameObject` menues instead of the separate window.
-- `Asset Reference Finder` now a context menu from `Assets` menu instead of the separate window.
-- `Scene management` hotkeys moved under the `File` menu with improved selected scene detection.
-- `GetRequiredComponent` is `GetOrAddComponent` now, for clearance.
+- All `Mane` menu items that open windows are now under `Window → Mane Tools`.
+- Tuned `Color` extensions and `Color Picker` to show and work with different values properly (everything grounded to the `HSL + Luma` system).
+- Most custom hotkey-related menus (screenshots, enabling / disabling GameObjects, console clearing, etc.) are under the `Edit` menu now.
+- `Screenshoter` is now available from code via `Screenshot.Capture()` with an optional custom path.
+- The Enable / Disable GameObject hotkey is F6 instead of F4 now (F4 is used for the Search panel by default).
+- `Missing Reference Finder` is now a context menu from `Assets` or `GameObject` menus instead of a separate window.
+- `Asset Reference Finder` is now a context menu from the `Assets` menu instead of a separate window.
+- `Scene management` hotkeys moved under the `File` menu with improved selected-scene detection.
+- `GetRequiredComponent` is `GetOrAddComponent` now, for clarity.
 - `ArrayElements` attribute renamed to `ItemNameFromField`.
-- `DropdownList` attribute now works not only with public methods, but also with privates and properties.
-- `DropdownList` options (when they are getting dynamically from the code) can now be refreshed from the context menu.
+- `DropdownList` attribute now works not only with public methods, but also with private members and properties.
+- `DropdownList` options (when they are loaded dynamically from code) can now be refreshed from the context menu.
 - `Layer` attribute renamed to `LayerSelector`.
 - `SerializeReferenceInterface` attribute was renamed to `SerializeInterface`.
 
 ### Removed
-- Intentionally dropped support of legacy `IMGUI` system highlighting advantages of `UI Toolkit`.
-- Dropped support of legacy `Text` component. Everyone uses `TextMesh Pro` for years anyway.
-- Some components and tools was deleted. I think they were too specific for a generic package like this, and some of them was duplicates of existed functions that appears in the standard API during the last years.
+- Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.
+- Dropped support of the legacy `Text` component. Everyone has used `TextMesh Pro` for years anyway.
+- Some components and tools were deleted. They were too specific for a generic package like this, and some of them duplicated functions that appeared in the standard API over the last years.

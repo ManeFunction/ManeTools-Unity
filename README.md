@@ -2,13 +2,27 @@
 
 Editor enhancements and class extensions for Unity.
 
-This package is dependent on [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git).
+The package is supported starting from **Unity 6.0.81** (6000.0.81f1) and depends on [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git).
+
+Add components from **Add Component → Mane Tools**.
 
 ## Features
 
-// TODO:
-
-Almost all public API methods are covered with NUnit tests.
+- A few ways to **serialize interfaces**: `SerializeInterface` for data structures and `InterfaceOnly` for `MonoBehaviours`.
+- `SerializableDateTime` and `SerializableDateTimeRange` with a calendar popup in the inspector.
+- `Screenshot.Capture()` and Edit-menu screenshot / GameObject toggle shortcuts.
+- Missing-reference and asset-reference finders as Assets / GameObject context menus.
+- `UnitySingleton` and `ScriptableSingleton` implementations (in addition to generic `ManeSingleton` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
+- **ManeStyle** inspector layout: framed blocks, `Space` / `Header` splits, and `Foldout` groups. Put `[ManeStyle]` on a `MonoBehaviour`, `ScriptableObject`, or a custom inspector.
+- Inspector attributes: `InfoBox`, `ReadOnly`, `Prefix` / `Postfix`, `DropdownList`, `ItemNameFromField` / `ItemNameFromString`, `AvailableIf`, and others to simplify work with Unity components.
+- `EditorButton`s to call component methods from the inspector.
+- `Color picker` and `Color` / `Color32` helpers (HSL, luma, hex, channel setters).
+- Scene View overlay for editor tools, including children-transform freeze.
+- Extensions for `GameObject`, `Transform`, `RectTransform`, `Rect`, `Vector2` / `Vector3`, `Scene`, and coroutines.
+- Custom yield instructions (`WaitForSecondsUntil` / `While`, realtime variants).
+- Unity-backed random helpers: `UnityRandom`, `RandomColor`, `RandomPoint`, `RandomDirection` (in addition to system-based `ManeRandom` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
+- Animator helpers, such as state randomizers.
+- NUnit coverage for date/time types, color helpers, and some extensions.
 
 ## Installation
 

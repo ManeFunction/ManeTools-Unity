@@ -104,8 +104,8 @@ namespace Mane.Unity
         public static Vector3 Clamp(this Vector3 v, float a, float b)
         {
             v.x = v.x.Clamp(a, b);
-            v.y = v.x.Clamp(a, b);
-            v.z = v.x.Clamp(a, b);
+            v.y = v.y.Clamp(a, b);
+            v.z = v.z.Clamp(a, b);
 
             return v;
         }

@@ -24,6 +24,8 @@ Add components from **Add Component → Mane Tools**.
 - Animator helpers, such as state randomizers.
 - NUnit coverage for date/time types, color helpers, and some extensions.
 
+For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!
+
 ## Installation
 
 I recommend installing this package with the `OpenUPM` CLI. It keeps dependencies and updates easy to manage. If you cannot use `OpenUPM`, download the package and place it anywhere in your Unity project.

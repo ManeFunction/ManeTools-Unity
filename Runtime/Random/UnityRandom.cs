@@ -10,9 +10,12 @@ namespace Mane.Unity
     /// Each instance keeps its own <see cref="Random.State"/> so it does not
     /// disturb the global Unity RNG. The parameterless constructor seeds from
     /// a cryptographically strong source.
+    /// Every instance shares one lock around the global RNG swap, so overlapping
+    /// draws cannot interleave <see cref="Random.state"/>.
     /// </summary>
     public class UnityRandom : IRandom
     {
+        private static readonly object _sync = new();
         private readonly int _seed;
         private Random.State _state;
 
@@ -46,36 +49,52 @@ namespace Mane.Unity
             if (min > max)
                 throw new ArgumentOutOfRangeException(nameof(max));
 
-            Random.State previous = Push();
-            int result = Random.Range(min, max);
-            Pop(previous);
-            return result;
+            lock (_sync)
+                return Draw(() => Random.Range(min, max));
         }
 
         /// <inheritdoc />
         public double Range01Double()
         {
-            Random.State previous = Push();
-            double result = Random.Range(0, int.MaxValue) / (double)int.MaxValue;
-            Pop(previous);
-            return result;
+            lock (_sync)
+                return Draw(() => Random.Range(0, int.MaxValue) / (double)int.MaxValue);
         }
 
         /// <inheritdoc />
         public float Range01()
         {
+            lock (_sync)
+                return Draw(() => Random.Range(0, int.MaxValue) * (1f / int.MaxValue));
+        }
+
+        private T Draw<T>(Func<T> sample)
+        {
             Random.State previous = Push();
-            float result = Random.Range(0, int.MaxValue) * (1f / int.MaxValue);
-            Pop(previous);
-            return result;
+            try
+            {
+                return sample();
+            }
+            finally
+            {
+                Pop(previous);
+            }
         }
 
         private void InitFromSeed(int seed)
         {
-            Random.State previous = Random.state;
-            Random.InitState(seed);
-            _state = Random.state;
-            Random.state = previous;
+            lock (_sync)
+            {
+                Random.State previous = Random.state;
+                try
+                {
+                    Random.InitState(seed);
+                    _state = Random.state;
+                }
+                finally
+                {
+                    Random.state = previous;
+                }
+            }
         }
 
         private Random.State Push()

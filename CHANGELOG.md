@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Changed
+- `UnityRandom` takes one shared lock around its swap of `UnityEngine.Random.state`, so overlapping draws from any instances cannot interleave that global state. The previous global state is restored if a draw throws.
 
 ## [2.0.0-preview.1] - 2026-08-29
 

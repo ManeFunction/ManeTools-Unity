@@ -15,7 +15,7 @@ namespace Mane.Unity
         public Vector2HistoryCache(int length) : base(length) { }
 
         /// <inheritdoc />
-        public override Vector2 GetAverage()
+        protected override Vector2 ComputeAverage()
         {
             if (Count == 0)
                 return Vector2.zero;

@@ -43,7 +43,6 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Tuned `Color` extensions and `Color Picker` to show and work with different values properly (everything grounded to the `HSL + Luma` system).
 - Most custom hotkey-related menus (screenshots, enabling / disabling GameObjects, console clearing, etc.) are under the `Edit` menu now.
 - `Screenshoter` is now available from code via `Screenshot.Capture()` with an optional custom path.
-- The Enable / Disable GameObject hotkey is F6 instead of F4 now (F4 is used for the Search panel by default).
 - `Missing Reference Finder` is now a context menu from `Assets` or `GameObject` menus instead of a separate window.
 - `Asset Reference Finder` is now a context menu from the `Assets` menu instead of a separate window.
 - `Scene management` hotkeys moved under the `File` menu with improved selected-scene detection.

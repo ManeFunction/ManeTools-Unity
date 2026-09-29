@@ -187,7 +187,7 @@ namespace Mane.Unity.Editor
         }
 
         private static string FormatNoneLabel(Type fieldType, Type interfaceType) =>
-            $"None ({fieldType.Name}:{interfaceType.Name})";
+            $"None ({fieldType.Name} : {interfaceType.Name})";
 
         private static void UpdateNoneLabel(ObjectField field, string noneLabel)
         {

@@ -8,12 +8,6 @@ namespace Mane.Unity
     public static class UnityObjectExtensions
     {
         /// <summary>
-        /// Loads a Resources asset at <paramref name="path"/> and instantiates it.
-        /// </summary>
-        public static T Instantiate<T>(this string path, Transform parent = null) where T : Object => 
-            Object.Instantiate(Resources.Load<T>(path), parent);
-
-        /// <summary>
         /// Destroys <paramref name="o"/> immediately in edit mode, otherwise with <see cref="Object.Destroy"/>.
         /// </summary>
         public static void SafeDestroy(this Object o)

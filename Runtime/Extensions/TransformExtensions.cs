@@ -8,11 +8,11 @@ namespace Mane.Unity
     public static class TransformExtensions
     {
         /// <summary>
-        /// Resets local position (Z kept as <paramref name="z"/>), scale, and rotation.
+        /// Resets local position, scale, and rotation.
         /// </summary>
-        public static void Reset(this Transform transform, float z = 0f)
+        public static void Reset(this Transform transform)
         {
-            transform.localPosition = new Vector3(0f, 0f, z);
+            transform.localPosition = Vector3.zero;
             transform.localScale = Vector3.one;
             transform.localRotation = Quaternion.identity;
         }

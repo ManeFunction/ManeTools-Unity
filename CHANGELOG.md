@@ -6,9 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
-### Changed
-- `UnityRandom` takes one shared lock around its swap of `UnityEngine.Random.state`, so overlapping draws from any instances cannot interleave that global state. The previous global state is restored if a draw throws.
-- `AnimationEventInvoker` now shows a `UnityEvent` and can be used from the inspector as well as from code.
+
 
 ## [2.0.0-preview.1] - 2026-08-29
 
@@ -53,6 +51,8 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `DropdownList` options (when they are loaded dynamically from code) can now be refreshed from the context menu.
 - `Layer` attribute renamed to `LayerSelector`.
 - `SerializeReferenceInterface` attribute was renamed to `SerializeInterface`.
+- `UnityRandom` takes one shared lock around its swap of `UnityEngine.Random.state`, so overlapping draws from any instances cannot interleave that global state. The previous global state is restored if a draw throws.
+- `AnimationEventInvoker` now shows a `UnityEvent` and can be used from the inspector as well as from code.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.

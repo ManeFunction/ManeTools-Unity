@@ -8,7 +8,7 @@ namespace Mane.Unity
     /// </summary>
     [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/Position Follower (simple)")]
-    public class PositionFollowerSimple : MonoBehaviour
+    public sealed class PositionFollowerSimple : MonoBehaviour
     {
         [SerializeField] private Transform _target;
         [SerializeField, Range(0f, 1f), Tooltip("Catch-up factor (0 = stay, 1 = snap).")]

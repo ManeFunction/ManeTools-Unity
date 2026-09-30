@@ -10,11 +10,11 @@ namespace Mane.Unity
     /// </summary>
     [ManeStyle]
     [AddComponentMenu("Mane Tools/Components/Position Follower (by distance)")]
-    public class PositionFollowerByDistance : MonoBehaviour
+    public sealed class PositionFollowerByDistance : MonoBehaviour
     {
         [SerializeField] private Transform _target;
         [SerializeField, Tooltip("X is a distance range to the target. Y is catch-up factor (0 = stay, 1 = snap).")]
-        private AnimationCurve _animationCurve = AnimationCurve.Linear(10f, 0f, 100f, .3f);
+        private AnimationCurve _distanceCurve = AnimationCurve.Linear(10f, 0f, 100f, .3f);
 
         /// <summary>
         /// Transform to follow.
@@ -28,10 +28,10 @@ namespace Mane.Unity
         /// <summary>
         /// Catch-up curve sampled by world distance to the target.
         /// </summary>
-        public AnimationCurve AnimationCurve
+        public AnimationCurve DistanceCurve
         {
-            get => _animationCurve;
-            set => _animationCurve = value;
+            get => _distanceCurve;
+            set => _distanceCurve = value;
         }
 
         private void Update()
@@ -46,7 +46,7 @@ namespace Mane.Unity
                 return;
 
             float lag = Mathf.Sqrt(sqrLag);
-            float factor = Mathf.Clamp01(_animationCurve.Evaluate(SampleTime(_animationCurve, lag)));
+            float factor = Mathf.Clamp01(_distanceCurve.Evaluate(SampleTime(_distanceCurve, lag)));
             if (factor <= 0f)
                 return;
 

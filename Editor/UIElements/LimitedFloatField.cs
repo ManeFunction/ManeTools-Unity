@@ -4,12 +4,12 @@ using UnityEngine.UIElements;
 namespace Mane.Unity.Editor
 {
     /// <summary>
-    /// Integer field with optional labels for zero and for -1.
+    /// Decimal version of <see cref="LimitedIntField"/>: float field with optional labels for zero and for -1.
     /// Negatives are either clamped out, or limited to -1 with an optional display string.
     /// Empty labels show the numeric value.
     /// </summary>
     [UxmlElement]
-    public sealed partial class LimitedValueField : IntegerField
+    public sealed partial class LimitedFloatField : FloatField
     {
         private bool _allowNegatives;
         private string _negativeLabel = string.Empty;
@@ -18,7 +18,7 @@ namespace Mane.Unity.Editor
         /// <summary>
         /// Creates a field with default labels.
         /// </summary>
-        public LimitedValueField()
+        public LimitedFloatField()
         {
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
@@ -75,7 +75,7 @@ namespace Mane.Unity.Editor
         /// <summary>
         /// Sets the value without sending a change event, clamping and refreshing labels.
         /// </summary>
-        public override void SetValueWithoutNotify(int newValue)
+        public override void SetValueWithoutNotify(float newValue)
         {
             base.SetValueWithoutNotify(Clamp(newValue));
             RefreshDisplayedText();
@@ -88,36 +88,36 @@ namespace Mane.Unity.Editor
                 text = display;
         }
 
-        protected override string ValueToString(int v)
+        protected override string ValueToString(float v)
         {
-            if (v < 0)
+            if (v < 0f)
                 return string.IsNullOrEmpty(_negativeLabel) ? base.ValueToString(v) : _negativeLabel;
 
-            if (v == 0)
+            if (v == 0f)
                 return string.IsNullOrEmpty(_zeroLabel) ? base.ValueToString(v) : _zeroLabel;
 
             return base.ValueToString(v);
         }
 
-        protected override int StringToValue(string str)
+        protected override float StringToValue(string str)
         {
             if (!string.IsNullOrEmpty(_negativeLabel) &&
                 string.Equals(str, _negativeLabel, StringComparison.OrdinalIgnoreCase))
-                return _allowNegatives ? -1 : 0;
+                return _allowNegatives ? -1f : 0f;
 
             if (!string.IsNullOrEmpty(_zeroLabel) &&
                 string.Equals(str, _zeroLabel, StringComparison.OrdinalIgnoreCase))
-                return 0;
+                return 0f;
 
             return Clamp(base.StringToValue(str));
         }
 
-        private int Clamp(int v)
+        private float Clamp(float v)
         {
             if (_allowNegatives)
-                return v < -1 ? -1 : v;
+                return v < 0f ? -1f : v;
 
-            return v < 0 ? 0 : v;
+            return v < 0f ? 0f : v;
         }
     }
 }

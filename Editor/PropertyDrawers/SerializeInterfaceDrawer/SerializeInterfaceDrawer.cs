@@ -19,6 +19,7 @@ namespace Mane.Unity.Editor
         private const string TypeClass = "mie-serialize-interface__type";
         private const string ChildrenClass = "mie-serialize-interface__children";
         private const string NoneLabel = "None";
+        private const long ExpandedPollMs = 100;
 
         private static StyleSheet _sheet;
 
@@ -53,7 +54,7 @@ namespace Mane.Unity.Editor
             field.AddToClassList(FieldClass);
             root.Add(field);
 
-            Toggle arrow = new() { value = true, viewDataKey = ViewDataKey(tracked) };
+            Toggle arrow = new() { value = tracked.isExpanded };
             arrow.pickingMode = PickingMode.Ignore;
             arrow.AddToClassList(ArrowClass);
             arrow.AddToClassList(Foldout.toggleUssClassName);
@@ -106,7 +107,11 @@ namespace Mane.Unity.Editor
             void ApplyExpanded(bool expanded) =>
                 children.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
 
-            arrow.RegisterValueChangedCallback(evt => ApplyExpanded(evt.newValue));
+            arrow.RegisterValueChangedCallback(evt =>
+            {
+                tracked.isExpanded = evt.newValue;
+                ApplyExpanded(evt.newValue);
+            });
             arrow.RegisterCallback<AttachToPanelEvent>(_ => ApplyExpanded(arrow.value));
             field.RegisterCallback<PointerDownEvent>(evt =>
             {
@@ -115,15 +120,37 @@ namespace Mane.Unity.Editor
                 if (evt.position.x > field.labelElement.worldBound.xMax)
                     return;
 
-                arrow.value = !arrow.value;
+                bool expanded = !arrow.value;
+                arrow.value = expanded;
+                if (evt.altKey)
+                {
+                    SetExpandedRecursive(tracked, expanded);
+                    children.Query<Foldout>().ForEach(foldout => foldout.value = expanded);
+                }
+
                 evt.StopImmediatePropagation();
             }, TrickleDown.TrickleDown);
+
+            // isExpanded is also changed from outside (Option-click on a parent foldout), which raises no event.
+            IVisualElementScheduledItem expandedWatcher = root.schedule.Execute(() =>
+            {
+                if (arrow.parent == null || tracked.serializedObject?.targetObject == null)
+                    return;
+                if (arrow.value == tracked.isExpanded)
+                    return;
+
+                arrow.SetValueWithoutNotify(tracked.isExpanded);
+                ApplyExpanded(arrow.value);
+            }).Every(ExpandedPollMs);
+            expandedWatcher.Pause();
 
             root.RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 root.EnableInClassList(RootFieldsClass, HasFieldsAncestor(root));
                 HideHostLabel(root);
+                expandedWatcher.Resume();
             });
+            root.RegisterCallback<DetachFromPanelEvent>(_ => expandedWatcher.Pause());
 
             SyncChildren();
             root.TrackPropertyValue(tracked, _ =>
@@ -266,10 +293,14 @@ namespace Mane.Unity.Editor
             return Type.GetType($"{assemblyAndType[(split + 1)..]}, {assemblyAndType[..split]}");
         }
 
-        private static string ViewDataKey(SerializedProperty property)
+        private static void SetExpandedRecursive(SerializedProperty property, bool expanded)
         {
-            string typeName = property.serializedObject.targetObject.GetType().FullName;
-            return "Mane.SerializeInterface." + typeName + "." + property.propertyPath;
+            SerializedProperty iterator = property.Copy();
+            SerializedProperty end = iterator.GetEndProperty();
+            iterator.isExpanded = expanded;
+
+            while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, end))
+                iterator.isExpanded = expanded;
         }
 
         private static bool HasFieldsAncestor(VisualElement element)

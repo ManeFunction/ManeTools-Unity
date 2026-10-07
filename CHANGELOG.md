@@ -54,6 +54,9 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `AnimationEventInvoker` now shows a `UnityEvent` and can be used from the inspector as well as from code.
 - **Create → Scripting → MonoBehaviour Script** now creates an empty class body, without `Start` and `Update`.
 
+### Fixed
+- Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
+
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.
 - Dropped support of the legacy `Text` component. Everyone has used `TextMesh Pro` for years anyway.

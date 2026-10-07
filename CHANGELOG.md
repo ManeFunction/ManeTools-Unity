@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-
 ## [2.0.0-preview.1] - 2026-08-29
 
 Initial release of the extracted Unity codebase and Editor tools. Types were moved and refactored out of the legacy Unity-coupled module. Versioning starts at 2.0.0 to mark that split; this is not a new project, it is just a fresh start.
@@ -53,6 +52,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `SerializeReferenceInterface` attribute was renamed to `SerializeInterface`.
 - `UnityRandom` takes one shared lock around its swap of `UnityEngine.Random.state`, so overlapping draws from any instances cannot interleave that global state. The previous global state is restored if a draw throws.
 - `AnimationEventInvoker` now shows a `UnityEvent` and can be used from the inspector as well as from code.
+- **Create → Scripting → MonoBehaviour Script** now creates an empty class body, without `Start` and `Update`.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.

@@ -22,6 +22,7 @@ Add components from **Add Component → Mane Tools**.
 - Custom yield instructions (`WaitForSecondsUntil` / `While`, realtime variants).
 - Unity-backed random helpers: `UnityRandom`, `RandomColor`, `RandomPoint`, `RandomDirection` (in addition to system-based `ManeRandom` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
 - Animator helpers, such as state randomizers.
+- Script creation menu for `MonoBehaviour` starting point without `Start()` and `Update()` placeholders.
 - NUnit coverage for date/time types, color helpers, and some extensions.
 
 For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!

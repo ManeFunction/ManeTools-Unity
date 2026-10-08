@@ -16,6 +16,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 ### Added
 - Added `SerializableDateTime` and `SerializableDateTimeRange` types for date data, and `Calendar` - an editor date selection control.
 - Added the `InterfaceOnly` attribute to declare fields that require a `MonoBehaviour` plus an interface.
+- Added `Easing` presets: the standard easing equations as shared `AnimationCurve`s (`SinIn`, `ExpoOut`, `BackInOut`, and the rest).
 - Added a Mane Tools editor Scene View overlay to keep editor features in one place.
 - Added 'Copy as C# code' to color fields' context menu.
 - Added `EditorButton` to draw method-calling buttons in inspectors.

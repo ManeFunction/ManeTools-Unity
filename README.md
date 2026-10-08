@@ -22,6 +22,7 @@ Add components from **Add Component → Mane Tools**.
 - Extensions for `GameObject`, `Transform`, `RectTransform`, `Rect`, `Vector2` / `Vector3`, `Scene`, and coroutines.
 - Custom yield instructions (`WaitForSecondsUntil` / `While`, realtime variants).
 - Unity-backed random helpers: `UnityRandom`, `RandomColor`, `RandomPoint`, `RandomDirection` (in addition to system-based `ManeRandom` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
+- `ParticleSystemUIScaler` to fit a particle emitter size and particle count to a `RectTransform` area with consistent emission intencity.
 - Animator helpers, such as state randomizers.
 - Script creation menu for `MonoBehaviour` starting point without `Start()` and `Update()` placeholders.
 - NUnit coverage for date/time types, color helpers, and some extensions.

@@ -51,11 +51,14 @@ namespace Mane.Unity.Editor
                         block.Add(HeaderDrawer.Create(header.header));
                 }
 
-                PropertyField field = CreateField(property);
-                if (hasHeader)
-                    HeaderDrawer.HideUnityDecorator(field);
-                if (hasSpace)
-                    SpaceDrawer.HideUnityDecorator(field);
+                VisualElement field = CreateManeField(property);
+                if (field is PropertyField propertyField)
+                {
+                    if (hasHeader)
+                        HeaderDrawer.HideUnityDecorator(propertyField);
+                    if (hasSpace)
+                        SpaceDrawer.HideUnityDecorator(propertyField);
+                }
 
                 block.Add(field);
             }
@@ -148,6 +151,73 @@ namespace Mane.Unity.Editor
                 value = true,
                 viewDataKey = "Mane.Foldout." + typeName + "." + property.propertyPath
             };
+        }
+
+        // MinMaxCurve fields and lists get MinMaxCurveField, unless other property attributes need the PropertyField path.
+        private static VisualElement CreateManeField(SerializedProperty property)
+        {
+            if (!HasOnlyLayoutAttributes(property))
+                return CreateField(property);
+
+            if (MinMaxCurveField.IsMinMaxCurve(property))
+                return CreateMinMaxCurveField(property);
+
+            if (MinMaxCurveField.IsMinMaxCurveArray(property))
+                return CreateMinMaxCurveList(property);
+
+            return CreateField(property);
+        }
+
+        private static bool HasOnlyLayoutAttributes(SerializedProperty property)
+        {
+            foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
+            {
+                if (attribute is not (HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static MinMaxCurveField CreateMinMaxCurveField(SerializedProperty property)
+        {
+            MinMaxCurveField field = new(property.displayName)
+            {
+                name = "PropertyField:" + property.propertyPath,
+                tooltip = property.tooltip
+            };
+            field.BindProperty(property);
+            return field;
+        }
+
+        private static ListView CreateMinMaxCurveList(SerializedProperty property)
+        {
+            SerializedProperty array = property.Copy();
+            string typeName = property.serializedObject.targetObject.GetType().FullName;
+
+            ListView list = new()
+            {
+                name = "PropertyField:" + property.propertyPath,
+                headerTitle = property.displayName,
+                tooltip = property.tooltip,
+                viewDataKey = "Mane.List." + typeName + "." + property.propertyPath,
+                showFoldoutHeader = true,
+                showAddRemoveFooter = true,
+                showBorder = true,
+                showBoundCollectionSize = true,
+                reorderable = true,
+                reorderMode = ListViewReorderMode.Animated,
+                selectionType = SelectionType.Multiple,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+                makeItem = () => new MinMaxCurveField(),
+                bindItem = (element, index) =>
+                {
+                    if (index < array.arraySize)
+                        ((MinMaxCurveField)element).BindProperty(array.GetArrayElementAtIndex(index));
+                }
+            };
+            list.BindProperty(array);
+            return list;
         }
 
         private static PropertyField CreateField(SerializedProperty property)

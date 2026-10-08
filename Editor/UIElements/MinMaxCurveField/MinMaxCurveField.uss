@@ -1,0 +1,69 @@
+/* MinMaxCurve row: inspector label, one or two evenly sized value slots, mode arrow pinned to the right. */
+
+.mie-mmc-field {
+    min-width: 0;
+}
+
+.mie-mmc-field > .mie-mmc-field__input {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* List items have no label — no gap after the missing label column */
+.mie-mmc-field.unity-base-field--no-label > .mie-mmc-field__input {
+    margin-left: 0;
+}
+
+.mie-mmc-field > .mie-mmc-field__input > .mie-mmc-field__slot {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 0;
+    margin-right: 2px;
+}
+
+/* The value fills its slot. Lists force flex-grow 0 on BaseFields; align-self stretch still fills the column. */
+.mie-mmc-field .mie-mmc-field__slot > .mie-mmc-field__value {
+    align-self: stretch;
+    min-width: 0;
+    margin: 0;
+}
+
+.mie-mmc-field .mie-mmc-field__value > .unity-base-field__input {
+    margin-left: 0;
+    min-width: 0;
+}
+
+.mie-mmc-field .mie-mmc-field__slot--hidden {
+    display: none;
+}
+
+.mie-mmc-field .mie-mmc-field__mode {
+    flex-shrink: 0;
+    width: 16px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0);
+    align-items: center;
+    justify-content: center;
+}
+
+.mie-mmc-field .mie-mmc-field__mode:hover {
+    background-color: var(--mie-button-hover, #444);
+}
+
+.mie-mmc-field .mie-mmc-field__mode:active {
+    background-color: var(--mie-button-active, #555);
+}
+
+.mie-mmc-field .mie-mmc-field__mode > .mie-mmc-field__mode-arrow {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0;
+}

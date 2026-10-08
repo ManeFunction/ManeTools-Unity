@@ -27,6 +27,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Added the custom style attribute `ManeStyle` that you can apply to a component or Scriptable Object to follow this package's inspector styles. In that case `Space` splits visual blocks, `Header` adds a header to the split, and custom `Foldout("Header")` creates a foldout block, the same as in `ThreeStatesToggle`.
 - Added a `Prefix` property decorator, alongside the existing `Postfix` one.
 - Added the `ItemNameFromString` attribute, to set collection element names like `ItemNameFromField`, but using a custom format string `{0}`.
+- Added `ParticleSystemUIScaler` that scales a `ParticleSystem` emitter size and particle count (emission rates, bursts, max particles) by a `RectTransform` size, relative to reference values captured with one inspector button. Shape axes that follow the rect width / height are detected from the emitter rotation.
 
 ### Changed
 - Moved .NET-related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so they can be used from domain code without Unity references.

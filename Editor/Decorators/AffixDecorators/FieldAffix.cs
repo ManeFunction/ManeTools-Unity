@@ -47,6 +47,9 @@ namespace Mane.Unity.Editor
         private static void Apply(PropertyField host, string text, bool prefix)
         {
             SerializedProperty property = host.GetBoundSerializedProperty();
+            if (MinMaxCurveField.IsMinMaxCurve(property) || MinMaxCurveField.IsMinMaxCurveArray(property))
+                return;
+
             if (property is { isArray: true })
             {
                 ApplyCollectionTitle(host, property);
@@ -71,10 +74,14 @@ namespace Mane.Unity.Editor
                 row.Add(chip);
         }
 
-        private static void ApplyCollectionTitle(PropertyField host, SerializedProperty property)
+        public static void ApplyCollectionTitle(PropertyField host, SerializedProperty property)
         {
+            string name = property.GetAttribute<LabelAttribute>()?.Text;
+            if (string.IsNullOrEmpty(name))
+                name = property.displayName;
+
             string title =
-                $"{property.GetAttribute<PrefixAttribute>()?.Text}{property.displayName}{property.GetAttribute<PostfixAttribute>()?.Text}";
+                $"{property.GetAttribute<PrefixAttribute>()?.Text}{name}{property.GetAttribute<PostfixAttribute>()?.Text}";
 
             // Public label setter calls Rebind() and rebuilds the list. Decorators run after
             // Bind(), so write the backing field and the live ListView header instead.

@@ -39,23 +39,23 @@ namespace Mane.Unity
         [SerializeField] private RectTransform _rectTransform;
 
         [Header("Reference")]
-        [SerializeField, Tooltip("Rect size the reference values are tuned for.")]
+        [SerializeField, Label("Size"), Tooltip("Rect size the reference values are tuned for.")]
         private Vector2 _referenceSize = new(100f, 100f);
-        [SerializeField, Tooltip("Shape module scale at the reference size. The axis not mapped to width or height is not scaled.")]
+        [SerializeField, Label("Shape Scale"), Tooltip("Shape module scale at the reference size. The axis not mapped to width or height is not scaled.")]
         private Vector3 _referenceShapeScale = Vector3.one;
-        [SerializeField, Tooltip("Shape axis that follows the rect width. Detected from the emitter rotation on copy.")]
+        [SerializeField, Label("Width Axis"), Tooltip("Shape axis that follows the rect width. Detected from the emitter rotation on copy.")]
         private ShapeAxis _widthAxis = ShapeAxis.X;
-        [SerializeField, Tooltip("Shape axis that follows the rect height. Detected from the emitter rotation on copy.")]
+        [SerializeField, Label("Height Axis"), Tooltip("Shape axis that follows the rect height. Detected from the emitter rotation on copy.")]
         private ShapeAxis _heightAxis = ShapeAxis.Y;
 
         [Header("Reference Emission")]
-        [SerializeField, Tooltip("Emission rate over time at the reference size.")]
+        [SerializeField, Label("Rate Over Time"), Tooltip("Emission rate over time at the reference size.")]
         private MinMaxCurve _referenceRateOverTime = new(10f);
-        [SerializeField, Tooltip("Emission rate over distance at the reference size.")]
+        [SerializeField, Label("Rate Over Distance"), Tooltip("Emission rate over distance at the reference size.")]
         private MinMaxCurve _referenceRateOverDistance = new(0f);
-        [SerializeField, Tooltip("Burst counts at the reference size, by burst index.")]
+        [SerializeField, Label("Bursts"), Tooltip("Burst counts at the reference size, by burst index.")]
         private MinMaxCurve[] _referenceBurstCounts = { };
-        [SerializeField, Tooltip("Max particles at the reference size.")]
+        [SerializeField, Label("Max Particles"), Tooltip("Max particles at the reference size.")]
         private int _referenceMaxParticles = 1000;
 
         [SerializeField, HideInInspector] private bool _hasReferences;

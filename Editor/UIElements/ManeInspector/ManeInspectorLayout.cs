@@ -154,6 +154,7 @@ namespace Mane.Unity.Editor
         }
 
         // MinMaxCurve fields and lists get MinMaxCurveField, unless other property attributes need the PropertyField path.
+        // Label renames the field; Prefix / Postfix have no place in this row and are ignored.
         private static VisualElement CreateManeField(SerializedProperty property)
         {
             if (!HasOnlyLayoutAttributes(property))
@@ -172,16 +173,23 @@ namespace Mane.Unity.Editor
         {
             foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
             {
-                if (attribute is not (HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute))
+                if (attribute is not (HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute
+                    or LabelAttribute or PrefixAttribute or PostfixAttribute))
                     return false;
             }
 
             return true;
         }
 
+        private static string GetDisplayName(SerializedProperty property)
+        {
+            string label = property.GetAttribute<LabelAttribute>()?.Text;
+            return string.IsNullOrEmpty(label) ? property.displayName : label;
+        }
+
         private static MinMaxCurveField CreateMinMaxCurveField(SerializedProperty property)
         {
-            MinMaxCurveField field = new(property.displayName)
+            MinMaxCurveField field = new(GetDisplayName(property))
             {
                 name = "PropertyField:" + property.propertyPath,
                 tooltip = property.tooltip
@@ -198,7 +206,7 @@ namespace Mane.Unity.Editor
             ListView list = new()
             {
                 name = "PropertyField:" + property.propertyPath,
-                headerTitle = property.displayName,
+                headerTitle = GetDisplayName(property),
                 tooltip = property.tooltip,
                 viewDataKey = "Mane.List." + typeName + "." + property.propertyPath,
                 showFoldoutHeader = true,

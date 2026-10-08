@@ -99,7 +99,7 @@
 .mie-serialize-interface__children {
     flex-grow: 0;
     flex-direction: column;
-    margin-left: 15px;
+    margin-left: 13px;
 }
 
 .mie-serialize-interface--fields > .mie-serialize-interface__field > .unity-base-field__input {

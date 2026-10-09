@@ -47,7 +47,7 @@ namespace Mane.Unity.Editor
         private static void Apply(PropertyField host, string text, bool prefix)
         {
             SerializedProperty property = host.GetBoundSerializedProperty();
-            if (MinMaxCurveField.IsMinMaxCurve(property) || MinMaxCurveField.IsMinMaxCurveArray(property))
+            if (MinMaxCurveField.IsMinMaxCurve(property))
                 return;
 
             if (property is { isArray: true })

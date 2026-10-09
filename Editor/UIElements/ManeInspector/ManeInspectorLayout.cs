@@ -154,7 +154,7 @@ namespace Mane.Unity.Editor
         }
 
         // MinMaxCurve fields and lists get MinMaxCurveField, unless other property attributes need the PropertyField path.
-        // Label renames the field; Prefix / Postfix have no place in this row and are ignored.
+        // Label renames the field; Prefix / Postfix are ignored on the row and only extend a list title.
         private static VisualElement CreateManeField(SerializedProperty property)
         {
             if (!HasOnlyLayoutAttributes(property))
@@ -206,7 +206,7 @@ namespace Mane.Unity.Editor
             ListView list = new()
             {
                 name = "PropertyField:" + property.propertyPath,
-                headerTitle = GetDisplayName(property),
+                headerTitle = $"{property.GetAttribute<PrefixAttribute>()?.Text}{GetDisplayName(property)}{property.GetAttribute<PostfixAttribute>()?.Text}",
                 tooltip = property.tooltip,
                 viewDataKey = "Mane.List." + typeName + "." + property.propertyPath,
                 showFoldoutHeader = true,

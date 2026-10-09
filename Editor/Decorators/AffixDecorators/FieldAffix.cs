@@ -8,10 +8,9 @@ namespace Mane.Unity.Editor
 {
     internal static class FieldAffix
     {
-        private const string RowClass = "mie-affix-row";
-        private const string RowFieldsClass = "mie-affix-row--fields";
         private const string PrefixClass = "mie-prefix";
         private const string PostfixClass = "mie-postfix";
+        private const string HasPrefixClass = "mie-has-prefix";
         private const string BaseFieldClass = "unity-base-field";
         private const string InputClass = "unity-base-field__input";
         private const string ChipFieldClass = "unity-composite-field__field";
@@ -64,49 +63,36 @@ namespace Mane.Unity.Editor
                 foreach (VisualElement endpoint in field.Query(className: ChipFieldClass).ToList())
                 {
                     if (endpoint.GetFirstAncestorOfType<PropertyField>() == host)
-                        AddEndpointChip(endpoint, text, prefix);
+                        AddChip(endpoint, text, prefix);
                 }
 
                 return;
             }
 
-            AddChip(field, text, prefix, HasFieldsAncestor(field));
+            AddChip(field, text, prefix);
         }
 
-        // Chips are siblings of the endpoint input, so the input keeps the styles that expect it as a direct child.
-        private static void AddEndpointChip(VisualElement endpoint, string text, bool prefix)
-        {
-            VisualElement input = endpoint.Q(className: InputClass);
-            if (input == null)
-                return;
-
-            string chipClass = prefix ? PrefixClass : PostfixClass;
-            if (endpoint.Q(className: chipClass) != null)
-                return;
-
-            ApplySheet(endpoint);
-            Label chip = new(text);
-            chip.AddToClassList(chipClass);
-            endpoint.Insert(endpoint.IndexOf(input) + (prefix ? 0 : 1), chip);
-        }
-
-        private static void AddChip(VisualElement field, string text, bool prefix, bool inFields)
+        // Chips are siblings of the input. The input must stay a direct child of its field: numeric fields cast
+        // the input's parent to the field when dragging the label, and field styles expect that structure.
+        private static void AddChip(VisualElement field, string text, bool prefix)
         {
             VisualElement input = FindInput(field);
             if (input == null)
                 return;
 
             string chipClass = prefix ? PrefixClass : PostfixClass;
-            VisualElement row = EnsureRow(field, input, inFields);
-            if (row.Q(className: chipClass) != null)
-                return;
+            foreach (VisualElement child in field.Children())
+            {
+                if (child.ClassListContains(chipClass))
+                    return;
+            }
 
+            ApplySheet(field);
             Label chip = new(text);
             chip.AddToClassList(chipClass);
             if (prefix)
-                row.Insert(0, chip);
-            else
-                row.Add(chip);
+                field.AddToClassList(HasPrefixClass);
+            field.Insert(field.IndexOf(input) + (prefix ? 0 : 1), chip);
         }
 
         public static void ApplyCollectionTitle(PropertyField host, SerializedProperty property)
@@ -144,24 +130,6 @@ namespace Mane.Unity.Editor
             return null;
         }
 
-        private static VisualElement EnsureRow(VisualElement field, VisualElement input, bool inFields)
-        {
-            VisualElement parent = input.parent;
-            if (parent != null && parent.ClassListContains(RowClass))
-                return parent;
-
-            VisualElement row = new();
-            row.AddToClassList(RowClass);
-            if (inFields)
-                row.AddToClassList(RowFieldsClass);
-            ApplySheet(row);
-
-            int index = field.IndexOf(input);
-            field.Insert(index, row);
-            row.Add(input);
-            return row;
-        }
-
         private static VisualElement FindBaseField(PropertyField host)
         {
             foreach (VisualElement element in host.Query(className: BaseFieldClass).ToList())
@@ -177,17 +145,6 @@ namespace Mane.Unity.Editor
             return null;
         }
 
-        private static bool HasFieldsAncestor(VisualElement element)
-        {
-            for (VisualElement current = element; current != null; current = current.parent)
-            {
-                if (current.ClassListContains(ManeEditorStyles.FieldsClass))
-                    return true;
-            }
-
-            return false;
-        }
-
         private static VisualElement FindInput(VisualElement field)
         {
             if (field == null)
@@ -197,8 +154,6 @@ namespace Mane.Unity.Editor
             {
                 if (child.ClassListContains(InputClass))
                     return child;
-                if (child.ClassListContains(RowClass))
-                    return child.Q(className: InputClass);
             }
 
             return null;

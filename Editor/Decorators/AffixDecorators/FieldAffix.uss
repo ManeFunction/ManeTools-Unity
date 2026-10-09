@@ -1,32 +1,5 @@
 /* Prefix/postfix chips next to the input — width follows text, like Min/Max/X/Y. */
 
-.mie-affix-row {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
-    min-width: 0;
-}
-
-.mie-affix-row > .unity-base-field__input,
-.mie-affix-row > .unity-composite-field__input {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    flex-grow: 1;
-    min-width: 0;
-}
-
-.mie-affix-row--fields {
-    margin-left: 12px;
-}
-
-.mie-affix-row--fields > .unity-base-field__input {
-    margin-left: 0;
-}
-
 .mie-prefix,
 .mie-postfix {
     flex-grow: 0;
@@ -49,4 +22,17 @@
 .mie-postfix {
     margin-left: 2px;
     margin-right: 0;
+}
+
+/* ManeStyle puts the label gap on the input; with a prefix the gap goes before the chip instead. */
+.mie-fields .unity-base-field.mie-has-prefix > .unity-base-field__input {
+    margin-left: 0;
+}
+
+.mie-fields .unity-base-field.mie-has-prefix > .mie-prefix {
+    margin-left: 12px;
+}
+
+.mie-fields .unity-composite-field__field.unity-base-field.mie-has-prefix > .mie-prefix {
+    margin-left: 2px;
 }

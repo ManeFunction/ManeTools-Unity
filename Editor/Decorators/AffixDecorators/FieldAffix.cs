@@ -15,6 +15,7 @@ namespace Mane.Unity.Editor
         private const string BaseFieldClass = "unity-base-field";
         private const string InputClass = "unity-base-field__input";
         private const string ChipFieldClass = "unity-composite-field__field";
+        private const string MinMaxFieldClass = "mie-minmax-field";
 
         private static readonly FieldInfo LabelField = typeof(PropertyField)
             .GetField("m_Label", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -57,12 +58,46 @@ namespace Mane.Unity.Editor
             }
 
             VisualElement field = FindBaseField(host);
+            if (field != null && field.ClassListContains(MinMaxFieldClass))
+            {
+                // Min / Max drawer: the affix goes around each endpoint input, not around the whole row.
+                foreach (VisualElement endpoint in field.Query(className: ChipFieldClass).ToList())
+                {
+                    if (endpoint.GetFirstAncestorOfType<PropertyField>() == host)
+                        AddEndpointChip(endpoint, text, prefix);
+                }
+
+                return;
+            }
+
+            AddChip(field, text, prefix, HasFieldsAncestor(field));
+        }
+
+        // Chips are siblings of the endpoint input, so the input keeps the styles that expect it as a direct child.
+        private static void AddEndpointChip(VisualElement endpoint, string text, bool prefix)
+        {
+            VisualElement input = endpoint.Q(className: InputClass);
+            if (input == null)
+                return;
+
+            string chipClass = prefix ? PrefixClass : PostfixClass;
+            if (endpoint.Q(className: chipClass) != null)
+                return;
+
+            ApplySheet(endpoint);
+            Label chip = new(text);
+            chip.AddToClassList(chipClass);
+            endpoint.Insert(endpoint.IndexOf(input) + (prefix ? 0 : 1), chip);
+        }
+
+        private static void AddChip(VisualElement field, string text, bool prefix, bool inFields)
+        {
             VisualElement input = FindInput(field);
             if (input == null)
                 return;
 
             string chipClass = prefix ? PrefixClass : PostfixClass;
-            VisualElement row = EnsureRow(field, input);
+            VisualElement row = EnsureRow(field, input, inFields);
             if (row.Q(className: chipClass) != null)
                 return;
 
@@ -109,7 +144,7 @@ namespace Mane.Unity.Editor
             return null;
         }
 
-        private static VisualElement EnsureRow(VisualElement field, VisualElement input)
+        private static VisualElement EnsureRow(VisualElement field, VisualElement input, bool inFields)
         {
             VisualElement parent = input.parent;
             if (parent != null && parent.ClassListContains(RowClass))
@@ -117,7 +152,7 @@ namespace Mane.Unity.Editor
 
             VisualElement row = new();
             row.AddToClassList(RowClass);
-            if (HasFieldsAncestor(field))
+            if (inFields)
                 row.AddToClassList(RowFieldsClass);
             ApplySheet(row);
 

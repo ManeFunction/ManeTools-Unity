@@ -7,7 +7,7 @@
     --mie-button-active: #555;
     --mie-accent: #2a6cb8;
     --mie-accent-hover: #3a7cc8;
-    --mie-accent-muted: #2a6cb866;
+    --mie-accent-muted: rgba(42, 108, 184, 0.4);
     --mie-label-width: 115px;
     --mie-nested-label-width: 109px;
 }

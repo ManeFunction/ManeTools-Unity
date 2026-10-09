@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,10 +40,11 @@ namespace Mane.Unity.Editor
 
         private static bool TryGetSelectedScene(out Scene scene)
         {
-            foreach (EntityId id in Selection.entityIds)
+            List<Scene> scenes = SceneSelection.GetSelectedScenes();
+            if (scenes.Count > 0)
             {
-                if (TryGetSceneFromEntityId(id, out scene))
-                    return true;
+                scene = scenes[0];
+                return true;
             }
 
             GameObject selection = Selection.activeGameObject;
@@ -53,26 +55,6 @@ namespace Mane.Unity.Editor
             }
 
             scene = default;
-            return false;
-        }
-
-        private static bool TryGetSceneFromEntityId(EntityId id, out Scene scene)
-        {
-            scene = default;
-            if (EditorUtility.EntityIdToObject(id) != null)
-                return false;
-
-            SceneHandle handle = SceneHandle.FromRawData(EntityId.ToULong(id));
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                Scene candidate = SceneManager.GetSceneAt(i);
-                if (candidate.handle != handle)
-                    continue;
-
-                scene = candidate;
-                return scene.IsValid();
-            }
-
             return false;
         }
 

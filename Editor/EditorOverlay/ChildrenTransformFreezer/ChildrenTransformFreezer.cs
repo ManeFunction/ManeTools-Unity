@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+#if UNITY_6000_4_OR_NEWER
+using ObjectId = UnityEngine.EntityId;
+#else
+using ObjectId = System.Int32;
+#endif
 
 namespace Mane.Unity.Editor
 {
@@ -17,11 +22,11 @@ namespace Mane.Unity.Editor
         private static readonly List<Transform> Roots = new();
         private static readonly HashSet<Transform> SelectedSet = new();
         private static readonly List<FrozenChild> ChildBuffer = new();
-        private static readonly Dictionary<EntityId, FreezeState> Freezes = new();
-        private static readonly Dictionary<EntityId, LocalPose> LastPoses = new();
-        private static readonly Dictionary<int, Dictionary<EntityId, FreezeState>> Operations = new();
+        private static readonly Dictionary<ObjectId, FreezeState> Freezes = new();
+        private static readonly Dictionary<ObjectId, LocalPose> LastPoses = new();
+        private static readonly Dictionary<int, Dictionary<ObjectId, FreezeState>> Operations = new();
         private static readonly Queue<int> OperationOrder = new();
-        private static readonly HashSet<EntityId> Dragging = new();
+        private static readonly HashSet<ObjectId> Dragging = new();
 
         private static bool _applying;
 
@@ -89,7 +94,7 @@ namespace Mane.Unity.Editor
         {
             Dragging.Clear();
 
-            if (Operations.TryGetValue(info.undoGroup, out Dictionary<EntityId, FreezeState> snapshot))
+            if (Operations.TryGetValue(info.undoGroup, out Dictionary<ObjectId, FreezeState> snapshot))
             {
                 RestoreSnapshot(snapshot);
                 if (Enabled)
@@ -114,7 +119,7 @@ namespace Mane.Unity.Editor
                     continue;
 
                 transform.hasChanged = false;
-                EntityId id = transform.GetEntityId();
+                ObjectId id = GetId(transform);
                 Freezes[id] = CreateFreezeState(transform);
                 LastPoses[id] = ReadLocalPose(transform);
             }
@@ -148,7 +153,7 @@ namespace Mane.Unity.Editor
                 if (transform == null)
                     continue;
 
-                EntityId id = transform.GetEntityId();
+                ObjectId id = GetId(transform);
                 if (!Freezes.TryGetValue(id, out FreezeState state))
                 {
                     transform.hasChanged = false;
@@ -184,24 +189,24 @@ namespace Mane.Unity.Editor
             if (Operations.ContainsKey(group))
                 return;
 
-            Operations[group] = new Dictionary<EntityId, FreezeState>(Freezes);
+            Operations[group] = new Dictionary<ObjectId, FreezeState>(Freezes);
             OperationOrder.Enqueue(group);
 
             while (OperationOrder.Count > MaxOperationSnapshots)
                 Operations.Remove(OperationOrder.Dequeue());
         }
 
-        private static void RestoreSnapshot(Dictionary<EntityId, FreezeState> snapshot)
+        private static void RestoreSnapshot(Dictionary<ObjectId, FreezeState> snapshot)
         {
-            foreach (KeyValuePair<EntityId, FreezeState> pair in snapshot)
+            foreach (KeyValuePair<ObjectId, FreezeState> pair in snapshot)
                 RestoreChildren(pair.Value);
         }
 
-        private static void AdoptSnapshot(Dictionary<EntityId, FreezeState> snapshot)
+        private static void AdoptSnapshot(Dictionary<ObjectId, FreezeState> snapshot)
         {
             Freezes.Clear();
             LastPoses.Clear();
-            foreach (KeyValuePair<EntityId, FreezeState> pair in snapshot)
+            foreach (KeyValuePair<ObjectId, FreezeState> pair in snapshot)
             {
                 Freezes[pair.Key] = pair.Value;
                 Transform parent = pair.Value.Parent;
@@ -303,6 +308,13 @@ namespace Mane.Unity.Editor
                     EditorUtility.SetDirty(child);
             }
         }
+
+        private static ObjectId GetId(Transform transform) =>
+#if UNITY_6000_4_OR_NEWER
+            transform.GetEntityId();
+#else
+            transform.GetInstanceID();
+#endif
 
         private static LocalPose ReadLocalPose(Transform transform) =>
             new(transform.localPosition, transform.localRotation, transform.localScale);

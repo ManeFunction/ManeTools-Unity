@@ -28,7 +28,7 @@ namespace Mane.Unity.Editor
                 return;
             }
 
-            List<Scene> scenes = GetSelectedScenes();
+            List<Scene> scenes = SceneSelection.GetSelectedScenes();
             if (scenes.Count == 0)
             {
                 Scene active = SceneManager.GetActiveScene();
@@ -48,7 +48,7 @@ namespace Mane.Unity.Editor
             if (PrefabStageUtility.GetCurrentPrefabStage() != null)
                 return true;
 
-            if (GetSelectedScenes().Count > 0)
+            if (SceneSelection.GetSelectedScenes().Count > 0)
                 return true;
 
             Scene active = SceneManager.GetActiveScene();
@@ -75,41 +75,6 @@ namespace Mane.Unity.Editor
 
             LogDone();
             return hadErrors;
-        }
-
-        private static List<Scene> GetSelectedScenes()
-        {
-            List<Scene> scenes = new();
-            foreach (EntityId id in Selection.entityIds)
-            {
-                if (!TryGetSceneFromEntityId(id, out Scene scene))
-                    continue;
-
-                if (!scenes.Contains(scene))
-                    scenes.Add(scene);
-            }
-
-            return scenes;
-        }
-
-        private static bool TryGetSceneFromEntityId(EntityId id, out Scene scene)
-        {
-            scene = default;
-            if (EditorUtility.EntityIdToObject(id) != null)
-                return false;
-
-            SceneHandle handle = SceneHandle.FromRawData(EntityId.ToULong(id));
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                Scene candidate = SceneManager.GetSceneAt(i);
-                if (candidate.handle != handle)
-                    continue;
-
-                scene = candidate;
-                return scene.IsValid();
-            }
-
-            return false;
         }
 
         private static bool ScanScene(Scene scene)
@@ -185,8 +150,7 @@ namespace Mane.Unity.Editor
                     if (serializedProperty.propertyType != SerializedPropertyType.ObjectReference)
                         continue;
 
-                    if (serializedProperty.objectReferenceValue == null
-                        && serializedProperty.objectReferenceEntityIdValue != EntityId.None)
+                    if (serializedProperty.objectReferenceValue == null && HasReferenceId(serializedProperty))
                     {
                         Debug.LogError(
                             $"Missing Ref in: {FullPath(obj)}. Component: {component.GetType().Name}, Property: {ObjectNames.NicifyVariableName(serializedProperty.name)}",
@@ -202,6 +166,14 @@ namespace Mane.Unity.Editor
 
             return hadErrors;
         }
+
+        // A null reference that still carries an id points to a missing object.
+        private static bool HasReferenceId(SerializedProperty property) =>
+#if UNITY_6000_4_OR_NEWER
+            property.objectReferenceEntityIdValue != EntityId.None;
+#else
+            property.objectReferenceInstanceIDValue != 0;
+#endif
 
         private static string FullPath(GameObject go)
         {

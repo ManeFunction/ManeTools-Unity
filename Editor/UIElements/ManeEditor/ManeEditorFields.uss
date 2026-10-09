@@ -217,7 +217,7 @@
 }
 
 .mie-fields .unity-list-view__footer > .unity-button:hover {
-    background-color: #00000000;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .mie-fields #unity-list-view__add-button:hover {

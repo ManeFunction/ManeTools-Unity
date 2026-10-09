@@ -19,10 +19,12 @@ namespace Mane.Unity
         /// </summary>
         public bool IsInterface => InterfaceType is { IsInterface: true };
 
+#if UNITY_EDITOR
         /// <summary>
         /// Restricts the field to objects that implement <paramref name="interfaceType"/>.
         /// </summary>
         /// <param name="interfaceType">Required interface.</param>
-        public InterfaceOnlyAttribute(Type interfaceType) => InterfaceType = interfaceType;
+        internal InterfaceOnlyAttribute(Type interfaceType) => InterfaceType = interfaceType;
+#endif
     }
 }

@@ -11,11 +11,6 @@ namespace Mane.Unity
     public sealed class SerializableDateTime
     {
         /// <summary>
-        /// Serialized field name of the stored ISO string.
-        /// </summary>
-        public const string PropertyName = nameof(_dateTimeString);
-
-        /// <summary>
         /// Display format for a date without time.
         /// </summary>
         public const string DateFormat = "yyyy-MM-dd";
@@ -121,5 +116,9 @@ namespace Mane.Unity
         /// </summary>
         public static string FormatDate(DateTime value) =>
             value.ToString(DateFormat, CultureInfo.InvariantCulture);
+        
+#if UNITY_EDITOR
+        internal const string PropertyName = nameof(_dateTimeString);
+#endif
     }
 }

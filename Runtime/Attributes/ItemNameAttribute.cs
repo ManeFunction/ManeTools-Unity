@@ -72,10 +72,12 @@ namespace Mane.Unity
             StartingIndex = startingIndex;
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// Returns true if <paramref name="label"/> contains a <c>{0}</c> index placeholder.
         /// </summary>
-        public static bool HasIndexPlaceholder(string label) =>
+        internal static bool HasIndexPlaceholder(string label) =>
             !string.IsNullOrEmpty(label) && label.IndexOf("{0}", StringComparison.Ordinal) >= 0;
+#endif
     }
 }

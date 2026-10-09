@@ -9,16 +9,6 @@ namespace Mane.Unity
     [Serializable]
     public sealed class SerializableDateTimeRange
     {
-        /// <summary>
-        /// Serialized field name of the start ISO string.
-        /// </summary>
-        public const string StartPropertyName = nameof(_startDateTimeString);
-
-        /// <summary>
-        /// Serialized field name of the end ISO string.
-        /// </summary>
-        public const string EndPropertyName = nameof(_endDateTimeString);
-
         [SerializeField] private string _startDateTimeString;
         [SerializeField] private string _endDateTimeString;
 
@@ -82,5 +72,10 @@ namespace Mane.Unity
             _startDateTimeString = SerializableDateTime.FormatRoundTrip(start);
             _endDateTimeString = SerializableDateTime.FormatRoundTrip(end);
         }
+
+#if UNITY_EDITOR
+        internal const string StartPropertyName = nameof(_startDateTimeString);
+        internal const string EndPropertyName = nameof(_endDateTimeString);
+#endif
     }
 }

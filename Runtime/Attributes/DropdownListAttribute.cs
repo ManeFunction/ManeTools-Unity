@@ -45,17 +45,18 @@ namespace Mane.Unity
             MemberName = memberName;
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// True when choices can be resolved from <see cref="SourceType"/> and <see cref="MemberName"/>.
         /// </summary>
-        public bool CanRefresh => SourceType != null && !string.IsNullOrEmpty(MemberName);
+        internal bool CanRefresh => SourceType != null && !string.IsNullOrEmpty(MemberName);
 
         /// <summary>
         /// Returns the current dropdown choices for <paramref name="target"/>.
         /// </summary>
         /// <param name="target">Inspected object, used for instance members.</param>
         /// <returns>Choice strings, or null if the member could not be resolved.</returns>
-        public string[] GetStrings(object target) =>
+        internal string[] GetStrings(object target) =>
             CanRefresh ? TryResolve(SourceType, MemberName, target, true) : Strings;
 
         private static string[] TryResolve(Type type, string memberName, object target, bool logIfMissing = false)
@@ -107,5 +108,6 @@ namespace Mane.Unity
             instance = target;
             return true;
         }
+#endif
     }
 }

@@ -12,7 +12,7 @@ namespace Mane.Unity.Editor
     /// Inspector field for <see cref="InterfaceOnlyAttribute"/> object references.
     /// </summary>
     [CustomPropertyDrawer(typeof(InterfaceOnlyAttribute))]
-    public sealed class InterfaceOnlyDrawer : PropertyDrawer
+    internal sealed class InterfaceOnlyDrawer : PropertyDrawer
     {
         private const string DisplayLabelClass = "unity-object-field-display__label";
         private const string AcceptDropClass = "unity-object-field-display--accept-drop";

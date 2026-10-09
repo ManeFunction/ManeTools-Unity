@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     /// </summary>
     [Icon("Packages/com.manefunction.tools-unity/Editor/Icons/InkedKettle@2x.png")]
     [Overlay(typeof(SceneView), "ManeTools", "Mane Tools")]
-    public sealed class ManeToolsOverlay : ToolbarOverlay
+    internal sealed class ManeToolsOverlay : ToolbarOverlay
     {
         private ManeToolsOverlay() : base(ChildrenTransformFreezeToggle.Id) { }
     }

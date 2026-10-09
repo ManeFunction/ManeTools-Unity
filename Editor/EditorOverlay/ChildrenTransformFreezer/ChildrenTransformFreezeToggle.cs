@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
     /// Scene view toggle that freezes child transforms while moving the selection.
     /// </summary>
     [EditorToolbarElement(Id, typeof(SceneView))]
-    public sealed class ChildrenTransformFreezeToggle : EditorToolbarToggle
+    internal sealed class ChildrenTransformFreezeToggle : EditorToolbarToggle
     {
         /// <summary>
         /// Overlay toolbar element id.

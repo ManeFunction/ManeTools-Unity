@@ -38,7 +38,7 @@ namespace Mane.Unity
         [SerializeField] private ParticleSystem _particleSystem;
         [SerializeField] private RectTransform _rectTransform;
 
-        [Header("Reference")]
+        [Foldout("Reference Values")]
         [SerializeField, Label("Size"), Tooltip("Rect size the reference values are tuned for.")]
         private Vector2 _referenceSize = new(100f, 100f);
         [SerializeField, Label("Shape Scale"), Tooltip("Shape module scale at the reference size. The axis not mapped to width or height is not scaled.")]
@@ -48,7 +48,7 @@ namespace Mane.Unity
         [SerializeField, Label("Height Axis"), Tooltip("Shape axis that follows the rect height. Detected from the emitter rotation on copy.")]
         private ShapeAxis _heightAxis = ShapeAxis.Y;
 
-        [Header("Reference Emission")]
+        [NonBreakingSpace]
         [SerializeField, Label("Rate Over Time"), Tooltip("Emission rate over time at the reference size.")]
         private MinMaxCurve _referenceRateOverTime = new(10f);
         [SerializeField, Label("Rate Over Distance"), Tooltip("Emission rate over distance at the reference size.")]

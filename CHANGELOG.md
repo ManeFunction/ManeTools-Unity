@@ -26,6 +26,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Added the `LimitedField` attribute to draw a plain `int` or `float` field with `LimitedIntField` / `LimitedFloatField`, optionally with `allowNegatives` and a custom `negativeLabel`.
 - All `UI Toolkit` styles were aggregated into this package, so they can be reused from one place. You can use them as well if you want to style your inspectors the same way.
 - Added the custom style attribute `ManeStyle` that you can apply to a component or Scriptable Object to follow this package's inspector styles. In that case `Space` splits visual blocks, `Header` adds a header to the split, and custom `Foldout("Header")` creates a foldout block, the same as in `ThreeStatesToggle`.
+- Added the `NonBreakingSpace` attribute. It adds the same spacing as `Space` (or a custom height) in the default inspector, but inside `ManeStyle` it keeps the fields in one block instead of splitting it.
 - Added a `Prefix` property decorator, alongside the existing `Postfix` one. On `MinMaxInt` / `MinMaxFloat` / `MinMaxDouble` both decorators are drawn around each of the Min and Max inputs.
 - Added the `Label` attribute to show a custom field name in the inspector without renaming the field. It works as a decorator, so it combines with `Prefix` / `Postfix`, `DropdownList`, and other attributes, and on collections it replaces the collection title.
 - Added the `ItemNameFromString` attribute, to set collection element names like `ItemNameFromField`, but using a custom format string `{0}`.

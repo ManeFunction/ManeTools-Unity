@@ -14,7 +14,7 @@ Add components from **Add Component → Mane Tools**.
 - Missing-reference and asset-reference finders as Assets / GameObject context menus.
 - `UnitySingleton` and `ScriptableSingleton` implementations (in addition to generic `ManeSingleton` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
 - Easing presets (`Easing.SinIn`, `Easing.ExpoOut`, and the rest of the standard set) as shared `AnimationCurve`s.
-- **ManeStyle** inspector layout: framed blocks, `Space` / `Header` splits, and `Foldout` groups. Put `[ManeStyle]` on a `MonoBehaviour`, `ScriptableObject`, or a custom inspector.
+- **ManeStyle** inspector layout: framed blocks, `Space` / `Header` splits, `NonBreakingSpace` for spacing inside a block, and `Foldout` groups. Put `[ManeStyle]` on a `MonoBehaviour`, `ScriptableObject`, or a custom inspector.
 - Inspector attributes: `InfoBox`, `ReadOnly`, `Label`, `Prefix` / `Postfix`, `DropdownList`, `LimitedField`, `ItemNameFromField` / `ItemNameFromString`, `AvailableIf`, and others to simplify work with Unity components.
 - `EditorButton`s to call component methods from the inspector.
 - `Color picker` and `Color` / `Color32` helpers (HSL, luma, hex, channel setters).

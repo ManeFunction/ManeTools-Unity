@@ -7,7 +7,8 @@ namespace Mane.Unity.Editor
 {
     /// <summary>
     /// Builds inspector field layout.
-    /// <see cref="Fill"/> is the ManeStyle path: <c>mie-block</c>s, headers, and <see cref="FoldoutBlock"/>.
+    /// <see cref="Fill"/> is the ManeStyle path: <c>mie-block</c>s, headers, and <see cref="FoldoutBlock"/>;
+    /// <see cref="NonBreakingSpaceAttribute"/> adds spacing without starting a new block.
     /// <see cref="FillDefault"/> is Unity's default look with a stock <see cref="Foldout"/> for
     /// <see cref="FoldoutAttribute"/>.
     /// </summary>
@@ -52,12 +53,19 @@ namespace Mane.Unity.Editor
                 }
 
                 VisualElement field = CreateManeField(property);
+
+                NonBreakingSpaceAttribute nonBreakingSpace = property.GetAttribute<NonBreakingSpaceAttribute>();
+                if (nonBreakingSpace != null)
+                    block.Add(NonBreakingSpaceDrawer.Create(nonBreakingSpace.Height));
+
                 if (field is PropertyField propertyField)
                 {
                     if (hasHeader)
                         HeaderDrawer.HideUnityDecorator(propertyField);
                     if (hasSpace)
                         SpaceDrawer.HideUnityDecorator(propertyField);
+                    if (nonBreakingSpace != null)
+                        NonBreakingSpaceDrawer.HideUnityDecorator(propertyField);
                 }
 
                 block.Add(field);
@@ -174,7 +182,7 @@ namespace Mane.Unity.Editor
             foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
             {
                 if (attribute is not (HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute
-                    or LabelAttribute or PrefixAttribute or PostfixAttribute))
+                    or LabelAttribute or PrefixAttribute or PostfixAttribute or NonBreakingSpaceAttribute))
                     return false;
             }
 

@@ -23,6 +23,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Added optional conditions to `InfoBox`.
 - `Apply Transform values` to a prefab now works properly with `RectTransform`.
 - Added editor `LimitedIntField` as a custom `IntegerField` with custom labels and limits for non-positive values, and `LimitedFloatField` as its decimal version based on `FloatField`.
+- Added the `LimitedField` attribute to draw a plain `int` or `float` field with `LimitedIntField` / `LimitedFloatField`, optionally with `allowNegatives` and a custom `negativeLabel`.
 - All `UI Toolkit` styles were aggregated into this package, so they can be reused from one place. You can use them as well if you want to style your inspectors the same way.
 - Added the custom style attribute `ManeStyle` that you can apply to a component or Scriptable Object to follow this package's inspector styles. In that case `Space` splits visual blocks, `Header` adds a header to the split, and custom `Foldout("Header")` creates a foldout block, the same as in `ThreeStatesToggle`.
 - Added a `Prefix` property decorator, alongside the existing `Postfix` one. On `MinMaxInt` / `MinMaxFloat` / `MinMaxDouble` both decorators are drawn around each of the Min and Max inputs.

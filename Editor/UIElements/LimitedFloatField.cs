@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
@@ -14,6 +15,7 @@ namespace Mane.Unity.Editor
         private bool _allowNegatives;
         private string _negativeLabel = string.Empty;
         private string _zeroLabel = string.Empty;
+        private bool _dragging;
 
         /// <summary>
         /// Creates a field with default labels.
@@ -73,6 +75,32 @@ namespace Mane.Unity.Editor
         }
 
         /// <summary>
+        /// The field value, clamped before the change event is sent so listeners and bindings get the limited value.
+        /// </summary>
+        public override float value
+        {
+            get => base.value;
+            set => base.value = _dragging ? ClampDragged(value) : Clamp(value);
+        }
+
+        /// <summary>
+        /// Applies a label drag. Drag steps are small decimals, so -1 and 0 are passed one at a time
+        /// instead of snapping back to -1, as the integer field does.
+        /// </summary>
+        public override void ApplyInputDeviceDelta(Vector3 delta, DeltaSpeed speed, float startValue)
+        {
+            _dragging = true;
+            try
+            {
+                base.ApplyInputDeviceDelta(delta, speed, startValue);
+            }
+            finally
+            {
+                _dragging = false;
+            }
+        }
+
+        /// <summary>
         /// Sets the value without sending a change event, clamping and refreshing labels.
         /// </summary>
         public override void SetValueWithoutNotify(float newValue)
@@ -110,6 +138,22 @@ namespace Mane.Unity.Editor
                 return 0f;
 
             return Clamp(base.StringToValue(str));
+        }
+
+        private float ClampDragged(float v)
+        {
+            if (!_allowNegatives)
+                return Clamp(v);
+
+            if (v >= 0f)
+                return v;
+
+            // Below zero the value moves between -1 and 0 first, so neither is skipped by a small drag step.
+            float current = base.value;
+            if (current < 0f)
+                return v > current ? 0f : -1f;
+
+            return current > 0f ? 0f : -1f;
         }
 
         private float Clamp(float v)

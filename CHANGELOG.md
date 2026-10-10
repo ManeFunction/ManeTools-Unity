@@ -61,6 +61,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 
 ### Fixed
 - Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
+- `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.

@@ -11,23 +11,18 @@ namespace Mane.Unity
     public static class CoroutineExtensions
     {
         /// <summary>
-        /// Yields until <paramref name="task"/> completes, then invokes <paramref name="callback"/>.
+        /// Yields until <paramref name="task"/> completes, then invokes <paramref name="callback"/>
+        /// with <c>(true, result)</c>, or <c>(false, default)</c> if the task faulted or was canceled.
         /// </summary>
         public static IEnumerator ToCoroutine<T>(this Task<T> task, Action<bool, T> callback)
         {
             while (!task.IsCompleted)
-            {
-                if (task.IsFaulted || task.IsCanceled)
-                {
-                    callback?.Invoke(false, default);
-
-                    yield break;
-                }
-
                 yield return null;
-            }
 
-            callback?.Invoke(true, task.Result);
+            if (task.Status == TaskStatus.RanToCompletion)
+                callback?.Invoke(true, task.Result);
+            else
+                callback?.Invoke(false, default);
         }
 
         /// <summary>

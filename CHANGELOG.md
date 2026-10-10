@@ -66,5 +66,6 @@ Below, you can find a list of changes compared with legacy ManeTools.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.
+- The `Color Picker` no longer reads the clipboard every 200 ms. It applied any text that parsed as a color and then cleared the system clipboard. Paste a color into the hex field instead.
 - Dropped support of the legacy `Text` component. Everyone has used `TextMesh Pro` for years anyway.
 - Some components and tools were deleted. They were too specific for a generic package like this, and some of them duplicated functions that appeared in the standard API over the last years.

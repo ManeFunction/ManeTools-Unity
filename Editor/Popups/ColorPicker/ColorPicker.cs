@@ -104,7 +104,6 @@ namespace Mane.Unity.Editor
                 EditorGUIUtility.systemCopyBuffer = _color.ToCode();
 
             RefreshFields();
-            rootVisualElement.schedule.Execute(TryPasteClipboard).Every(200);
         }
 
         private void BindChannel(FloatField floatField, IntegerField intField, SetChannel setChannel)
@@ -130,15 +129,12 @@ namespace Mane.Unity.Editor
             });
         }
 
-        private void ApplyColor(Color color, bool clearClipboard = false)
+        private void ApplyColor(Color color)
         {
             if (_syncing)
                 return;
 
             _color = color;
-            if (clearClipboard)
-                EditorGUIUtility.systemCopyBuffer = string.Empty;
-
             RefreshFields();
         }
 
@@ -157,21 +153,6 @@ namespace Mane.Unity.Editor
             _syncing = true;
             _hexField.SetValueWithoutNotify(_color.ToHex());
             _syncing = false;
-        }
-
-        private void TryPasteClipboard()
-        {
-            if (_syncing)
-                return;
-
-            string buffer = EditorGUIUtility.systemCopyBuffer;
-            if (string.IsNullOrWhiteSpace(buffer) || !TryParseHex(buffer, out Color color))
-                return;
-
-            if (_color == color)
-                return;
-
-            ApplyColor(color, true);
         }
 
         private void RefreshFields()

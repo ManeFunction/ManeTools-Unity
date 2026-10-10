@@ -5,9 +5,7 @@ namespace Mane.Unity.Editor
 {
     internal static class UnityDecoratorHider
     {
-        private const string DecoratorContainerClass = "unity-decorator-drawers-container";
         private const string HiddenClass = "mie-unity-imgui-hidden";
-        private const string AvailableIfName = "mie-available-if";
 
         public static void HideImgui(PropertyField field)
         {
@@ -50,8 +48,7 @@ namespace Mane.Unity.Editor
                 SetHidden(container);
         }
 
-        private static bool ShouldKeep(VisualElement child) =>
-            child.name == AvailableIfName || child.ClassListContains("message-box");
+        private static bool ShouldKeep(VisualElement child) => child.ClassListContains(PropertyHost.KeepClass);
 
         private static void SetHidden(VisualElement element)
         {
@@ -61,7 +58,7 @@ namespace Mane.Unity.Editor
 
         private static VisualElement FindDecoratorContainer(PropertyField field)
         {
-            foreach (VisualElement element in field.Query(className: DecoratorContainerClass).ToList())
+            foreach (VisualElement element in field.Query(className: PropertyHost.DecoratorContainerClass).ToList())
             {
                 if (element.GetFirstAncestorOfType<PropertyField>() == field)
                     return element;

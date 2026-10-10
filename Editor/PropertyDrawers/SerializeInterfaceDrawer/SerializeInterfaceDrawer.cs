@@ -147,7 +147,7 @@ namespace Mane.Unity.Editor
             root.RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 root.EnableInClassList(RootFieldsClass, HasFieldsAncestor(root));
-                HideHostLabel(root);
+                PropertyHost.HideLabelsOutside(root);
                 expandedWatcher.Resume();
             });
             root.RegisterCallback<DetachFromPanelEvent>(_ => expandedWatcher.Pause());
@@ -164,32 +164,6 @@ namespace Mane.Unity.Editor
             });
 
             return root;
-        }
-
-        private static void HideHostLabel(VisualElement root)
-        {
-            PropertyField host = root.GetFirstAncestorOfType<PropertyField>();
-            if (host == null)
-                return;
-
-            host.Query<Label>(className: PropertyField.labelUssClassName).ForEach(label =>
-            {
-                if (IsUnder(label, root))
-                    return;
-
-                label.style.display = DisplayStyle.None;
-            });
-        }
-
-        private static bool IsUnder(VisualElement element, VisualElement ancestor)
-        {
-            for (VisualElement current = element; current != null; current = current.parent)
-            {
-                if (current == ancestor)
-                    return true;
-            }
-
-            return false;
         }
 
         private static bool ApplyType(SerializedProperty property, Type[] types, int selected)

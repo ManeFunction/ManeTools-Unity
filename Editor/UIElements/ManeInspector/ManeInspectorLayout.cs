@@ -189,15 +189,9 @@ namespace Mane.Unity.Editor
             return true;
         }
 
-        private static string GetDisplayName(SerializedProperty property)
-        {
-            string label = property.GetAttribute<LabelAttribute>()?.Text;
-            return string.IsNullOrEmpty(label) ? property.displayName : label;
-        }
-
         private static MinMaxCurveField CreateMinMaxCurveField(SerializedProperty property)
         {
-            MinMaxCurveField field = new(GetDisplayName(property))
+            MinMaxCurveField field = new(PropertyHost.DisplayName(property))
             {
                 name = "PropertyField:" + property.propertyPath,
                 tooltip = property.tooltip
@@ -214,7 +208,7 @@ namespace Mane.Unity.Editor
             ListView list = new()
             {
                 name = "PropertyField:" + property.propertyPath,
-                headerTitle = $"{property.GetAttribute<PrefixAttribute>()?.Text}{GetDisplayName(property)}{property.GetAttribute<PostfixAttribute>()?.Text}",
+                headerTitle = PropertyHost.CollectionTitle(property),
                 tooltip = property.tooltip,
                 viewDataKey = "Mane.List." + typeName + "." + property.propertyPath,
                 showFoldoutHeader = true,

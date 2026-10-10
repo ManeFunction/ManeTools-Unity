@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
         public override VisualElement CreatePropertyGUI()
         {
             PostfixAttribute info = (PostfixAttribute)attribute;
-            return FieldAffix.CreateHook(info.Text, prefix: false);
+            return PropertyHost.CreateHook(host => host.Postfix = info.Text);
         }
     }
 }

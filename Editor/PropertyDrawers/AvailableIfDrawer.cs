@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Reflection;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityObject = UnityEngine.Object;
@@ -12,79 +11,22 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(AvailableIfAttribute))]
     internal sealed class AvailableIfDrawer : DecoratorDrawer
     {
-        private const string DecoratorContainerClass = "unity-decorator-drawers-container";
         private const BindingFlags MemberFlags =
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
         public override VisualElement CreatePropertyGUI()
         {
             AvailableIfAttribute info = (AvailableIfAttribute)attribute;
-            VisualElement hook = new()
+            return PropertyHost.CreateHook(host =>
             {
-                name = "mie-available-if",
-                style =
+                if (string.IsNullOrEmpty(info.PropertyName))
                 {
-                    display = DisplayStyle.None
-                }
-            };
-            hook.RegisterCallback<AttachToPanelEvent>(_ => Bind(hook, info));
-            return hook;
-        }
-
-        private static void Bind(VisualElement hook, AvailableIfAttribute info)
-        {
-            PropertyField host = hook.GetFirstAncestorOfType<PropertyField>();
-            if (host == null)
-                return;
-
-            if (string.IsNullOrEmpty(info.PropertyName))
-            {
-                Apply(host, info.IsAvailable, info.Hide);
-                return;
-            }
-
-            bool tracking = false;
-            int retries = 0;
-
-            void TryBind()
-            {
-                SerializedProperty property = hook.GetBoundSerializedProperty();
-                if (property?.serializedObject == null)
-                {
-                    if (retries++ < 10)
-                        hook.schedule.Execute(TryBind);
+                    host.SetAvailable(info.IsAvailable, info.Hide);
                     return;
                 }
 
-                SerializedProperty tracked = property.Copy();
-                void Update() => Apply(host, Evaluate(tracked, info), info.Hide);
-                Update();
-
-                if (tracking)
-                    return;
-
-                tracking = true;
-                hook.TrackSerializedObjectValue(tracked.serializedObject, _ => Update());
-
-                SerializedProperty attached = FindAttached(tracked, info.PropertyName);
-                if (attached != null)
-                    hook.TrackPropertyValue(attached, _ => Update());
-            }
-
-            TryBind();
-        }
-
-        private static void Apply(PropertyField host, bool available, bool hide)
-        {
-            host.style.display = !available && hide ? DisplayStyle.None : StyleKeyword.Null;
-
-            foreach (VisualElement child in host.Children())
-            {
-                if (child.ClassListContains(DecoratorContainerClass))
-                    continue;
-
-                child.SetEnabled(available);
-            }
+                host.WhenBound(property => host.SetAvailable(Evaluate(property, info), info.Hide));
+            });
         }
 
         private static bool Evaluate(SerializedProperty property, AvailableIfAttribute info)

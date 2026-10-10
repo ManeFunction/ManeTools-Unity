@@ -51,6 +51,7 @@ namespace Mane.Unity.Editor
 
             box.Q<Label>("label").text = message;
             box.AddToClassList(TypeClass(type));
+            box.AddToClassList(PropertyHost.KeepClass);
             box.RemoveFromHierarchy();
 
             for (int i = 0; i < container.styleSheets.count; i++)

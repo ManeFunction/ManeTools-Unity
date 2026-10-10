@@ -9,7 +9,7 @@ namespace Mane.Unity.Editor
         public override VisualElement CreatePropertyGUI()
         {
             PrefixAttribute info = (PrefixAttribute)attribute;
-            return FieldAffix.CreateHook(info.Text, prefix: true);
+            return PropertyHost.CreateHook(host => host.Prefix = info.Text);
         }
     }
 }

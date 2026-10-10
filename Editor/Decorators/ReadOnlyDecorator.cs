@@ -8,55 +8,31 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     internal sealed class ReadOnlyDecorator : DecoratorDrawer
     {
-        private const string DecoratorContainerClass = "unity-decorator-drawers-container";
         private const string AppliedClass = "mie-read-only";
         private const string PanelFilterClass = "mie-read-only-menu-filter";
 
-        public override VisualElement CreatePropertyGUI()
-        {
-            VisualElement hook = new()
+        public override VisualElement CreatePropertyGUI() =>
+            PropertyHost.CreateHook(host =>
             {
-                style = { display = DisplayStyle.None }
-            };
-            hook.RegisterCallback<AttachToPanelEvent>(_ => Bind(hook));
-            return hook;
-        }
+                host.ReadOnly = true;
+                BlockPaste(host.Field);
+            });
 
-        private static void Bind(VisualElement hook)
+        // Disabled fields still accept Paste from the keyboard and the context menu.
+        private static void BlockPaste(PropertyField field)
         {
-            PropertyField host = hook.GetFirstAncestorOfType<PropertyField>();
-            if (host == null)
-                return;
-
-            void TryApply() => Apply(host);
-
-            host.RegisterCallback<GeometryChangedEvent>(_ => TryApply());
-            hook.schedule.Execute(TryApply);
-            TryApply();
-        }
-
-        private static void Apply(PropertyField host)
-        {
-            if (!host.ClassListContains(AppliedClass))
+            if (!field.ClassListContains(AppliedClass))
             {
-                host.AddToClassList(AppliedClass);
-                host.RegisterCallback<ValidateCommandEvent>(BlockPasteCommand, TrickleDown.TrickleDown);
-                host.RegisterCallback<ExecuteCommandEvent>(BlockPasteCommand, TrickleDown.TrickleDown);
+                field.AddToClassList(AppliedClass);
+                field.RegisterCallback<ValidateCommandEvent>(BlockPasteCommand, TrickleDown.TrickleDown);
+                field.RegisterCallback<ExecuteCommandEvent>(BlockPasteCommand, TrickleDown.TrickleDown);
             }
 
-            VisualElement root = host.panel?.visualTree;
+            VisualElement root = field.panel?.visualTree;
             if (root != null && !root.ClassListContains(PanelFilterClass))
             {
                 root.AddToClassList(PanelFilterClass);
                 root.RegisterCallback<ContextualMenuPopulateEvent>(StripPaste);
-            }
-
-            foreach (VisualElement child in host.Children())
-            {
-                if (child.ClassListContains(DecoratorContainerClass))
-                    continue;
-
-                child.SetEnabled(false);
             }
         }
 

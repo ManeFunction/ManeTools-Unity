@@ -23,7 +23,8 @@ namespace Mane.Unity.Editor
 
             string label = string.IsNullOrEmpty(preferredLabel) ? tracked.displayName : preferredLabel;
             bool isString = tracked.propertyType == SerializedPropertyType.String;
-            DropdownField dropdown = CreateDropdown(label, list, CurrentIndex());
+            DropdownField dropdown = CreateDropdown(label, list);
+            ApplyDisplay();
 
             dropdown.RegisterValueChangedCallback(evt =>
             {
@@ -59,13 +60,17 @@ namespace Mane.Unity.Editor
 
             return dropdown;
 
+            // -1 when the stored value is not one of the options (unset, removed, out of range).
             int CurrentIndex() => isString
-                ? Mathf.Max(0, Array.IndexOf(list, tracked.stringValue))
-                : Mathf.Clamp(tracked.intValue, 0, list.Length - 1);
+                ? Array.IndexOf(list, tracked.stringValue)
+                : tracked.intValue >= 0 && tracked.intValue < list.Length ? tracked.intValue : -1;
 
+            // A value that is not an option shows as empty, so picking any option, the first one included,
+            // is a change and gets written.
             void ApplyDisplay()
             {
-                string value = list[CurrentIndex()];
+                int index = CurrentIndex();
+                string value = index >= 0 ? list[index] : null;
                 if (dropdown.value != value)
                     dropdown.SetValueWithoutNotify(value);
             }
@@ -82,9 +87,9 @@ namespace Mane.Unity.Editor
             }
         }
 
-        private static DropdownField CreateDropdown(string label, string[] list, int index)
+        private static DropdownField CreateDropdown(string label, string[] list)
         {
-            DropdownField dropdown = new(label, new List<string>(list), index);
+            DropdownField dropdown = new(label, new List<string>(list), 0);
             dropdown.AddToClassList(BaseField<string>.alignedFieldUssClassName);
             return dropdown;
         }

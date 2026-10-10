@@ -9,8 +9,6 @@ namespace Mane.Unity.Editor
     /// </summary>
     public static class Decorations
     {
-        private const string DecoratorContainerClass = "unity-decorator-drawers-container";
-
         /// <summary>
         /// Warning that <paramref name="attributeName"/> cannot be used on this property type.
         /// </summary>
@@ -42,51 +40,12 @@ namespace Mane.Unity.Editor
             if (host == null)
                 return;
 
-            HideHostLabel(host, field);
+            PropertyHost.HideLabelsOutside(field);
 
-            VisualElement container = FindDecoratorContainer(host);
-            if (container == null)
-            {
-                container = new VisualElement();
-                container.AddToClassList(DecoratorContainerClass);
-                host.Insert(0, container);
-            }
-
+            VisualElement container = PropertyHost.GetDecoratorContainer(host, create: true);
+            decoration.AddToClassList(PropertyHost.KeepClass);
             if (decoration.parent != container)
                 container.Add(decoration);
-        }
-
-        private static VisualElement FindDecoratorContainer(PropertyField host)
-        {
-            foreach (VisualElement child in host.Children())
-            {
-                if (child.ClassListContains(DecoratorContainerClass))
-                    return child;
-            }
-
-            return null;
-        }
-
-        private static void HideHostLabel(PropertyField host, VisualElement drawerRoot)
-        {
-            host.Query<Label>(className: PropertyField.labelUssClassName).ForEach(label =>
-            {
-                if (IsUnder(label, drawerRoot))
-                    return;
-
-                label.style.display = DisplayStyle.None;
-            });
-        }
-
-        private static bool IsUnder(VisualElement element, VisualElement ancestor)
-        {
-            for (VisualElement current = element; current != null; current = current.parent)
-            {
-                if (current == ancestor)
-                    return true;
-            }
-
-            return false;
         }
     }
 }

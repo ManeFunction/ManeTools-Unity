@@ -64,7 +64,12 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.
 - A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
+- Changes made by an `EditorButton` method to the inspected objects were not saved: they were not marked dirty, not kept as prefab overrides, and could not be undone.
+- Custom `ManeEditor` inspectors did not draw `EditorButton` methods.
 - Children Transform Freeze did not record the children's counter-move as prefab overrides, so prefab instance children could jump back on reload.
+- `ReadOnly` together with `AvailableIf` made the field editable whenever the condition was true, because the last decorator to run decided the enabled state. Decorators on one field now apply together: the field is enabled only when it is not read-only and is available.
+- `Prefix` and `Postfix` showed nothing on `string` fields.
+- `DropdownList` showed the first option for an unset value, and picking that option did not save it. A value that is not an option now shows as empty.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.

@@ -1,11 +1,12 @@
-using System.Reflection;
-using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Prefix and postfix chips around a field input. <see cref="PropertyHost"/> decides when they apply.
+    /// </summary>
     internal static class FieldAffix
     {
         private const string PrefixClass = "mie-prefix";
@@ -16,46 +17,14 @@ namespace Mane.Unity.Editor
         private const string ChipFieldClass = "unity-composite-field__field";
         private const string MinMaxFieldClass = "mie-minmax-field";
 
-        private static readonly FieldInfo LabelField = typeof(PropertyField)
-            .GetField("m_Label", BindingFlags.Instance | BindingFlags.NonPublic);
-
         private static StyleSheet _sheet;
 
-        public static VisualElement CreateHook(string text, bool prefix)
+        /// <summary>
+        /// Adds a prefix or postfix chip next to the input of <paramref name="host"/>, or next to each
+        /// endpoint input of a Min / Max drawer. Does nothing if that chip is already there.
+        /// </summary>
+        public static void AddChips(PropertyField host, string text, bool prefix)
         {
-            VisualElement hook = new()
-            {
-                style = { display = DisplayStyle.None }
-            };
-            hook.RegisterCallback<AttachToPanelEvent>(_ => Bind(hook, text, prefix));
-            return hook;
-        }
-
-        private static void Bind(VisualElement hook, string text, bool prefix)
-        {
-            PropertyField host = hook.GetFirstAncestorOfType<PropertyField>();
-            if (host == null)
-                return;
-
-            void TryApply() => Apply(host, text, prefix);
-
-            host.RegisterCallback<GeometryChangedEvent>(_ => TryApply());
-            hook.schedule.Execute(TryApply);
-            TryApply();
-        }
-
-        private static void Apply(PropertyField host, string text, bool prefix)
-        {
-            SerializedProperty property = host.GetBoundSerializedProperty();
-            if (MinMaxCurveField.IsMinMaxCurve(property))
-                return;
-
-            if (property is { isArray: true })
-            {
-                ApplyCollectionTitle(host, property);
-                return;
-            }
-
             VisualElement field = FindBaseField(host);
             if (field != null && field.ClassListContains(MinMaxFieldClass))
             {
@@ -93,41 +62,6 @@ namespace Mane.Unity.Editor
             if (prefix)
                 field.AddToClassList(HasPrefixClass);
             field.Insert(field.IndexOf(input) + (prefix ? 0 : 1), chip);
-        }
-
-        public static void ApplyCollectionTitle(PropertyField host, SerializedProperty property)
-        {
-            string name = property.GetAttribute<LabelAttribute>()?.Text;
-            if (string.IsNullOrEmpty(name))
-                name = property.displayName;
-
-            string title =
-                $"{property.GetAttribute<PrefixAttribute>()?.Text}{name}{property.GetAttribute<PostfixAttribute>()?.Text}";
-
-            // Public label setter calls Rebind() and rebuilds the list. Decorators run after
-            // Bind(), so write the backing field and the live ListView header instead.
-            LabelField?.SetValue(host, title);
-
-            BaseListView list = FindListView(host);
-            if (list != null)
-                list.headerTitle = title;
-        }
-
-        private static BaseListView FindListView(VisualElement root)
-        {
-            foreach (VisualElement child in root.hierarchy.Children())
-            {
-                if (child is BaseListView list)
-                    return list;
-                if (child is PropertyField)
-                    continue;
-
-                BaseListView nested = FindListView(child);
-                if (nested != null)
-                    return nested;
-            }
-
-            return null;
         }
 
         private static VisualElement FindBaseField(PropertyField host)

@@ -11,6 +11,8 @@ namespace Mane.Unity.Editor
 {
     /// <summary>
     /// Adds inspector buttons for methods marked with <see cref="EditorButtonAttribute"/>.
+    /// Changes the method makes to the inspected objects are recorded for Undo, mark them dirty,
+    /// and are kept as prefab overrides. Changes to other objects are up to the method.
     /// </summary>
     public static class EditorButton
     {
@@ -18,14 +20,21 @@ namespace Mane.Unity.Editor
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic |
             BindingFlags.DeclaredOnly;
 
+        private const string ContainerClass = "mie-editor-buttons";
+
         private static StyleSheet _sheet;
 
         /// <summary>
         /// Appends buttons for the inspected type to <paramref name="inspectorRoot"/>.
+        /// Does nothing if the buttons were already added to that root.
         /// </summary>
         public static void AddTo(VisualElement inspectorRoot, UnityEditor.Editor editor)
         {
             if (inspectorRoot == null || editor == null || editor.targets == null || editor.targets.Length == 0)
+                return;
+
+            // ManeEditor adds them itself; an editor that also calls AddTo must not get a second row.
+            if (inspectorRoot.Q(className: ContainerClass) != null)
                 return;
 
             UnityObject first = editor.targets[0];
@@ -38,7 +47,7 @@ namespace Mane.Unity.Editor
 
             bool maneStyle = inspectorRoot.ClassListContains(ManeEditorStyles.RootClass);
             VisualElement container = new();
-            container.AddToClassList("mie-editor-buttons");
+            container.AddToClassList(ContainerClass);
             if (maneStyle)
                 AddSheet(inspectorRoot);
             else
@@ -52,7 +61,8 @@ namespace Mane.Unity.Editor
             foreach ((MethodInfo method, string label) in buttons)
             {
                 MethodInfo capturedMethod = method;
-                Button button = new(() => Invoke(capturedMethod, targets, serializedObject))
+                string capturedLabel = label;
+                Button button = new(() => Invoke(capturedMethod, capturedLabel, targets, serializedObject))
                 {
                     text = label
                 };
@@ -114,8 +124,9 @@ namespace Mane.Unity.Editor
             return buttons;
         }
 
-        private static void Invoke(MethodInfo method, UnityObject[] targets, SerializedObject serializedObject)
+        private static void Invoke(MethodInfo method, string label, UnityObject[] targets, SerializedObject serializedObject)
         {
+            List<UnityObject> invoked = new();
             try
             {
                 if (method.IsStatic)
@@ -129,14 +140,24 @@ namespace Mane.Unity.Editor
                         if (target == null || (method.DeclaringType != null && !method.DeclaringType.IsInstanceOfType(target)))
                             continue;
 
-                        method.Invoke(target, null);
+                        invoked.Add(target);
                     }
+
+                    // A field changed directly from C# is invisible to the editor. Undo compares this snapshot
+                    // after the call, and only when something changed records a step and marks the object dirty.
+                    Undo.RecordObjects(invoked.ToArray(), label);
+                    foreach (UnityObject target in invoked)
+                        method.Invoke(target, null);
                 }
             }
             catch (TargetInvocationException exception)
             {
                 Debug.LogException(exception.InnerException ?? exception);
             }
+
+            foreach (UnityObject target in invoked)
+                if (target != null)
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(target);
 
             if (serializedObject != null && serializedObject.targetObject != null)
                 serializedObject.Update();

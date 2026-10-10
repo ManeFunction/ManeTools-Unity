@@ -19,6 +19,6 @@ namespace Mane.Unity
         /// <summary>
         /// True while the predicate is still false.
         /// </summary>
-        public override bool keepWaiting => IsKeepWaiting(true, false);
+        public override bool keepWaiting => IsKeepWaiting(isUntil: true, isRealtime: false);
     }
 }

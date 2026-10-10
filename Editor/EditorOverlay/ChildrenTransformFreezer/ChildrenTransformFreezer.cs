@@ -304,8 +304,12 @@ namespace Mane.Unity.Editor
             foreach (var frozenChild in children)
             {
                 Transform child = frozenChild.Transform;
-                if (child != null)
-                    EditorUtility.SetDirty(child);
+                if (child == null)
+                    continue;
+
+                EditorUtility.SetDirty(child);
+                // Without this, the counter-move of a prefab instance child is not an override and reverts on reload.
+                PrefabUtility.RecordPrefabInstancePropertyModifications(child);
             }
         }
 

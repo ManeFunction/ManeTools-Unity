@@ -63,6 +63,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
 - `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.
+- A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
 
 ### Removed
 - Intentionally dropped support of the legacy `IMGUI` system, highlighting the advantages of `UI Toolkit`.

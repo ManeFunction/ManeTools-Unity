@@ -60,16 +60,17 @@ namespace Mane.Unity
         public static void ClearInstance() => _instance = null;
 
         /// <summary>
-        /// Registers this object as the singleton instance.
+        /// Registers this object as the singleton instance. If another instance is already registered
+        /// (for example, the scene that holds this object was loaded again), destroys this GameObject instead.
+        /// Overrides should call <c>base.Awake()</c> first and return when <c>Instance != this</c>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when another instance is already registered.
-        /// </exception>
         protected virtual void Awake()
         {
             if (_instance != null && _instance != this)
-                throw new InvalidOperationException(
-                    $"{typeof(T).Name} singleton is already initialized.");
+            {
+                Destroy(gameObject);
+                return;
+            }
 
             _instance = (T)this;
             Persist(gameObject);

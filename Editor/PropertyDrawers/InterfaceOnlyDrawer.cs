@@ -53,6 +53,7 @@ namespace Mane.Unity.Editor
             Label warningLabel = warning.Q<Label>("label");
             warning.style.display = DisplayStyle.None;
 
+            Label display = field.Q<Label>(className: DisplayLabelClass);
             bool applying = false;
 
             SerializedProperty LiveProperty()
@@ -71,7 +72,7 @@ namespace Mane.Unity.Editor
                     return;
 
                 UpdateWarning(live, info.InterfaceType, fieldType, warning, warningLabel);
-                UpdateNoneLabel(field, noneLabel);
+                UpdateNoneLabel(field, display, live, noneLabel);
             }
 
             void ApplyAssignment(UnityObject assigned)
@@ -108,7 +109,9 @@ namespace Mane.Unity.Editor
 
             field.RegisterValueChangedCallback(evt => ApplyAssignment(evt.newValue));
             field.TrackSerializedObjectValue(tracked.serializedObject, _ => Refresh());
-            field.RegisterCallback<GeometryChangedEvent>(_ => UpdateNoneLabel(field, noneLabel));
+            // The binding rewrites the label with the standard text whenever it syncs, which can happen
+            // after any one-shot refresh, so the custom text is reapplied on every write.
+            display?.RegisterValueChangedCallback(_ => UpdateNoneLabel(field, display, LiveProperty(), noneLabel));
             field.RegisterCallback<AttachToPanelEvent>(_ => Refresh());
             field.schedule.Execute(Refresh);
             RegisterDragFilter(field, info.InterfaceType, fieldType);
@@ -189,18 +192,26 @@ namespace Mane.Unity.Editor
         private static string FormatNoneLabel(Type fieldType, Type interfaceType) =>
             $"None ({fieldType.Name} : {interfaceType.Name})";
 
-        private static void UpdateNoneLabel(ObjectField field, string noneLabel)
+        private static void UpdateNoneLabel(ObjectField field, Label display, SerializedProperty property, string noneLabel)
         {
-            if (field.value != null || field.showMixedValue)
+            if (display == null || field.value != null || field.showMixedValue)
                 return;
 
-            Label display = field.Q<Label>(className: DisplayLabelClass);
-            if (display == null)
+            // A missing reference keeps the standard "Missing" text.
+            if (property != null && property.objectReferenceValue == null && HasReferenceId(property))
                 return;
 
             if (display.text != noneLabel)
                 display.text = noneLabel;
         }
+
+        // A null reference that still carries an id points to a missing object.
+        private static bool HasReferenceId(SerializedProperty property) =>
+#if UNITY_6000_4_OR_NEWER
+            property.objectReferenceEntityIdValue != EntityId.None;
+#else
+            property.objectReferenceInstanceIDValue != 0;
+#endif
 
         private static bool TryGetWarning(
             SerializedProperty property, Type interfaceType, Type fieldType, out string message)

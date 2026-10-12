@@ -4,7 +4,16 @@
     margin-bottom: 0;
 }
 
-.mie-root > .mie-editor-buttons > .mie-button {
+/* Row at the end of a block or foldout (EditorButton block parameter) — aligned like a message box.
+   .mie-block > also covers the row after a FoldoutBlock's content (hideWithFoldout: false). */
+.mie-block > .mie-editor-buttons,
+.mie-foldout-block > .unity-foldout__content > .mie-editor-buttons {
+    margin-top: 3px;
+    margin-right: -4px;
+    margin-bottom: 0;
+}
+
+.mie-root .mie-editor-buttons > .mie-button {
     margin-top: 0;
     margin-right: 0;
     margin-left: 0;

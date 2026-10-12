@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -93,6 +94,43 @@ namespace Mane.Unity.Editor
             }
 
             return false;
+        }
+
+        // Path of the last field in the first block opened by a Foldout or Header with this text, or null.
+        // A block ends at the next Header, Space, or Foldout, as in Fill and FillDefault.
+        internal static string FindBlockEnd(SerializedObject serializedObject, string block)
+        {
+            if (serializedObject?.targetObject == null || string.IsNullOrEmpty(block))
+                return null;
+
+            string lastPath = null;
+            bool inBlock = false;
+
+            SerializedProperty iterator = serializedObject.GetIterator();
+            bool enterChildren = true;
+            while (iterator.NextVisible(enterChildren))
+            {
+                enterChildren = false;
+                if (iterator.propertyPath == ScriptPath)
+                    continue;
+
+                FoldoutAttribute foldout = iterator.GetAttribute<FoldoutAttribute>();
+                HeaderAttribute[] headers = iterator.GetAttributes<HeaderAttribute>();
+                bool hasSpace = iterator.GetAttributes<SpaceAttribute>().Length > 0;
+
+                if (foldout != null || headers.Length > 0 || hasSpace)
+                {
+                    if (inBlock)
+                        return lastPath;
+
+                    inBlock = foldout?.Header == block || Array.Exists(headers, header => header.header == block);
+                }
+
+                if (inBlock)
+                    lastPath = iterator.propertyPath;
+            }
+
+            return inBlock ? lastPath : null;
         }
 
         /// <summary>

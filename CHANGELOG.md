@@ -19,7 +19,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Added `Easing` presets: the standard easing equations as shared `AnimationCurve`s (`SinIn`, `ExpoOut`, `BackInOut`, and the rest).
 - Added a Mane Tools editor Scene View overlay to keep editor features in one place.
 - Added 'Copy as C# code' to color fields' context menu.
-- Added `EditorButton` to draw method-calling buttons in inspectors.
+- Added `EditorButton` to draw method-calling buttons in inspectors. Buttons go at the end of the inspector, or at the end of a `Header` or `Foldout` block when you pass its text as `block`. Buttons in a foldout hide with it, unless `hideWithFoldout` is false.
 - Added optional conditions to `InfoBox`.
 - `Apply Transform values` to a prefab now works properly with `RectTransform`.
 - Added editor `LimitedIntField` as a custom `IntegerField` with custom labels and limits for non-positive values, and `LimitedFloatField` as its decimal version based on `FloatField`.

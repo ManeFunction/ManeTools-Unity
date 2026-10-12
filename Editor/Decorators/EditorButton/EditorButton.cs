@@ -21,11 +21,14 @@ namespace Mane.Unity.Editor
             BindingFlags.DeclaredOnly;
 
         private const string ContainerClass = "mie-editor-buttons";
+        private const string FieldPrefix = "PropertyField:";
 
+        private static readonly HashSet<string> MissingBlockWarnings = new();
         private static StyleSheet _sheet;
 
         /// <summary>
         /// Appends buttons for the inspected type to <paramref name="inspectorRoot"/>.
+        /// A button with <see cref="EditorButtonAttribute.Block"/> goes after the last field of that block instead.
         /// Does nothing if the buttons were already added to that root.
         /// </summary>
         public static void AddTo(VisualElement inspectorRoot, UnityEditor.Editor editor)
@@ -41,28 +44,58 @@ namespace Mane.Unity.Editor
             if (first == null)
                 return;
 
-            List<(MethodInfo method, string label)> buttons = Collect(first.GetType());
+            List<ButtonInfo> buttons = Collect(first.GetType());
             if (buttons.Count == 0)
                 return;
 
             bool maneStyle = inspectorRoot.ClassListContains(ManeEditorStyles.RootClass);
-            VisualElement container = new();
-            container.AddToClassList(ContainerClass);
             if (maneStyle)
                 AddSheet(inspectorRoot);
-            else
-                container.style.marginTop = 4;
-
-            inspectorRoot.Add(container);
 
             UnityObject[] targets = editor.targets;
             SerializedObject serializedObject = editor.serializedObject;
 
-            foreach ((MethodInfo method, string label) in buttons)
+            // One row per block, placed after its last field, and one more after the content of a foldout for buttons
+            // that stay visible when it is collapsed. Buttons without a found block share the end row.
+            Dictionary<VisualElement, VisualElement> blockRows = new();
+            VisualElement endRow = null;
+
+            foreach (ButtonInfo info in buttons)
             {
-                MethodInfo capturedMethod = method;
-                string capturedLabel = label;
-                Button button = new(() => Invoke(capturedMethod, capturedLabel, targets, serializedObject))
+                VisualElement anchor = FindAnchor(inspectorRoot, serializedObject, info);
+                VisualElement row;
+                if (anchor == null)
+                {
+                    if (endRow == null)
+                    {
+                        endRow = CreateRow(maneStyle);
+                        inspectorRoot.Add(endRow);
+                    }
+
+                    row = endRow;
+                }
+                else
+                {
+                    // Inside a foldout, the hierarchy parent of a field is the content element, which is hidden
+                    // on collapse. anchor.parent is the logical parent, the Foldout itself.
+                    Foldout foldout = info.HideWithFoldout ? null : anchor.GetFirstAncestorOfType<Foldout>();
+                    VisualElement after = foldout != null ? foldout.contentContainer : anchor;
+                    if (!blockRows.TryGetValue(after, out row))
+                    {
+                        row = CreateRow(maneStyle);
+                        // Line up with the stock foldout content (15px indent); FoldoutBlock content has none.
+                        if (foldout != null && !maneStyle)
+                            row.style.marginLeft = 15;
+
+                        VisualElement parent = after.hierarchy.parent;
+                        parent.hierarchy.Insert(parent.hierarchy.IndexOf(after) + 1, row);
+                        blockRows[after] = row;
+                    }
+                }
+
+                MethodInfo method = info.Method;
+                string label = info.Label;
+                Button button = new(() => Invoke(method, label, targets, serializedObject))
                 {
                     text = label
                 };
@@ -71,8 +104,33 @@ namespace Mane.Unity.Editor
                 else
                     button.style.marginRight = -3;
 
-                container.Add(button);
+                row.Add(button);
             }
+        }
+
+        private static VisualElement CreateRow(bool maneStyle)
+        {
+            VisualElement row = new();
+            row.AddToClassList(ContainerClass);
+            if (!maneStyle)
+                row.style.marginTop = 4;
+            return row;
+        }
+
+        private static VisualElement FindAnchor(VisualElement root, SerializedObject serializedObject, ButtonInfo info)
+        {
+            if (string.IsNullOrEmpty(info.Block))
+                return null;
+
+            string path = ManeInspectorLayout.FindBlockEnd(serializedObject, info.Block);
+            VisualElement anchor = path != null ? root.Q(FieldPrefix + path) : null;
+            if (anchor?.hierarchy.parent != null)
+                return anchor;
+
+            if (MissingBlockWarnings.Add(info.Method.DeclaringType + "." + info.Method.Name))
+                Debug.LogWarning($"[EditorButton] {info.Method.DeclaringType}.{info.Method.Name}: block " +
+                                 $"'{info.Block}' was not found in the inspector, the button is drawn at the end.");
+            return null;
         }
 
         private static void AddSheet(VisualElement root)
@@ -91,9 +149,9 @@ namespace Mane.Unity.Editor
         private static StyleSheet Sheet =>
             _sheet ??= UIElementsTools.LoadUSS(typeof(EditorButton));
 
-        private static List<(MethodInfo method, string label)> Collect(Type type)
+        private static List<ButtonInfo> Collect(Type type)
         {
-            List<(MethodInfo method, string label)> buttons = new();
+            List<ButtonInfo> buttons = new();
 
             for (Type current = type;
                  current != null && current != typeof(MonoBehaviour) && current != typeof(ScriptableObject) &&
@@ -117,7 +175,7 @@ namespace Mane.Unity.Editor
                     }
 
                     string label = string.IsNullOrEmpty(attribute.Name) ? method.Name : attribute.Name;
-                    buttons.Add((method, label));
+                    buttons.Add(new ButtonInfo(method, label, attribute.Block, attribute.HideWithFoldout));
                 }
             }
 
@@ -161,6 +219,22 @@ namespace Mane.Unity.Editor
 
             if (serializedObject != null && serializedObject.targetObject != null)
                 serializedObject.Update();
+        }
+
+        private readonly struct ButtonInfo
+        {
+            public readonly MethodInfo Method;
+            public readonly string Label;
+            public readonly string Block;
+            public readonly bool HideWithFoldout;
+
+            public ButtonInfo(MethodInfo method, string label, string block, bool hideWithFoldout)
+            {
+                Method = method;
+                Label = label;
+                Block = block;
+                HideWithFoldout = hideWithFoldout;
+            }
         }
     }
 }

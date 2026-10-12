@@ -142,7 +142,7 @@ namespace Mane.Unity
         /// <summary>
         /// Returns a new curve with the same keys and wrap mode as <paramref name="curve"/>.
         /// </summary>
-        public static AnimationCurve Clone(AnimationCurve curve)
+        public static AnimationCurve Clone(this AnimationCurve curve)
         {
             if (curve == null)
                 throw new ArgumentNullException(nameof(curve));

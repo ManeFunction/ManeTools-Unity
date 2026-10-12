@@ -39,14 +39,35 @@ namespace Mane.Unity.Editor
 
             CurveField curve = new(CurveLabel)
             {
-                style = { marginLeft = CurveIndent }
+                style = { marginLeft = 3 }
             };
             curve.AddToClassList(BaseField<AnimationCurve>.alignedFieldUssClassName);
             curve.BindProperty(tracked);
 
+            // The branch mark sits in the indent, so the field keeps its position.
+            Label branch = new("└")
+            {
+                pickingMode = PickingMode.Ignore,
+                style =
+                {
+                    width = CurveIndent,
+                    flexShrink = 0,
+                    paddingLeft = 0,
+                    paddingRight = 0,
+                    paddingTop = 3,
+                    marginLeft = 0,
+                    marginRight = 0,
+                    unityTextAlign = TextAnchor.MiddleCenter
+                }
+            };
+
+            VisualElement curveRow = new() { style = { flexDirection = FlexDirection.Row } };
+            curveRow.Add(branch);
+            curveRow.Add(curve);
+
             VisualElement root = new();
             root.Add(presets);
-            root.Add(curve);
+            root.Add(curveRow);
 
             // The field stores only keys, so the preset is found by comparing them. Custom stays selected once
             // picked, even while the keys still match a preset, so the curve does not hide under the user.
@@ -95,7 +116,7 @@ namespace Mane.Unity.Editor
                 if (presets.value != shown)
                     presets.SetValueWithoutNotify(shown);
 
-                curve.style.display = custom ? DisplayStyle.Flex : DisplayStyle.None;
+                curveRow.style.display = custom ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
     }

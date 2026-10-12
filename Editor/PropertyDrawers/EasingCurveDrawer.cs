@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Mane.Unity.Editor
+{
+    /// <summary>
+    /// Inspector field for <see cref="EasingCurveAttribute"/>: a preset dropdown, and the curve itself for Custom.
+    /// An empty curve shows no selection.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(EasingCurveAttribute))]
+    internal sealed class EasingCurveDrawer : PropertyDrawer
+    {
+        private const string CurveLabel = "Curve";
+        // Same indent as foldout content, so the curve reads as part of the dropdown above.
+        private const float CurveIndent = 15f;
+
+        /// <summary>
+        /// Builds the preset dropdown and the curve field.
+        /// </summary>
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+            SerializedProperty tracked = property.Copy();
+            if (tracked.propertyType != SerializedPropertyType.AnimationCurve)
+            {
+                return Decorations.CreateUnsupportedFieldTypeWarning(
+                    tracked, "EasingCurve", nameof(AnimationCurve));
+            }
+
+            string label = string.IsNullOrEmpty(preferredLabel) ? tracked.displayName : preferredLabel;
+
+            // A dropdown of names rather than an EnumField: an empty curve shows as no selection,
+            // so picking Custom on it is a change that gets a starting curve.
+            DropdownField presets = new(label, new List<string>(Enum.GetNames(typeof(EasingPreset))), -1);
+            presets.AddToClassList(BaseField<string>.alignedFieldUssClassName);
+
+            CurveField curve = new(CurveLabel)
+            {
+                style = { marginLeft = CurveIndent }
+            };
+            curve.AddToClassList(BaseField<AnimationCurve>.alignedFieldUssClassName);
+            curve.BindProperty(tracked);
+
+            VisualElement root = new();
+            root.Add(presets);
+            root.Add(curve);
+
+            // The field stores only keys, so the preset is found by comparing them. Custom stays selected once
+            // picked, even while the keys still match a preset, so the curve does not hide under the user.
+            bool custom = false;
+            ApplyDisplay();
+
+            presets.RegisterValueChangedCallback(evt =>
+            {
+                if (!Enum.TryParse(evt.newValue, out EasingPreset preset))
+                    return;
+
+                custom = preset == EasingPreset.Custom;
+
+                // Custom keeps the current keys; only an empty curve starts from Linear.
+                // The setter copies the keys, so the shared preset is never edited through the field.
+                AnimationCurve next = !custom ? Easing.Get(preset)
+                    : IsEmpty() ? Easing.Get(EasingPreset.Linear)
+                    : null;
+
+                if (next != null)
+                {
+                    tracked.animationCurveValue = next;
+                    tracked.serializedObject.ApplyModifiedProperties();
+                }
+
+                ApplyDisplay();
+            });
+            root.TrackPropertyValue(tracked, _ => ApplyDisplay());
+
+            return root;
+
+            bool IsEmpty() => !tracked.hasMultipleDifferentValues && tracked.animationCurveValue is not { length: > 0 };
+
+            void ApplyDisplay()
+            {
+                bool mixed = tracked.hasMultipleDifferentValues;
+                bool empty = IsEmpty();
+                EasingPreset found = mixed || empty ? EasingPreset.Custom : Easing.FindPreset(tracked.animationCurveValue);
+                if (empty)
+                    custom = false;
+                else if (!mixed && found == EasingPreset.Custom)
+                    custom = true;
+
+                string shown = empty ? null : (custom ? EasingPreset.Custom : found).ToString();
+                presets.showMixedValue = mixed && !custom;
+                if (presets.value != shown)
+                    presets.SetValueWithoutNotify(shown);
+
+                curve.style.display = custom ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+    }
+}

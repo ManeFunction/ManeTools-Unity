@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -62,6 +64,71 @@ namespace Mane.Unity.Tests
 
             copy.AddKey(.2f, 0f);
             Assert.AreEqual(.2f, Easing.Linear.Evaluate(.2f), .0001f);
+        }
+
+        [Test]
+        public void Get_ReturnsThePropertyOfTheSameName()
+        {
+            foreach (EasingPreset preset in Enum.GetValues(typeof(EasingPreset)))
+            {
+                if (preset == EasingPreset.Custom)
+                    continue;
+
+                PropertyInfo property = typeof(Easing).GetProperty(preset.ToString(), BindingFlags.Public | BindingFlags.Static);
+                Assert.IsNotNull(property, preset.ToString());
+                Assert.AreSame(property.GetValue(null), Easing.Get(preset), preset.ToString());
+            }
+        }
+
+        [Test]
+        public void Get_EveryPresetPropertyHasAnEnumValue()
+        {
+            foreach (PropertyInfo property in typeof(Easing).GetProperties(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (property.PropertyType == typeof(AnimationCurve))
+                    Assert.IsTrue(Enum.IsDefined(typeof(EasingPreset), property.Name), property.Name);
+            }
+        }
+
+        [Test]
+        public void Get_CustomIsNull_UndefinedThrows()
+        {
+            Assert.IsNull(Easing.Get(EasingPreset.Custom));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Easing.Get((EasingPreset)999));
+        }
+
+        [Test]
+        public void FindPreset_RecognizesCopies()
+        {
+            foreach (EasingPreset preset in Enum.GetValues(typeof(EasingPreset)))
+            {
+                if (preset == EasingPreset.Custom)
+                    continue;
+
+                Assert.AreEqual(preset, Easing.FindPreset(Easing.Get(preset)), preset.ToString());
+                Assert.AreEqual(preset, Easing.FindPreset(Easing.Clone(Easing.Get(preset))), preset.ToString());
+                // Wrap modes are not part of the preset.
+                AnimationCurve looped = new(Easing.Get(preset).keys) { postWrapMode = WrapMode.Loop };
+                Assert.AreEqual(preset, Easing.FindPreset(looped), preset.ToString());
+            }
+        }
+
+        [Test]
+        public void FindPreset_OtherCurves_AreCustom()
+        {
+            Assert.AreEqual(EasingPreset.Custom, Easing.FindPreset(null));
+            Assert.AreEqual(EasingPreset.Custom, Easing.FindPreset(new AnimationCurve()));
+            Assert.AreEqual(EasingPreset.Custom, Easing.FindPreset(AnimationCurve.EaseInOut(0f, 0f, 1f, 2f)));
+
+            AnimationCurve moved = Easing.Clone(Easing.CubicOut);
+            Keyframe key = moved.keys[1];
+            key.value = .9f;
+            moved.MoveKey(1, key);
+            Assert.AreEqual(EasingPreset.Custom, Easing.FindPreset(moved));
+
+            AnimationCurve extra = Easing.Clone(Easing.Linear);
+            extra.AddKey(.5f, .5f);
+            Assert.AreEqual(EasingPreset.Custom, Easing.FindPreset(extra));
         }
     }
 }

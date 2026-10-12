@@ -18,6 +18,7 @@ namespace Mane.Unity
         private const float BounceWidth = 2.75f;
         private const float ElasticPeriod = .3f;
         private const float FitTolerance = .001f;
+        private const float MatchTolerance = .0001f;
 
         /// <summary>Constant speed from 0 to 1.</summary>
         public static AnimationCurve Linear { get; } = Curve(
@@ -153,6 +154,94 @@ namespace Mane.Unity
             };
         }
 
+
+        /// <summary>
+        /// The shared curve of <paramref name="preset"/>, or null for <see cref="EasingPreset.Custom"/>.
+        /// Do not edit its keys; use <see cref="Clone"/> for a private copy.
+        /// </summary>
+        public static AnimationCurve Get(EasingPreset preset) =>
+            preset switch
+            {
+                EasingPreset.Linear => Linear,
+                EasingPreset.QuadIn => QuadIn,
+                EasingPreset.QuadOut => QuadOut,
+                EasingPreset.QuadInOut => QuadInOut,
+                EasingPreset.CubicIn => CubicIn,
+                EasingPreset.CubicOut => CubicOut,
+                EasingPreset.CubicInOut => CubicInOut,
+                EasingPreset.QuartIn => QuartIn,
+                EasingPreset.QuartOut => QuartOut,
+                EasingPreset.QuartInOut => QuartInOut,
+                EasingPreset.QuintIn => QuintIn,
+                EasingPreset.QuintOut => QuintOut,
+                EasingPreset.QuintInOut => QuintInOut,
+                EasingPreset.SinIn => SinIn,
+                EasingPreset.SinOut => SinOut,
+                EasingPreset.SinInOut => SinInOut,
+                EasingPreset.ExpoIn => ExpoIn,
+                EasingPreset.ExpoOut => ExpoOut,
+                EasingPreset.ExpoInOut => ExpoInOut,
+                EasingPreset.CircIn => CircIn,
+                EasingPreset.CircOut => CircOut,
+                EasingPreset.CircInOut => CircInOut,
+                EasingPreset.BackIn => BackIn,
+                EasingPreset.BackOut => BackOut,
+                EasingPreset.BackInOut => BackInOut,
+                EasingPreset.BounceIn => BounceIn,
+                EasingPreset.BounceOut => BounceOut,
+                EasingPreset.BounceInOut => BounceInOut,
+                EasingPreset.ElasticIn => ElasticIn,
+                EasingPreset.ElasticOut => ElasticOut,
+                EasingPreset.ElasticInOut => ElasticInOut,
+                EasingPreset.Spring => Spring,
+                EasingPreset.Custom => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(preset), preset, null)
+            };
+
+        /// <summary>
+        /// The preset whose keys <paramref name="curve"/> has, such as a <see cref="Clone"/> or a serialized copy
+        /// of it, or <see cref="EasingPreset.Custom"/> when it matches none (or is null or empty).
+        /// Wrap modes are not compared.
+        /// </summary>
+        public static EasingPreset FindPreset(AnimationCurve curve)
+        {
+            if (curve == null || curve.length == 0)
+                return EasingPreset.Custom;
+
+            Keyframe[] keys = curve.keys;
+            for (EasingPreset preset = 0; preset < EasingPreset.Custom; preset++)
+            {
+                if (KeysMatch(keys, Get(preset).keys))
+                    return preset;
+            }
+
+            return EasingPreset.Custom;
+        }
+
+        private static bool KeysMatch(Keyframe[] a, Keyframe[] b)
+        {
+            if (a.Length != b.Length)
+                return false;
+
+            for (int i = 0; i < a.Length; i++)
+            {
+                Keyframe x = a[i];
+                Keyframe y = b[i];
+                if (x.weightedMode != y.weightedMode
+                    || !Near(x.time, y.time) || !Near(x.value, y.value)
+                    || !Near(x.inTangent, y.inTangent) || !Near(x.outTangent, y.outTangent)
+                    || !Near(x.inWeight, y.inWeight) || !Near(x.outWeight, y.outWeight))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Relative for steep tangents, absolute near zero.
+        private static bool Near(float a, float b) =>
+            Mathf.Abs(a - b) <= MatchTolerance * Mathf.Max(1f, Mathf.Abs(a), Mathf.Abs(b));
 
         private static float QuartInAt(float t) => t * t * t * t;
 

@@ -177,6 +177,22 @@
     max-width: var(--mie-nested-label-width);
 }
 
+/* Composite channels (Vector3 X/Y/Z, Rect...) are BaseFields too. They share the row with flex-basis 0,
+   so the two rules above would collapse them to nothing and give their chips the label column. */
+.mie-fields .unity-list-view .unity-scroll-view .unity-composite-field__field,
+.mie-fields .unity-collection-view .unity-scroll-view .unity-composite-field__field {
+    flex-grow: 1;
+    align-self: auto;
+}
+
+.mie-fields .unity-list-view__item .unity-composite-field__field > .unity-base-field__label,
+.mie-fields .unity-collection-view__item .unity-composite-field__field > .unity-base-field__label {
+    flex-basis: auto;
+    width: auto;
+    min-width: 12px;
+    max-width: none;
+}
+
 /* Scroller/Slider are BaseFields, not inspector rows. The 115px label column
    shoves the thumb off the track (bar stays, dragger disappears). */
 .mie-fields .unity-scroller {

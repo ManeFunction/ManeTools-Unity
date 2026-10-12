@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -17,6 +19,12 @@ namespace Mane.Unity.Editor
     {
         private const string BlockClass = "mie-block";
         private const string ScriptPath = "m_Script";
+        // Root of Unity's own MinMaxCurve drawer, the same on 6.0 and later.
+        private const string UnityMinMaxCurveRowClass = "unity-particle-system-min-max-curve__row";
+        // Unity rebuilds a PropertyField's content on rebind, sometimes without a geometry change to notice it by.
+        private const long ReplaceCheckIntervalMs = 200;
+
+        private static HashSet<Type> _decoratorAttributes;
 
         /// <summary>
         /// Fills <paramref name="root"/> with ManeStyle blocks, headers, and foldouts.
@@ -199,32 +207,123 @@ namespace Mane.Unity.Editor
             };
         }
 
-        // MinMaxCurve fields and lists get MinMaxCurveField, unless other property attributes need the PropertyField path.
+        // MinMaxCurve fields and lists get MinMaxCurveField. With only layout attributes it is used directly:
         // Label renames the field; Prefix / Postfix are ignored on the row and only extend a list title.
+        // With decorators (InfoBox, ReadOnly, AvailableIf...) it stays in a PropertyField, which runs them.
+        // Any other property drawer attribute keeps the PropertyField as it is.
         private static VisualElement CreateManeField(SerializedProperty property)
         {
-            if (!HasOnlyLayoutAttributes(property))
+            bool isCurve = MinMaxCurveField.IsMinMaxCurve(property);
+            bool isCurveArray = !isCurve && MinMaxCurveField.IsMinMaxCurveArray(property);
+            if (!isCurve && !isCurveArray)
                 return CreateField(property);
 
-            if (MinMaxCurveField.IsMinMaxCurve(property))
-                return CreateMinMaxCurveField(property);
-
-            if (MinMaxCurveField.IsMinMaxCurveArray(property))
-                return CreateMinMaxCurveList(property);
-
-            return CreateField(property);
-        }
-
-        private static bool HasOnlyLayoutAttributes(SerializedProperty property)
-        {
+            bool decorated = false;
             foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
             {
-                if (attribute is not (HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute
-                    or LabelAttribute or PrefixAttribute or PostfixAttribute or NonBreakingSpaceAttribute))
-                    return false;
+                if (IsLayoutAttribute(attribute))
+                    continue;
+                if (!IsDecoratorAttribute(attribute))
+                    return CreateField(property);
+
+                decorated = true;
             }
 
-            return true;
+            if (decorated)
+                return CreateDecoratedMinMaxCurve(property, isCurveArray);
+
+            return isCurve ? CreateMinMaxCurveField(property) : CreateMinMaxCurveList(property);
+        }
+
+        private static bool IsLayoutAttribute(PropertyAttribute attribute) =>
+            attribute is HeaderAttribute or SpaceAttribute or TooltipAttribute or FoldoutAttribute
+                or LabelAttribute or PrefixAttribute or PostfixAttribute or NonBreakingSpaceAttribute;
+
+        // Attributes drawn by a DecoratorDrawer. They draw around the field, so any field control can follow them.
+        private static bool IsDecoratorAttribute(PropertyAttribute attribute)
+        {
+            if (_decoratorAttributes == null)
+            {
+                _decoratorAttributes = new HashSet<Type>();
+                FieldInfo typeField = typeof(CustomPropertyDrawer).GetField("m_Type",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                foreach (Type drawer in TypeCache.GetTypesDerivedFrom<DecoratorDrawer>())
+                {
+                    foreach (CustomPropertyDrawer target in drawer.GetCustomAttributes<CustomPropertyDrawer>(false))
+                    {
+                        if (typeField?.GetValue(target) is Type attributeType)
+                            _decoratorAttributes.Add(attributeType);
+                    }
+                }
+            }
+
+            return _decoratorAttributes.Contains(attribute.GetType());
+        }
+
+        // The PropertyField runs the decorators but draws the value with Unity's MinMaxCurve row (or a list of them).
+        // That content is hidden and the ManeStyle field takes its place, again after every rebuild of the content.
+        private static PropertyField CreateDecoratedMinMaxCurve(SerializedProperty property, bool isArray)
+        {
+            PropertyField field = CreateField(property);
+            SerializedProperty tracked = property.Copy();
+            VisualElement replacement = null;
+
+            field.RegisterCallback<GeometryChangedEvent>(_ => Replace());
+            field.schedule.Execute(Replace).Every(ReplaceCheckIntervalMs);
+            return field;
+
+            void Replace()
+            {
+                if (replacement != null && replacement.parent == field)
+                    return;
+
+                VisualElement unityContent = FindUnityContent(field, isArray);
+                if (unityContent == null)
+                    return;
+
+                if (replacement == null)
+                {
+                    replacement = isArray ? CreateMinMaxCurveList(tracked) : CreateMinMaxCurveField(tracked);
+                    // The host keeps the field name that EditorButton blocks look up.
+                    replacement.name = null;
+                }
+
+                unityContent.style.display = DisplayStyle.None;
+                // Before Unity's content, so decorators that look for the first label or list find this one.
+                field.Insert(field.IndexOf(unityContent), replacement);
+            }
+        }
+
+        // The direct child of the field that holds Unity's MinMaxCurve row or list, or null before it is built.
+        private static VisualElement FindUnityContent(PropertyField field, bool isArray)
+        {
+            foreach (VisualElement child in field.Children())
+            {
+                if (child.ClassListContains(PropertyHost.DecoratorContainerClass))
+                    continue;
+
+                if (Contains(child, isArray))
+                    return child;
+            }
+
+            return null;
+
+            // Nested PropertyFields are the row's own parts, or list items: they are not searched.
+            static bool Contains(VisualElement element, bool isArray)
+            {
+                if (isArray ? element is BaseListView : element.ClassListContains(UnityMinMaxCurveRowClass))
+                    return true;
+                if (element is PropertyField || element is MinMaxCurveField)
+                    return false;
+
+                foreach (VisualElement child in element.Children())
+                {
+                    if (Contains(child, isArray))
+                        return true;
+                }
+
+                return false;
+            }
         }
 
         private static MinMaxCurveField CreateMinMaxCurveField(SerializedProperty property)

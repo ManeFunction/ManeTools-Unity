@@ -39,7 +39,8 @@ namespace Mane.Unity.Editor
 
             CurveField curve = new(CurveLabel)
             {
-                style = { marginLeft = 3 }
+                // Fills the row without relying on the base-field styles, which only ManeStyle supplies.
+                style = { marginLeft = 0, flexGrow = 1, flexShrink = 1, minWidth = 0 }
             };
             curve.AddToClassList(BaseField<AnimationCurve>.alignedFieldUssClassName);
             curve.BindProperty(tracked);
@@ -55,7 +56,7 @@ namespace Mane.Unity.Editor
                     paddingLeft = 0,
                     paddingRight = 0,
                     paddingTop = 3,
-                    marginLeft = 0,
+                    marginLeft = -2,
                     marginRight = 0,
                     unityTextAlign = TextAnchor.MiddleCenter
                 }

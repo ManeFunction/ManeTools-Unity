@@ -187,6 +187,7 @@ namespace Mane.Unity.Editor
             if (!iterator.NextVisible(true))
                 return;
 
+            List<PropertyField> fields = new();
             while (!SerializedProperty.EqualContents(iterator, end))
             {
                 PropertyField child = new(iterator.Copy())
@@ -194,11 +195,14 @@ namespace Mane.Unity.Editor
                     name = "PropertyField:" + iterator.propertyPath
                 };
                 child.Bind(property.serializedObject);
-                parent.Add(child);
+                fields.Add(child);
 
                 if (!iterator.NextVisible(false))
                     break;
             }
+
+            for (int i = 0; i < fields.Count; i++)
+                parent.Add(ChildFields.CreateRow(fields[i], i == fields.Count - 1));
         }
 
         private static bool HasVisibleChildren(SerializedProperty property)

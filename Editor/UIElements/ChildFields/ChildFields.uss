@@ -1,0 +1,36 @@
+/* A child field under a parent field: the field itself, and a branch mark in the 15px slot before it.
+   The mark is out of the flow, so the row is exactly as tall as the field. */
+
+.mie-child-row {
+    position: relative;
+}
+
+.mie-child-row > .mie-child-branch {
+    position: absolute;
+    left: 1px;
+    top: 2px;
+    width: 15px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-center;
+}
+
+.mie-child-row > .mie-child-content {
+    margin-left: 16px;
+}
+
+/* A PropertyField wraps the real field, which has its own left margin: drop it so both start at the same x. */
+.mie-child-row > .mie-child-content.unity-property-field {
+    margin-left: 16px;
+}
+
+.mie-child-row > .mie-child-content.unity-property-field > .unity-base-field {
+    margin-left: 0;
+}
+
+/* Inputs of wrapped fields sit 6px further right than the standard 12px input margin. */
+.mie-fields .mie-child-row > .mie-child-content.unity-property-field > .unity-base-field > .unity-base-field__input,
+.mie-fields .mie-child-row > .mie-child-content.unity-property-field > .unity-base-field__input {
+    margin-left: 18px;
+}

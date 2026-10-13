@@ -15,8 +15,6 @@ namespace Mane.Unity.Editor
     internal sealed class EasingCurveDrawer : PropertyDrawer
     {
         private const string CurveLabel = "Curve";
-        // Same indent as foldout content, so the curve reads as part of the dropdown above.
-        private const float CurveIndent = 15f;
 
         /// <summary>
         /// Builds the preset dropdown and the curve field.
@@ -37,34 +35,12 @@ namespace Mane.Unity.Editor
             DropdownField presets = new(label, new List<string>(Enum.GetNames(typeof(EasingPreset))), -1);
             presets.AddToClassList(BaseField<string>.alignedFieldUssClassName);
 
-            CurveField curve = new(CurveLabel)
-            {
-                // Fills the row without relying on the base-field styles, which only ManeStyle supplies.
-                style = { marginLeft = 1, flexGrow = 1, flexShrink = 1, minWidth = 0 }
-            };
+            CurveField curve = new(CurveLabel);
             curve.AddToClassList(BaseField<AnimationCurve>.alignedFieldUssClassName);
             curve.BindProperty(tracked);
 
-            // The branch mark sits in the indent, so the field keeps its position.
-            Label branch = new("└")
-            {
-                pickingMode = PickingMode.Ignore,
-                style =
-                {
-                    width = CurveIndent,
-                    flexShrink = 0,
-                    paddingLeft = 0,
-                    paddingRight = 0,
-                    paddingTop = 3,
-                    marginLeft = 0,
-                    marginRight = 0,
-                    unityTextAlign = TextAnchor.MiddleCenter
-                }
-            };
-
-            VisualElement curveRow = new() { style = { flexDirection = FlexDirection.Row } };
-            curveRow.Add(branch);
-            curveRow.Add(curve);
+            // The only child, so it always gets the closing mark.
+            VisualElement curveRow = ChildFields.CreateRow(curve, true);
 
             VisualElement root = new();
             root.Add(presets);

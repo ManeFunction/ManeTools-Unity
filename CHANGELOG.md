@@ -18,6 +18,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Added the `InterfaceOnly` attribute to declare fields that require a `MonoBehaviour` plus an interface.
 - Added `Easing` presets: the standard easing equations as shared `AnimationCurve`s (`SinIn`, `ExpoOut`, `BackInOut`, and the rest). The `EasingPreset` enum names them: `Easing.Get(preset)` returns the curve, `Easing.FindPreset(curve)` recognizes a copy of one.
 - Added the `EasingCurve` attribute for `AnimationCurve` fields. The inspector shows a dropdown of the easing presets, and the curve field only for `Custom`, which keeps the current keys (an empty curve starts from a linear one). Picking a preset copies its keys, so the field stays a plain `AnimationCurve` at runtime.
+- Added `ChildFields`, a shared editor layout for child fields of a parent field: a `├` / `└` branch mark in a fixed slot, then the field. `SerializeInterface` and `EasingCurve` use it.
 - Added a Mane Tools editor Scene View overlay to keep editor features in one place.
 - Added 'Copy as C# code' to color fields' context menu.
 - Added `EditorButton` to draw method-calling buttons in inspectors. Buttons go at the end of the inspector, or at the end of a `Header` or `Foldout` block when you pass its text as `block`. Buttons in a foldout hide with it, unless `hideWithFoldout` is false.

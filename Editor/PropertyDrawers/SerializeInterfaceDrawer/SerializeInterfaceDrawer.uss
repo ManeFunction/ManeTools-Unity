@@ -135,6 +135,12 @@
     max-width: var(--mie-nested-label-width);
 }
 
+/* Only the input moves: the standard 12px input margin plus 6px. Direct children only, so a nested interface keeps its header. */
+.mie-serialize-interface--fields .mie-serialize-interface__children > .unity-property-field > .unity-base-field > .unity-base-field__input,
+.mie-serialize-interface--fields .mie-serialize-interface__children > .unity-property-field > .unity-base-field__input {
+    margin-left: 18px;
+}
+
 .mie-fields .unity-list-view .unity-scroll-view .mie-serialize-interface__type,
 .mie-fields .unity-collection-view .unity-scroll-view .mie-serialize-interface__type {
     flex-grow: 1;

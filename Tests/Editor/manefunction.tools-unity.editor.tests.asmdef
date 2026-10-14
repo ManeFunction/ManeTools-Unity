@@ -1,0 +1,25 @@
+{
+    "name": "manefunction.tools-unity.editor.tests",
+    "rootNamespace": "Mane.Unity.Editor.Tests",
+    "references": [
+        "GUID:92798565309a34bec92f13faca6a3153",
+        "GUID:8a4e6e73610f6483791a6c2c8cdabadd",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

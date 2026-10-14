@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using UnityEngine;
 
 namespace Mane.Unity
@@ -9,10 +8,6 @@ namespace Mane.Unity
     /// </summary>
     public sealed class DropdownListAttribute : PropertyAttribute
     {
-        private const BindingFlags MemberFlags =
-            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance |
-            BindingFlags.DeclaredOnly;
-
         /// <summary>
         /// Static choices used when no source member is set.
         /// </summary>
@@ -24,7 +19,7 @@ namespace Mane.Unity
         public Type SourceType { get; }
 
         /// <summary>
-        /// Parameterless method or property that returns <c>string[]</c>.
+        /// Field, property or parameterless method that gives a <c>string[]</c>.
         /// </summary>
         public string MemberName { get; }
 
@@ -37,77 +32,13 @@ namespace Mane.Unity
         /// <summary>
         /// Creates a dropdown whose choices come from a member on <paramref name="type"/>.
         /// </summary>
-        /// <param name="type">Type that owns the member.</param>
-        /// <param name="memberName">Parameterless method or property returning <c>string[]</c>.</param>
+        /// <param name="type">Type that owns the member. An instance member is read from the object that holds
+        /// the field (or the inspected object) when it is of this type; otherwise only static members are used.</param>
+        /// <param name="memberName">Field, property or parameterless method giving a <c>string[]</c>.</param>
         public DropdownListAttribute(Type type, string memberName)
         {
             SourceType = type;
             MemberName = memberName;
         }
-
-#if UNITY_EDITOR
-        /// <summary>
-        /// True when choices can be resolved from <see cref="SourceType"/> and <see cref="MemberName"/>.
-        /// </summary>
-        internal bool CanRefresh => SourceType != null && !string.IsNullOrEmpty(MemberName);
-
-        /// <summary>
-        /// Returns the current dropdown choices for <paramref name="target"/>.
-        /// </summary>
-        /// <param name="target">Inspected object, used for instance members.</param>
-        /// <returns>Choice strings, or null if the member could not be resolved.</returns>
-        internal string[] GetStrings(object target) =>
-            CanRefresh ? TryResolve(SourceType, MemberName, target, true) : Strings;
-
-        private static string[] TryResolve(Type type, string memberName, object target, bool logIfMissing = false)
-        {
-            if (type == null || string.IsNullOrEmpty(memberName))
-                return null;
-
-            for (Type current = type; current != null; current = current.BaseType)
-            {
-                MethodInfo method = current.GetMethod(memberName, MemberFlags, null, Type.EmptyTypes, null);
-                if (method != null && typeof(string[]).IsAssignableFrom(method.ReturnType))
-                {
-                    if (!TryGetInvokeTarget(method.IsStatic, method.DeclaringType, target, out object methodTarget))
-                        continue;
-
-                    return method.Invoke(methodTarget, null) as string[];
-                }
-
-                PropertyInfo property = current.GetProperty(memberName, MemberFlags);
-                if (property == null || property.PropertyType != typeof(string[]) ||
-                    property.GetIndexParameters().Length != 0)
-                    continue;
-
-                MethodInfo getter = property.GetGetMethod(true);
-                if (getter == null)
-                    continue;
-
-                if (!TryGetInvokeTarget(getter.IsStatic, property.DeclaringType, target, out object propertyTarget))
-                    continue;
-
-                return property.GetValue(propertyTarget) as string[];
-            }
-
-            if (logIfMissing)
-                Debug.LogError($"Dropdown List: Can't find method or property {memberName} in {type}");
-
-            return null;
-        }
-
-        private static bool TryGetInvokeTarget(bool isStatic, Type declaringType, object target, out object instance)
-        {
-            instance = null;
-            if (isStatic)
-                return true;
-
-            if (target == null || !declaringType.IsInstanceOfType(target))
-                return false;
-
-            instance = target;
-            return true;
-        }
-#endif
     }
 }

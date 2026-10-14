@@ -17,7 +17,7 @@ namespace Mane.Unity.Editor
                 return Decorations.CreateUnsupportedFieldTypeWarning(tracked, "DropdownList", "string or int");
 
             DropdownListAttribute info = (DropdownListAttribute)attribute;
-            string[] list = info.GetStrings(property.serializedObject.targetObject);
+            string[] list = GetOptions(tracked, info);
             if (list == null || list.Length == 0)
                 return new PropertyField(tracked);
 
@@ -47,7 +47,7 @@ namespace Mane.Unity.Editor
             });
             dropdown.TrackPropertyValue(tracked, _ => ApplyDisplay());
 
-            if (info.CanRefresh)
+            if (IsDynamic(info))
             {
                 dropdown.AddManipulator(new ContextualMenuManipulator(evt =>
                 {
@@ -77,7 +77,7 @@ namespace Mane.Unity.Editor
 
             void Refresh()
             {
-                string[] next = info.GetStrings(tracked.serializedObject.targetObject);
+                string[] next = GetOptions(tracked, info);
                 if (next == null || next.Length == 0)
                     return;
 
@@ -85,6 +85,24 @@ namespace Mane.Unity.Editor
                 dropdown.choices = new List<string>(list);
                 ApplyDisplay();
             }
+        }
+
+        private static bool IsDynamic(DropdownListAttribute info) =>
+            info.SourceType != null && !string.IsNullOrEmpty(info.MemberName);
+
+        // Fixed strings, or the member's value. A missing member is logged once and gives no options.
+        private static string[] GetOptions(SerializedProperty property, DropdownListAttribute info)
+        {
+            if (!IsDynamic(info))
+                return info.Strings;
+
+            UnityEngine.Object target = property.serializedObject.targetObject;
+            if (MemberLookup.TryGetValue(property, target, info.MemberName, out string[] options, info.SourceType))
+                return options;
+
+            MemberLookup.ReportMissing(info.SourceType, info.MemberName, "DropdownList",
+                "a string[] field, property or parameterless method");
+            return null;
         }
 
         private static DropdownField CreateDropdown(string label, string[] list)

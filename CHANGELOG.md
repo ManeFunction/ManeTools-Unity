@@ -60,8 +60,12 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `UnityRandom` takes one shared lock around its swap of `UnityEngine.Random.state`, so overlapping draws from any instances cannot interleave that global state. The previous global state is restored if a draw throws.
 - `AnimationEventInvoker` now shows a `UnityEvent` and can be used from the inspector as well as from code.
 - **Create → Scripting → MonoBehaviour Script** now creates an empty class body, without `Start` and `Update`.
+- `AvailableIf`, the `InfoBox` show condition and `DropdownList` now find the members they name the same way: on the object that holds the field (a nested class or a list element), then on the inspected object, from the most derived type to the base, as a field, property or parameterless method. Conditions check serialized fields first, where any non-default value counts as true, so `InfoBox` now accepts non-bool serialized conditions too. `DropdownList` also accepts a `string[]` field.
+- A member that `AvailableIf`, `InfoBox` or `DropdownList` cannot find is logged as an error once per type and member, instead of on every inspector change. `AvailableIf` then leaves the field available instead of locking it.
 
 ### Fixed
+- `AvailableIf` with several objects selected used only the first one: a field locked on the others could be edited on all of them. It is now available only when it is on every selected object.
+- A `DropdownList` instance member on a nested serializable class or list element was never found.
 - Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
 - `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.

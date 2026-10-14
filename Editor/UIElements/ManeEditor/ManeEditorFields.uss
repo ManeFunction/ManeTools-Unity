@@ -14,6 +14,16 @@
     max-width: var(--mie-label-width);
 }
 
+/* Unity keeps inputs aligned inside nested foldouts with `.unity-foldout--depth-N > .unity-property-field >
+   .unity-base-field > .unity-base-field__label { margin-right: -13px; padding-right: 15px }`, which pulls the input
+   left of the fixed column. Back to the plain label margin and padding; five classes outweigh its four.
+   No left padding either, so the label text starts where the foldout header text does. */
+.mie-fields .unity-foldout .unity-property-field > .unity-base-field > .unity-base-field__label {
+    margin-right: 2px;
+    padding-left: 0;
+    padding-right: 2px;
+}
+
 .mie-fields .unity-base-field__input {
     flex-grow: 1;
     min-width: 0;

@@ -66,7 +66,7 @@
     margin: 0;
 }
 
-.mie-serialize-interface--foldout > .unity-base-field__label {
+.mie-serialize-interface--fields > .mie-serialize-interface--foldout > .unity-base-field__label {
     padding-left: 15px;
 }
 
@@ -157,4 +157,31 @@
     margin-left: 0;
     flex-grow: 1;
     min-width: 0;
+}
+
+/* Outside ManeStyle the group follows Unity's own nested fields (a PropertyField of a serializable class):
+   the arrow hangs left of the label column, the label starts where the other labels do, and the children sit
+   15px in with no branch marks. The offsets are measured against that default layout. */
+
+.mie-serialize-interface--default > .mie-serialize-interface__field > .mie-serialize-interface__arrow {
+    left: -14px;
+}
+
+/* A relative offset moves only the text; a margin would push the input as well. */
+.mie-serialize-interface--default > .mie-serialize-interface__field > .unity-base-field__label {
+    position: relative;
+    left: 1px;
+}
+
+.mie-serialize-interface--default > .mie-serialize-interface__children {
+    margin-top: 1px;
+}
+
+.mie-serialize-interface--default .mie-child-row > .mie-child-branch {
+    display: none;
+}
+
+.mie-serialize-interface--default .mie-child-row > .mie-child-content,
+.mie-serialize-interface--default .mie-child-row > .mie-child-content.unity-property-field {
+    margin-left: 18.5px;
 }

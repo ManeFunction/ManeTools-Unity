@@ -13,7 +13,8 @@ namespace Mane.Unity.Editor
     {
         private const string RootClass = "mie-serialize-interface";
         private const string RootFieldsClass = "mie-serialize-interface--fields";
-        private const string FieldClass = "mie-serialize-interface__field";
+        private const string RootDefaultClass = "mie-serialize-interface--default";
+        private const string FieldClass ="mie-serialize-interface__field";
         private const string FoldoutClass = "mie-serialize-interface--foldout";
         private const string ArrowClass = "mie-serialize-interface__arrow";
         private const string TypeClass = "mie-serialize-interface__type";
@@ -165,7 +166,9 @@ namespace Mane.Unity.Editor
 
             root.RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                root.EnableInClassList(RootFieldsClass, HasFieldsAncestor(root));
+                bool inManeStyle = HasFieldsAncestor(root);
+                root.EnableInClassList(RootFieldsClass, inManeStyle);
+                root.EnableInClassList(RootDefaultClass, !inManeStyle);
                 PropertyHost.HideLabelsOutside(root);
                 expandedWatcher.Resume();
             });

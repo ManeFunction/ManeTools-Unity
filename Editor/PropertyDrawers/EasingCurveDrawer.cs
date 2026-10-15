@@ -15,6 +15,10 @@ namespace Mane.Unity.Editor
     internal sealed class EasingCurveDrawer : PropertyDrawer
     {
         private const string CurveLabel = "Curve";
+        private const string RootClass = "mie-easing-curve";
+        private const string RootDefaultClass = "mie-easing-curve--default";
+
+        private static StyleSheet _sheet;
 
         /// <summary>
         /// Builds the preset dropdown and the curve field.
@@ -43,8 +47,12 @@ namespace Mane.Unity.Editor
             VisualElement curveRow = ChildFields.CreateRow(curve, true);
 
             VisualElement root = new();
+            root.AddToClassList(RootClass);
+            ApplySheet(root);
             root.Add(presets);
             root.Add(curveRow);
+            root.RegisterCallback<AttachToPanelEvent>(_ =>
+                root.EnableInClassList(RootDefaultClass, !ManeEditorStyles.IsInsideFields(root)));
 
             // The field stores only keys, so the preset is found by comparing them. Custom stays selected once
             // picked, even while the keys still match a preset, so the curve does not hide under the user.
@@ -96,5 +104,21 @@ namespace Mane.Unity.Editor
                 curveRow.style.display = custom ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
+
+        private static void ApplySheet(VisualElement root)
+        {
+            StyleSheet sheet = Sheet;
+            if (sheet == null)
+            {
+                Debug.LogError("EasingCurveDrawer.uss was not found next to EasingCurveDrawer.");
+                return;
+            }
+
+            if (!root.styleSheets.Contains(sheet))
+                root.styleSheets.Add(sheet);
+        }
+
+        private static StyleSheet Sheet =>
+            _sheet ??= UIElementsTools.LoadUSS(typeof(EasingCurveDrawer));
     }
 }

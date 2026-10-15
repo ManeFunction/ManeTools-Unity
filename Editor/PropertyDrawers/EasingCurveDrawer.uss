@@ -1,0 +1,11 @@
+/* Outside ManeStyle the curve row is a plain nested field: no branch mark, and its label sits 3px further in.
+   A relative offset moves only the text; a margin would push the input as well. */
+
+.mie-easing-curve--default .mie-child-row > .mie-child-branch {
+    display: none;
+}
+
+.mie-easing-curve--default .mie-child-row > .mie-child-content > .unity-base-field__label {
+    position: relative;
+    left: 2px;
+}

@@ -126,6 +126,18 @@ namespace Mane.Unity.Editor
             StyleListViewFooterButtons(root);
         }
 
+        // True when the element sits under a root that has the field layout, i.e. in a ManeStyle / ManeEditor inspector.
+        internal static bool IsInsideFields(VisualElement element)
+        {
+            for (VisualElement current = element?.parent; current != null; current = current.parent)
+            {
+                if (current.ClassListContains(FieldsClass))
+                    return true;
+            }
+
+            return false;
+        }
+
         private static void AddSheet(VisualElement root, StyleSheet sheet, string fileName)
         {
             if (sheet == null)

@@ -166,7 +166,7 @@ namespace Mane.Unity.Editor
 
             root.RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                bool inManeStyle = HasFieldsAncestor(root);
+                bool inManeStyle = ManeEditorStyles.IsInsideFields(root);
                 root.EnableInClassList(RootFieldsClass, inManeStyle);
                 root.EnableInClassList(RootDefaultClass, !inManeStyle);
                 PropertyHost.HideLabelsOutside(root);
@@ -305,17 +305,6 @@ namespace Mane.Unity.Editor
 
             while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, end))
                 iterator.isExpanded = expanded;
-        }
-
-        private static bool HasFieldsAncestor(VisualElement element)
-        {
-            for (VisualElement current = element.parent; current != null; current = current.parent)
-            {
-                if (current.ClassListContains(ManeEditorStyles.FieldsClass))
-                    return true;
-            }
-
-            return false;
         }
 
         private static void ApplySheet(VisualElement root)

@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -122,6 +123,24 @@ namespace Mane.Unity.Editor
 
             DisableInspectorLabelAlignment(root);
             StyleListViewFooterButtons(root);
+        }
+
+        // The root ManeEditor and the fallback inspector both start from: the inspected type in userData and, with
+        // ManeStyle, the styles plus a field layout refresh after every change. Fields that a change creates
+        // (list items, rebuilt rows) appear after it, so the refresh waits a tick.
+        internal static VisualElement CreateInspectorRoot(UnityEditor.Editor editor)
+        {
+            VisualElement root = new();
+            if (editor.serializedObject.targetObject != null)
+                root.userData = editor.serializedObject.targetObject.GetType();
+
+            if (!HasManeStyle(editor))
+                return root;
+
+            Apply(root);
+            root.TrackSerializedObjectValue(editor.serializedObject,
+                _ => root.schedule.Execute(() => RefreshFieldLayout(root)));
+            return root;
         }
 
         // True when the element sits under a root that has the field layout, i.e. in a ManeStyle / ManeEditor inspector.

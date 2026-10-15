@@ -10,7 +10,7 @@ using UnityObject = UnityEngine.Object;
 namespace Mane.Unity.Editor
 {
     /// <summary>
-    /// UI Toolkit helpers for inspectors: USS/UXML assets next to a script, visibility and binding.
+    /// UI Toolkit helpers for inspectors: USS/UXML assets next to a script, element lookup, visibility and binding.
     /// </summary>
     public static class UIElementsTools
     {
@@ -49,6 +49,48 @@ namespace Mane.Unity.Editor
         /// </summary>
         public static void SetVisible(this VisualElement element, bool visible) =>
             element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+
+        /// <summary>
+        /// Shows <paramref name="element"/> while <paramref name="condition"/> holds. The condition is checked now
+        /// and again whenever one of <paramref name="properties"/> changes, after their objects are updated.
+        /// </summary>
+        public static void ShowWhen(this VisualElement element, Func<bool> condition,
+            params SerializedProperty[] properties)
+        {
+            if (element == null || condition == null)
+                return;
+
+            void Refresh()
+            {
+                foreach (SerializedProperty property in properties)
+                    property?.serializedObject.UpdateIfRequiredOrScript();
+
+                element.SetVisible(condition());
+            }
+
+            Refresh();
+            foreach (SerializedProperty property in properties)
+            {
+                if (property != null)
+                    element.TrackPropertyValue(property, _ => Refresh());
+            }
+        }
+
+        /// <summary>
+        /// Finds the descendant of <paramref name="parent"/> named <paramref name="name"/>.
+        /// Logs an error and returns null when there is none, for elements the UXML must have.
+        /// </summary>
+        public static T Require<T>(this VisualElement parent, string name) where T : VisualElement
+        {
+            T element = parent?.Q<T>(name);
+            if (element == null)
+            {
+                string scope = string.IsNullOrEmpty(parent?.name) ? string.Empty : $" in '{parent.name}'";
+                Debug.LogError($"{typeof(T).Name} '{name}' was not found{scope}.");
+            }
+
+            return element;
+        }
 
         /// <summary>
         /// Binds <paramref name="field"/> to the property at <paramref name="path"/>.

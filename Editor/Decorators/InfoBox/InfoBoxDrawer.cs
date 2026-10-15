@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,9 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(InfoBoxAttribute))]
     public sealed class InfoBoxDrawer : ManeDecorator<InfoBoxDrawer>
     {
+        private const string WithActionClass = "message-box--action";
+        private const string ActionButtonClass = "message-box-button";
+
         protected override string XmlFileName => "InfoBox";
 
         /// <summary>
@@ -52,6 +56,24 @@ namespace Mane.Unity.Editor
                     box.styleSheets.Add(sheet);
             }
 
+            return box;
+        }
+
+        /// <summary>
+        /// Creates a standalone info box with a button after the message that runs <paramref name="action"/>.
+        /// Without an action it is the same as <see cref="Create(string, InfoBoxType)"/>.
+        /// </summary>
+        public static VisualElement Create(string message, InfoBoxType type, string actionText, Action action)
+        {
+            VisualElement box = Create(message, type);
+            if (action == null)
+                return box;
+
+            Button button = new(action) { name = "actionButton", text = actionText, tooltip = actionText };
+            button.AddToClassList(ActionButtonClass);
+            button.AddToClassList("mie-button");
+            box.AddToClassList(WithActionClass);
+            box.Add(button);
             return box;
         }
 

@@ -20,18 +20,12 @@ namespace Mane.Unity.Editor
         /// </summary>
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new();
-            if (serializedObject.targetObject != null)
-                root.userData = serializedObject.targetObject.GetType();
-
+            VisualElement root = ManeEditorStyles.CreateInspectorRoot(this);
             if (xml == null)
             {
                 Debug.LogError($"{GetType().Name} UXML is not assigned.");
                 return root;
             }
-
-            if (ManeEditorStyles.HasManeStyle(this))
-                ManeEditorStyles.Apply(root);
 
             xml.CloneTree(root);
             BuildInspector(root);

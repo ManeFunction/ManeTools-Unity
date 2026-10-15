@@ -33,7 +33,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `Label` attribute to show a custom field name in the inspector without renaming the field. It works as a decorator, so it combines with `Prefix` / `Postfix`, `DropdownList`, and other attributes, and on collections it replaces the collection title.
 - `ItemNameFromString` attribute, to set collection element names like `ItemNameFromField`, but using a custom format string `{0}`.
 - `ParticleSystemUIScaler` that scales a `ParticleSystem` emitter size and particle count (emission rates, bursts, max particles) by a `RectTransform` size, relative to reference values captured with one inspector button. Shape axes that follow the rect width / height are detected from the emitter rotation.
-- `UIElementsTools.AddStyleSheet`, `SetVisible` and `BindField` for custom inspectors: attach the stylesheet next to a script once, show or hide an element, and bind a field by property path with an error when the path is wrong. `ScriptTemplates.CreateScript` creates a script from a template in a package's `Editor/ScriptTemplates` folder.
+- `UIElementsTools.AddStyleSheet`, `SetVisible`, `ShowWhen`, `Require` and `BindField` for custom inspectors: attach the stylesheet next to a script once, show or hide an element, keep an element shown only while a condition on serialized properties holds, find an element the UXML must have with an error when it is missing, and bind a field by property path with an error when the path is wrong. `InfoBoxDrawer.Create` can add an action button to a standalone info box. `ScriptTemplates.CreateScript` creates a script from a template in a package's `Editor/ScriptTemplates` folder.
 
 ### Changed
 - Moved .NET-related classes to the separate library [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git), so they can be used from domain code without Unity references.
@@ -72,7 +72,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.
 - A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
 - Changes made by an `EditorButton` method to the inspected objects were not saved: they were not marked dirty, not kept as prefab overrides, and could not be undone.
-- Custom `ManeEditor` inspectors did not draw `EditorButton` methods.
+- Custom `ManeEditor` inspectors did not draw `EditorButton` methods, and did not re-apply the field layout after a change the way `ManeStyle` default inspectors do, so fields created by the change (list items, for example) could keep Unity's label alignment.
 - Children Transform Freeze did not record the children's counter-move as prefab overrides, so prefab instance children could jump back on reload.
 - `ReadOnly` together with `AvailableIf` made the field editable whenever the condition was true, because the last decorator to run decided the enabled state. Decorators on one field now apply together: the field is enabled only when it is not read-only and is available.
 - `Prefix` and `Postfix` showed nothing on `string` fields.

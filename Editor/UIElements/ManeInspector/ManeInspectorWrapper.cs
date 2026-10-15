@@ -13,16 +13,9 @@ namespace Mane.Unity.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new();
-            if (serializedObject.targetObject != null)
-                root.userData = serializedObject.targetObject.GetType();
-
-            if (ManeEditorStyles.HasManeStyle(this))
-            {
-                ManeEditorStyles.Apply(root);
+            VisualElement root = ManeEditorStyles.CreateInspectorRoot(this);
+            if (root.ClassListContains(ManeEditorStyles.RootClass))
                 ManeInspectorLayout.Fill(root, serializedObject);
-                root.TrackSerializedObjectValue(serializedObject, _ => ManeEditorStyles.RefreshFieldLayout(root));
-            }
             else if (ManeInspectorLayout.HasFoldout(serializedObject))
                 ManeInspectorLayout.FillDefault(root, serializedObject);
             else

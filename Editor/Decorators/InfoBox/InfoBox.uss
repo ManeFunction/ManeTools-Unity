@@ -32,6 +32,28 @@
     -unity-overflow-clip-box: padding-box;
 }
 
+/* With an action, the button keeps its size at the right edge and the message wraps in the rest. */
+.message-box--action {
+    overflow: hidden;
+}
+
+.message-box--action > .message-box-label {
+    width: 0;
+    flex-shrink: 1;
+    padding-right: 4px;
+    text-overflow: clip;
+}
+
+.message-box-button {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 18px;
+    margin: 0 0 0 2px;
+    padding: 0 6px;
+    font-size: 11px;
+    align-self: center;
+}
+
 .message-box.info .message-icon {
     background-image: resource("icons/console.infoicon.png");
 }

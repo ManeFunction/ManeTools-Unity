@@ -3,6 +3,10 @@
 
 .mie-child-row {
     position: relative;
+    /* The indent is the row's padding, and every field keeps Unity's own left margin: 3px for a field, and the
+       margins of a foldout or of a field Unity draws with IMGUI (a Quaternion, for one), which Unity positions
+       from that margin. 13px + 3px puts field labels 16px in, and the others line up with them. */
+    padding-left: 13px;
 }
 
 .mie-child-row > .mie-child-branch {
@@ -14,19 +18,6 @@
     margin: 0;
     padding: 0;
     -unity-text-align: middle-center;
-}
-
-.mie-child-row > .mie-child-content {
-    margin-left: 16px;
-}
-
-/* A PropertyField wraps the real field, which has its own left margin: drop it so both start at the same x. */
-.mie-child-row > .mie-child-content.unity-property-field {
-    margin-left: 16px;
-}
-
-.mie-child-row > .mie-child-content.unity-property-field > .unity-base-field {
-    margin-left: 0;
 }
 
 /* Inputs of wrapped fields sit 6px further right than the standard 12px input margin. */

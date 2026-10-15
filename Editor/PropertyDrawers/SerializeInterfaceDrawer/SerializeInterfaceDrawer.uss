@@ -66,8 +66,20 @@
     margin: 0;
 }
 
+/* The title starts 17px in, after the fold arrow. */
 .mie-serialize-interface--fields > .mie-serialize-interface--foldout > .unity-base-field__label {
+    padding-left: 17px;
+}
+
+/* The children's labels follow the title, 2px further in than other child rows. Their inputs stay in the
+   column of the other fields: 2px less input margin than ChildFields gives wrapped fields. */
+.mie-serialize-interface--fields .mie-child-row {
     padding-left: 15px;
+}
+
+.mie-fields .mie-serialize-interface--fields .mie-child-row > .mie-child-content.unity-property-field > .unity-base-field > .unity-base-field__input,
+.mie-fields .mie-serialize-interface--fields .mie-child-row > .mie-child-content.unity-property-field > .unity-base-field__input {
+    margin-left: 16px;
 }
 
 .mie-serialize-interface__type {
@@ -181,7 +193,6 @@
     display: none;
 }
 
-.mie-serialize-interface--default .mie-child-row > .mie-child-content,
-.mie-serialize-interface--default .mie-child-row > .mie-child-content.unity-property-field {
-    margin-left: 18.5px;
+.mie-serialize-interface--default .mie-child-row {
+    padding-left: 15.5px;
 }

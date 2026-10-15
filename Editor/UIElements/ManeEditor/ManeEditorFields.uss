@@ -17,10 +17,10 @@
 /* Unity keeps inputs aligned inside nested foldouts with `.unity-foldout--depth-N > .unity-property-field >
    .unity-base-field > .unity-base-field__label { margin-right: -13px; padding-right: 15px }`, which pulls the input
    left of the fixed column. Back to the plain label margin and padding; five classes outweigh its four.
-   No left padding either, so the label text starts where the foldout header text does. */
+   The left padding puts the label text where the foldout header text starts. */
 .mie-fields .unity-foldout .unity-property-field > .unity-base-field > .unity-base-field__label {
     margin-right: 2px;
-    padding-left: 0;
+    padding-left: 2px;
     padding-right: 2px;
 }
 
@@ -96,6 +96,16 @@
     margin-left: 0;
 }
 
+/* Every fold arrow sits where the FoldoutBlock header's does (FoldoutBlock.uss); nested ones only add the content indent. */
+.mie-fields .unity-foldout > .unity-foldout__toggle {
+    margin-left: 2px;
+    padding-left: 0;
+}
+
+.mie-fields .unity-foldout__toggle > .unity-base-field__input {
+    margin-left: 0;
+}
+
 .mie-fields .mie-minmax-field {
     margin-right: -2px;
 }
@@ -119,7 +129,7 @@
     flex-shrink: 0;
     min-height: 22px;
     height: 22px;
-    margin: 0 -4px 0 1px;
+    margin: 0 -4px 0 2px;
     padding: 0;
     align-items: center;
 }

@@ -25,6 +25,7 @@ namespace Mane.Unity.Editor
         private const long ReplaceCheckIntervalMs = 200;
 
         private static HashSet<Type> _decoratorAttributes;
+        private static List<(Type Drawn, bool UseForChildren)> _typeDrawers;
 
         /// <summary>
         /// Fills <paramref name="root"/> with ManeStyle blocks, headers, and foldouts.
@@ -211,12 +212,14 @@ namespace Mane.Unity.Editor
         // Label renames the field; Prefix / Postfix are ignored on the row and only extend a list title.
         // With decorators (InfoBox, ReadOnly, AvailableIf...) it stays in a PropertyField, which runs them.
         // Any other property drawer attribute keeps the PropertyField as it is.
+        // A plain serializable class with only layout attributes is drawn as a group of ChildFields,
+        // the same as a SerializeInterface field without its dropdown.
         private static VisualElement CreateManeField(SerializedProperty property)
         {
             bool isCurve = MinMaxCurveField.IsMinMaxCurve(property);
             bool isCurveArray = !isCurve && MinMaxCurveField.IsMinMaxCurveArray(property);
             if (!isCurve && !isCurveArray)
-                return CreateField(property);
+                return IsNestedClass(property) ? CreateNestedClass(property) : CreateField(property);
 
             bool decorated = false;
             foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
@@ -233,6 +236,63 @@ namespace Mane.Unity.Editor
                 return CreateDecoratedMinMaxCurve(property, isCurveArray);
 
             return isCurve ? CreateMinMaxCurveField(property) : CreateMinMaxCurveList(property);
+        }
+
+        private static VisualElement CreateNestedClass(SerializedProperty property)
+        {
+            VisualElement group = SerializeInterfaceDrawer.CreateGroup(property, PropertyHost.DisplayName(property));
+            group.name = "PropertyField:" + property.propertyPath;
+            group.tooltip = property.tooltip;
+            return group;
+        }
+
+        // A serializable class or struct with fields, no property attribute but layout ones (decorators need the
+        // PropertyField that hosts them), and no property drawer of its own for its type.
+        private static bool IsNestedClass(SerializedProperty property)
+        {
+            if (property.propertyType != SerializedPropertyType.Generic || property.isArray || !property.hasVisibleChildren)
+                return false;
+
+            foreach (PropertyAttribute attribute in property.GetAttributes<PropertyAttribute>())
+            {
+                if (!IsLayoutAttribute(attribute))
+                    return false;
+            }
+
+            Type type = MemberLookup.GetField(property)?.FieldType;
+            return type != null && !HasTypeDrawer(type);
+        }
+
+        // True if a CustomPropertyDrawer is declared for the type, or for a base type with useForChildren.
+        private static bool HasTypeDrawer(Type type)
+        {
+            if (_typeDrawers == null)
+            {
+                _typeDrawers = new List<(Type, bool)>();
+                FieldInfo typeField = typeof(CustomPropertyDrawer).GetField("m_Type",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                FieldInfo childrenField = typeof(CustomPropertyDrawer).GetField("m_UseForChildren",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                foreach (Type drawer in TypeCache.GetTypesDerivedFrom<PropertyDrawer>())
+                {
+                    foreach (CustomPropertyDrawer target in drawer.GetCustomAttributes<CustomPropertyDrawer>(false))
+                    {
+                        if (typeField?.GetValue(target) is Type drawn)
+                            _typeDrawers.Add((drawn, childrenField?.GetValue(target) is true));
+                    }
+                }
+            }
+
+            Type definition = type.IsGenericType ? type.GetGenericTypeDefinition() : null;
+            foreach ((Type drawn, bool useForChildren) in _typeDrawers)
+            {
+                if (drawn == type || drawn == definition)
+                    return true;
+                if (useForChildren && drawn.IsAssignableFrom(type))
+                    return true;
+            }
+
+            return false;
         }
 
         private static bool IsLayoutAttribute(PropertyAttribute attribute) =>

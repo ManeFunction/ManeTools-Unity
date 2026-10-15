@@ -40,17 +40,36 @@ namespace Mane.Unity.Editor
             }
 
             Type[] types = CollectTypes(baseType);
-            List<string> choices = BuildChoices(types);
             string label = string.IsNullOrEmpty(preferredLabel) ? tracked.displayName : preferredLabel;
+
+            return Build(tracked, label, types);
+        }
+
+        /// <summary>
+        /// The same header and child fields as a <c>SerializeInterface</c> field, for a plain serializable class:
+        /// the label with a fold arrow and the class fields as <see cref="ChildFields"/>, without the type dropdown.
+        /// </summary>
+        internal static VisualElement CreateGroup(SerializedProperty property, string label) =>
+            Build(property.Copy(), label, null);
+
+        // With types, the header holds the type dropdown. Without them it holds only the label.
+        private static VisualElement Build(SerializedProperty tracked, string label, Type[] types)
+        {
+            bool typed = types != null;
+            List<string> choices = typed ? BuildChoices(types) : null;
 
             VisualElement root = new();
             root.AddToClassList(RootClass);
             ApplySheet(root);
 
-            DropdownField dropdown = new(choices, CurrentIndex(tracked, types));
-            dropdown.AddToClassList(TypeClass);
+            DropdownField dropdown = null;
+            if (typed)
+            {
+                dropdown = new DropdownField(choices, CurrentIndex(tracked, types));
+                dropdown.AddToClassList(TypeClass);
+            }
 
-            SerializeInterfaceField field = new(label, dropdown);
+            SerializeInterfaceField field = new(label, (VisualElement)dropdown ?? new VisualElement());
             field.AddToClassList(FieldClass);
             root.Add(field);
 
@@ -63,7 +82,7 @@ namespace Mane.Unity.Editor
             children.AddToClassList(ChildrenClass);
             root.Add(children);
 
-            string lastTypeName = tracked.managedReferenceFullTypename;
+            string lastTypeName = typed ? tracked.managedReferenceFullTypename : null;
 
             void SyncChildren()
             {
@@ -96,7 +115,7 @@ namespace Mane.Unity.Editor
                 SyncChildren();
             }
 
-            dropdown.RegisterValueChangedCallback(_ =>
+            dropdown?.RegisterValueChangedCallback(_ =>
             {
                 if (!ApplyType(tracked, types, dropdown.index))
                     return;
@@ -153,15 +172,18 @@ namespace Mane.Unity.Editor
             root.RegisterCallback<DetachFromPanelEvent>(_ => expandedWatcher.Pause());
 
             SyncChildren();
-            root.TrackPropertyValue(tracked, _ =>
+            if (typed)
             {
-                string typeName = tracked.managedReferenceFullTypename;
-                if (typeName == lastTypeName)
-                    return;
+                root.TrackPropertyValue(tracked, _ =>
+                {
+                    string typeName = tracked.managedReferenceFullTypename;
+                    if (typeName == lastTypeName)
+                        return;
 
-                lastTypeName = typeName;
-                root.schedule.Execute(SyncType);
-            });
+                    lastTypeName = typeName;
+                    root.schedule.Execute(SyncType);
+                });
+            }
 
             return root;
         }
@@ -207,7 +229,8 @@ namespace Mane.Unity.Editor
 
         private static bool HasVisibleChildren(SerializedProperty property)
         {
-            if (property.managedReferenceValue == null)
+            if (property.propertyType == SerializedPropertyType.ManagedReference &&
+                property.managedReferenceValue == null)
                 return false;
 
             SerializedProperty iterator = property.Copy();

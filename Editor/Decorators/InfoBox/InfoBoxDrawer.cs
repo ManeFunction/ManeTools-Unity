@@ -62,9 +62,7 @@ namespace Mane.Unity.Editor
                 return;
 
             root.Add(PropertyHost.CreateHook(host => host.WhenBound(property =>
-                root.style.display = ShouldShow(property, showCondition, invert)
-                    ? DisplayStyle.Flex
-                    : DisplayStyle.None)));
+                root.SetVisible(ShouldShow(property, showCondition, invert)))));
         }
 
         // Shown while the condition is false on any inspected object (true, when inverted).

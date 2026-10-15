@@ -101,7 +101,7 @@ namespace Mane.Unity.Editor
 
                 children.Clear();
                 AddChildren(children, tracked);
-                children.style.display = arrow.value ? DisplayStyle.Flex : DisplayStyle.None;
+                children.SetVisible(arrow.value);
             }
 
             void SyncType()

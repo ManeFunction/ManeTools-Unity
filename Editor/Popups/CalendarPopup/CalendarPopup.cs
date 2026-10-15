@@ -340,7 +340,7 @@ namespace Mane.Unity.Editor
             if (_onDateSelected == null && _onRangeSelected == null)
                 return;
 
-            _modeRow.style.display = IsRange ? DisplayStyle.Flex : DisplayStyle.None;
+            _modeRow.SetVisible(IsRange);
             _startMode.EnableInClassList("mie-calendar-mode__button--active", IsRange && _editingStart);
             _endMode.EnableInClassList("mie-calendar-mode__button--active", IsRange && !_editingStart);
             _title.text = $"{_year:0000}-{_month:00}";

@@ -7,8 +7,12 @@ using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace Mane.Unity.Editor
 {
+    /// <summary>
+    /// Script templates of the Mane Tools packages. Replaces Unity's MonoBehaviour template and creates scripts
+    /// from the templates a package ships in its <c>Editor/ScriptTemplates</c> folder.
+    /// </summary>
     [InitializeOnLoad]
-    internal static class ScriptTemplates
+    public static class ScriptTemplates
     {
         private const string MonoBehaviourMenuPath = "Assets/Create/Scripting/MonoBehaviour Script";
 
@@ -21,7 +25,7 @@ namespace Mane.Unity.Editor
         static ScriptTemplates() => EditorApplication.delayCall += ReplaceMonoBehaviourMenu;
 
         private static void CreateMonoBehaviour() =>
-            CreateScript("MonoBehaviour.cs.txt", "NewMonoBehaviourScript.cs");
+            CreateScript(typeof(ScriptTemplates).Assembly, "MonoBehaviour.cs.txt", "NewMonoBehaviourScript.cs");
 
         private static void ReplaceMonoBehaviourMenu()
         {
@@ -54,25 +58,21 @@ namespace Mane.Unity.Editor
             });
         }
 
-        private static void CreateScript(string templateFileName, string defaultFileName)
+        /// <summary>
+        /// Starts creating a script in the Project window from <paramref name="templateFileName"/>, found in the
+        /// <c>Editor/ScriptTemplates</c> folder of the package that contains <paramref name="packageAssembly"/>.
+        /// </summary>
+        public static void CreateScript(Assembly packageAssembly, string templateFileName, string defaultFileName)
         {
-            string templatePath = TemplatePath(templateFileName);
-            if (templatePath == null)
-                return;
-
-            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, defaultFileName);
-        }
-
-        private static string TemplatePath(string templateFileName)
-        {
-            PackageInfo packageInfo = PackageInfo.FindForAssembly(typeof(ScriptTemplates).Assembly);
+            PackageInfo packageInfo = packageAssembly != null ? PackageInfo.FindForAssembly(packageAssembly) : null;
             if (packageInfo == null)
             {
-                Debug.LogError("Could not resolve the Mane Tools package path for script templates.");
-                return null;
+                Debug.LogError($"Could not resolve the package path of {packageAssembly?.GetName().Name} for script templates.");
+                return;
             }
 
-            return Path.Combine(packageInfo.resolvedPath, "Editor", "ScriptTemplates", templateFileName);
+            string templatePath = Path.Combine(packageInfo.resolvedPath, "Editor", "ScriptTemplates", templateFileName);
+            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, defaultFileName);
         }
     }
 }

@@ -36,8 +36,6 @@ namespace Mane.Unity.Editor
 
         private const string SheetFileName = "ChildFields.uss";
 
-        private static StyleSheet _sheet;
-
         /// <summary>
         /// Wraps <paramref name="content"/> in a row with a branch mark. The row carries the stylesheet.
         /// </summary>
@@ -47,7 +45,7 @@ namespace Mane.Unity.Editor
         {
             VisualElement row = new();
             row.AddToClassList(RowClass);
-            AddSheet(row);
+            UIElementsTools.AddStyleSheet(row, typeof(ChildFields), SheetFileName);
 
             Label branch = new(last ? LastMark : MiddleMark)
             {
@@ -60,21 +58,5 @@ namespace Mane.Unity.Editor
             row.Add(content);
             return row;
         }
-
-        private static void AddSheet(VisualElement row)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError($"{SheetFileName} was not found next to {nameof(ChildFields)}.");
-                return;
-            }
-
-            if (!row.styleSheets.Contains(sheet))
-                row.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(ChildFields), SheetFileName);
     }
 }

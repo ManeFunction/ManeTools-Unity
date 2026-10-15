@@ -17,8 +17,6 @@ namespace Mane.Unity.Editor
         private const string ChipFieldClass = "unity-composite-field__field";
         private const string MinMaxFieldClass = "mie-minmax-field";
 
-        private static StyleSheet _sheet;
-
         /// <summary>
         /// Adds a prefix or postfix chip next to the input of <paramref name="host"/>, or next to each
         /// endpoint input of a Min / Max drawer. Does nothing if that chip is already there.
@@ -56,7 +54,7 @@ namespace Mane.Unity.Editor
                     return;
             }
 
-            ApplySheet(field);
+            UIElementsTools.AddStyleSheet(field, typeof(FieldAffix));
             Label chip = new(text);
             chip.AddToClassList(chipClass);
             if (prefix)
@@ -92,21 +90,5 @@ namespace Mane.Unity.Editor
 
             return null;
         }
-
-        private static void ApplySheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("FieldAffix.uss was not found next to FieldAffix.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(FieldAffix));
     }
 }

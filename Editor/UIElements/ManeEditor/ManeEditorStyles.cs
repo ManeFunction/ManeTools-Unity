@@ -58,9 +58,6 @@ namespace Mane.Unity.Editor
         private const string SheetFileName = "ManeEditor.uss";
         private const string FieldsSheetFileName = "ManeEditorFields.uss";
 
-        private static StyleSheet _sheet;
-        private static StyleSheet _fieldsSheet;
-
         /// <summary>
         /// True when the editor type or every inspected target has <see cref="ManeStyleAttribute"/>.
         /// </summary>
@@ -98,13 +95,14 @@ namespace Mane.Unity.Editor
             root.AddToClassList(RootClass);
 
             if ((options & Options.Sheet) != 0)
-                AddSheet(root, Sheet, SheetFileName);
+                UIElementsTools.AddStyleSheet(root, typeof(ManeEditorStyles), SheetFileName);
 
             if ((options & Options.FieldLayout) != 0)
             {
                 root.AddToClassList(FieldsClass);
-                AddSheet(root, FieldsSheet, FieldsSheetFileName);
+                UIElementsTools.AddStyleSheet(root, typeof(ManeEditorStyles), FieldsSheetFileName);
                 root.schedule.Execute(() => StyleListViewFooterButtons(root));
+                QuaternionField.ReplaceImguiFields(root);
             }
 
             if ((options & Options.DisableInspectorAlignment) != 0)
@@ -137,24 +135,6 @@ namespace Mane.Unity.Editor
 
             return false;
         }
-
-        private static void AddSheet(VisualElement root, StyleSheet sheet, string fileName)
-        {
-            if (sheet == null)
-            {
-                Debug.LogError($"{fileName} was not found next to ManeEditorStyles.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), SheetFileName);
-
-        private static StyleSheet FieldsSheet =>
-            _fieldsSheet ??= UIElementsTools.LoadUSS(typeof(ManeEditorStyles), FieldsSheetFileName);
 
         private static void StyleListViewFooterButtons(VisualElement root)
         {

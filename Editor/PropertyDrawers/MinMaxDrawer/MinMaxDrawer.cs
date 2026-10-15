@@ -12,7 +12,6 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(MinMaxDouble))]
     internal sealed class MinMaxDrawer : PropertyDrawer
     {
-        private static StyleSheet _sheet;
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -136,7 +135,7 @@ namespace Mane.Unity.Editor
             input.Add(max);
 
             MinMaxField root = new(label, input);
-            ApplySheet(root);
+            UIElementsTools.AddStyleSheet(root, typeof(MinMaxDrawer));
             return root;
         }
 
@@ -152,21 +151,5 @@ namespace Mane.Unity.Editor
                 labelElement.AddToClassList(Vector2Field.labelUssClassName);
             }
         }
-
-        private static void ApplySheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("MinMaxDrawer.uss was not found next to MinMaxDrawer.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(MinMaxDrawer));
     }
 }

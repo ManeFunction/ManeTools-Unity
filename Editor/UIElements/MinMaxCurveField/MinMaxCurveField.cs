@@ -35,8 +35,6 @@ namespace Mane.Unity.Editor
             "Random Between Two Constants"
         };
 
-        private static StyleSheet _sheet;
-
         private readonly FloatField _constantMin;
         private readonly FloatField _constantMax;
         private readonly CurveField _curveMin;
@@ -90,7 +88,7 @@ namespace Mane.Unity.Editor
             input.Add(_curveMaxSlot);
             input.Add(_modeButton);
 
-            ApplySheet();
+            UIElementsTools.AddStyleSheet(this, typeof(MinMaxCurveField));
             Refresh();
         }
 
@@ -232,21 +230,5 @@ namespace Mane.Unity.Editor
             if (value == null || value.length == 0)
                 curve.animationCurveValue = AnimationCurve.Linear(0f, level, 1f, level);
         }
-
-        private void ApplySheet()
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("MinMaxCurveField.uss was not found next to MinMaxCurveField.");
-                return;
-            }
-
-            if (!styleSheets.Contains(sheet))
-                styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(MinMaxCurveField));
     }
 }

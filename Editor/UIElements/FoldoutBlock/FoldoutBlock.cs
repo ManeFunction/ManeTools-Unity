@@ -19,8 +19,6 @@ namespace Mane.Unity.Editor
         public const string UssClassName = "mie-foldout-block";
         private const string PrefPrefix = "Mane.Editor.FoldoutBlock.";
 
-        private static StyleSheet _sheet;
-
         private bool _collapsedByDefault;
         private bool _appliedStoredState;
 
@@ -31,7 +29,7 @@ namespace Mane.Unity.Editor
         {
             AddToClassList("mie-block");
             AddToClassList(UssClassName);
-            ApplySheet();
+            UIElementsTools.AddStyleSheet(this, typeof(FoldoutBlock));
             RegisterCallback<AttachToPanelEvent>(_ => ApplyStoredState());
             RegisterCallback<ChangeEvent<bool>>(evt =>
             {
@@ -52,22 +50,6 @@ namespace Mane.Unity.Editor
             get => _collapsedByDefault;
             set => _collapsedByDefault = value;
         }
-
-        private void ApplySheet()
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("FoldoutBlock.uss was not found next to FoldoutBlock.");
-                return;
-            }
-
-            if (!styleSheets.Contains(sheet))
-                styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(FoldoutBlock));
 
         private void ApplyStoredState()
         {

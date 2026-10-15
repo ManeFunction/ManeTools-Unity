@@ -18,8 +18,6 @@ namespace Mane.Unity.Editor
         private const string RootClass = "mie-easing-curve";
         private const string RootDefaultClass = "mie-easing-curve--default";
 
-        private static StyleSheet _sheet;
-
         /// <summary>
         /// Builds the preset dropdown and the curve field.
         /// </summary>
@@ -48,7 +46,7 @@ namespace Mane.Unity.Editor
 
             VisualElement root = new();
             root.AddToClassList(RootClass);
-            ApplySheet(root);
+            UIElementsTools.AddStyleSheet(root, typeof(EasingCurveDrawer));
             root.Add(presets);
             root.Add(curveRow);
             root.RegisterCallback<AttachToPanelEvent>(_ =>
@@ -101,24 +99,8 @@ namespace Mane.Unity.Editor
                 if (presets.value != shown)
                     presets.SetValueWithoutNotify(shown);
 
-                curveRow.style.display = custom ? DisplayStyle.Flex : DisplayStyle.None;
+                curveRow.SetVisible(custom);
             }
         }
-
-        private static void ApplySheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("EasingCurveDrawer.uss was not found next to EasingCurveDrawer.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(EasingCurveDrawer));
     }
 }

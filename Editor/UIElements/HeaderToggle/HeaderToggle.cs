@@ -18,15 +18,13 @@ namespace Mane.Unity.Editor
         private const string AlignedFieldClass = "unity-base-field__aligned";
         private const string ContentName = "contentContainer";
 
-        private static StyleSheet _sheet;
-
         /// <summary>
         /// Creates a header toggle and wires content visibility.
         /// </summary>
         public HeaderToggle()
         {
             AddToClassList(UssClassName);
-            ApplySheet();
+            UIElementsTools.AddStyleSheet(this, typeof(HeaderToggle));
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 StripInspectorChrome();
@@ -71,24 +69,8 @@ namespace Mane.Unity.Editor
             if (content == null)
                 return;
 
-            content.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+            content.SetVisible(value);
         }
-
-        private void ApplySheet()
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("HeaderToggle.uss was not found next to HeaderToggle.");
-                return;
-            }
-
-            if (!styleSheets.Contains(sheet))
-                styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(HeaderToggle));
 
         private VisualElement FindContent()
         {

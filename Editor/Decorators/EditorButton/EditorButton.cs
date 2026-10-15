@@ -24,7 +24,6 @@ namespace Mane.Unity.Editor
         private const string FieldPrefix = "PropertyField:";
 
         private static readonly HashSet<string> MissingBlockWarnings = new();
-        private static StyleSheet _sheet;
 
         /// <summary>
         /// Appends buttons for the inspected type to <paramref name="inspectorRoot"/>.
@@ -50,7 +49,7 @@ namespace Mane.Unity.Editor
 
             bool maneStyle = inspectorRoot.ClassListContains(ManeEditorStyles.RootClass);
             if (maneStyle)
-                AddSheet(inspectorRoot);
+                UIElementsTools.AddStyleSheet(inspectorRoot, typeof(EditorButton));
 
             UnityObject[] targets = editor.targets;
             SerializedObject serializedObject = editor.serializedObject;
@@ -132,22 +131,6 @@ namespace Mane.Unity.Editor
                                  $"'{info.Block}' was not found in the inspector, the button is drawn at the end.");
             return null;
         }
-
-        private static void AddSheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("EditorButton.uss was not found next to EditorButton.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(EditorButton));
 
         private static List<ButtonInfo> Collect(Type type)
         {

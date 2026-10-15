@@ -9,7 +9,6 @@ namespace Mane.Unity.Editor
     [CustomPropertyDrawer(typeof(SerializableDateTime))]
     internal sealed class DateTimeDrawer : PropertyDrawer
     {
-        private static StyleSheet _sheet;
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -67,7 +66,7 @@ namespace Mane.Unity.Editor
             input.Add(pick);
 
             DateTimeRow field = new(label, input);
-            ApplySheet(field);
+            UIElementsTools.AddStyleSheet(field, typeof(DateTimeDrawer));
             field.TrackSerializedObjectValue(serializedObject, _ =>
             {
                 string next = text();
@@ -90,22 +89,6 @@ namespace Mane.Unity.Editor
                 : DateTime.UtcNow;
             return SerializableDateTime.FormatDisplay(utc);
         }
-
-        private static void ApplySheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("DateTimeDrawer.uss was not found next to DateTimeDrawer.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(DateTimeDrawer));
 
         private sealed class DateTimeRow : BaseField<string>
         {

@@ -22,8 +22,6 @@ namespace Mane.Unity.Editor
         private const string NoneLabel = "None";
         private const long ExpandedPollMs = 100;
 
-        private static StyleSheet _sheet;
-
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             SerializedProperty tracked = property.Copy();
@@ -61,7 +59,7 @@ namespace Mane.Unity.Editor
 
             VisualElement root = new();
             root.AddToClassList(RootClass);
-            ApplySheet(root);
+            UIElementsTools.AddStyleSheet(root, typeof(SerializeInterfaceDrawer));
 
             DropdownField dropdown = null;
             if (typed)
@@ -125,7 +123,7 @@ namespace Mane.Unity.Editor
                 root.schedule.Execute(SyncChildren);
             });
             void ApplyExpanded(bool expanded) =>
-                children.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
+                children.SetVisible(expanded);
 
             arrow.RegisterValueChangedCallback(evt =>
             {
@@ -306,22 +304,6 @@ namespace Mane.Unity.Editor
             while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, end))
                 iterator.isExpanded = expanded;
         }
-
-        private static void ApplySheet(VisualElement root)
-        {
-            StyleSheet sheet = Sheet;
-            if (sheet == null)
-            {
-                Debug.LogError("SerializeInterfaceDrawer.uss was not found next to SerializeInterfaceDrawer.");
-                return;
-            }
-
-            if (!root.styleSheets.Contains(sheet))
-                root.styleSheets.Add(sheet);
-        }
-
-        private static StyleSheet Sheet =>
-            _sheet ??= UIElementsTools.LoadUSS(typeof(SerializeInterfaceDrawer));
 
         private sealed class SerializeInterfaceField : BaseField<int>
         {

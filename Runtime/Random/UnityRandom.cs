@@ -64,8 +64,21 @@ namespace Mane.Unity
         public float Range01()
         {
             lock (_sync)
-                return Draw(() => Random.Range(0, int.MaxValue) * (1f / int.MaxValue));
+                return Draw(() => ToRange01(Random.Range(0, FloatSteps)));
         }
+
+        /// <inheritdoc />
+        public float Range01Inc()
+        {
+            lock (_sync)
+                return Draw(() => ToRange01(Random.Range(0, FloatSteps + 1)));
+        }
+
+        // A float has 24 bits of precision: below 1 it holds every multiple of 2^-24 exactly. Scaling a wider
+        // integer rounds the top values up to 1f.
+        internal const int FloatSteps = 1 << 24;
+
+        internal static float ToRange01(int step) => step * (1f / FloatSteps);
 
         private T Draw<T>(Func<T> sample)
         {

@@ -32,6 +32,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `Prefix` property decorator, alongside the existing `Postfix` one. On `MinMaxInt` / `MinMaxFloat` / `MinMaxDouble` both decorators are drawn around each of the Min and Max inputs.
 - `Label` attribute to show a custom field name in the inspector without renaming the field. It works as a decorator, so it combines with `Prefix` / `Postfix`, `DropdownList`, and other attributes, and on collections it replaces the collection title.
 - `ItemNameFromString` attribute, to set collection element names like `ItemNameFromField`, but using a custom format string `{0}`.
+- `UnityRandom.Range01Inc`, the new `IRandom` member from ManeTools-dotNET: a float in `[0, 1]`, where 1 is a possible result too.
 - `ParticleSystemUIScaler` that scales a `ParticleSystem` emitter size and particle count (emission rates, bursts, max particles) by a `RectTransform` size, relative to reference values captured with one inspector button. Shape axes that follow the rect width / height are detected from the emitter rotation.
 - `UIElementsTools.AddStyleSheet`, `SetVisible`, `ShowWhen`, `Require` and `BindField` for custom inspectors: attach the stylesheet next to a script once, show or hide an element, keep an element shown only while a condition on serialized properties holds, find an element the UXML must have with an error when it is missing, and bind a field by property path with an error when the path is wrong. `InfoBoxDrawer.Create` can add an action button to a standalone info box. `ScriptTemplates.CreateScript` creates a script from a template in a package's `Editor/ScriptTemplates` folder.
 
@@ -70,6 +71,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
 - `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.
+- `UnityRandom.Range01` could return exactly `1f` (about 3 in 100 million calls), breaking its `[0, 1)` range, because the top values of the integer it scaled round up to 1 as a float. It now draws one of the 2^24 float steps below 1.
 - A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
 - Changes made by an `EditorButton` method to the inspected objects were not saved: they were not marked dirty, not kept as prefab overrides, and could not be undone.
 - Custom `ManeEditor` inspectors did not draw `EditorButton` methods, and did not re-apply the field layout after a change the way `ManeStyle` default inspectors do, so fields created by the change (list items, for example) could keep Unity's label alignment.

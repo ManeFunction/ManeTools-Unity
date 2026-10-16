@@ -10,7 +10,7 @@ Add components from **Add Component → Mane Tools**.
 
 - A few ways to **serialize interfaces**: `SerializeInterface` for data structures and `InterfaceOnly` for `MonoBehaviours`.
 - `SerializableDateTime` and `SerializableDateTimeRange` with a calendar popup in the inspector.
-- `Screenshot.Capture()` and Edit-menu screenshot / GameObject toggle shortcuts.
+- `Screenshot.Capture()`, Edit-menu shortcuts to take a game screenshot (F10) and clear the Console (F8), and File-menu shortcuts to unload, remove, and reopen scenes.
 - Missing-reference and asset-reference finders as Assets / GameObject context menus.
 - `UnitySingleton` and `ScriptableSingleton` implementations (in addition to generic `ManeSingleton` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
 - Easing presets (`Easing.SinIn`, `Easing.ExpoOut`, and the rest of the standard set) as shared `AnimationCurve`s, and `[EasingCurve]` to pick one in the inspector.
@@ -22,7 +22,7 @@ Add components from **Add Component → Mane Tools**.
 - Extensions for `GameObject`, `Transform`, `RectTransform`, `Rect`, `Vector2` / `Vector3`, `Scene`, and coroutines.
 - Custom yield instructions (`WaitForSecondsUntil` / `While`, realtime variants).
 - Unity-backed random helpers: `UnityRandom`, `RandomColor`, `RandomPoint`, `RandomDirection` (in addition to system-based `ManeRandom` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
-- `ParticleSystemUIScaler` to fit a particle emitter size and particle count to a `RectTransform` area with consistent emission intencity.
+- `ParticleSystemUIScaler` to fit a particle emitter size and particle count to a `RectTransform` area with consistent emission intensity.
 - Animator helpers, such as state randomizers.
 - Script creation menu for `MonoBehaviour` starting point without `Start()` and `Update()` placeholders.
 - NUnit coverage for date/time types, color helpers, and some extensions.

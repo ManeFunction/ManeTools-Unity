@@ -48,7 +48,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `MainThreadDispatcher` is a singleton now.
 - All `Mane` menu items that open windows are now under `Window → Mane Tools`.
 - Tuned `Color` extensions and `Color Picker` to show and work with different values properly (everything grounded to the `HSL + Luma` system).
-- Most custom hotkey-related menus (screenshots, enabling / disabling GameObjects, console clearing, etc.) are under the `Edit` menu now.
+- Custom hotkey menus (game screenshot, console clearing) are under the `Edit` menu now. The GameObject enable / disable shortcuts were removed.
 - `Screenshoter` is now available from code via `Screenshot.Capture()` with an optional custom path.
 - `Missing Reference Finder` is now a context menu from `Assets` or `GameObject` menus instead of a separate window.
 - `Asset Reference Finder` is now a context menu from the `Assets` menu instead of a separate window. It finds references from every asset type (materials, ScriptableObjects, animator controllers, and so on), not only scenes and prefabs, using Unity's dependency data instead of searching file text, so binary-serialized assets are covered too. Several selected assets are searched in one pass. A `deep` variant also searches the text of every text file for the asset's GUID, to find GUIDs stored as plain strings, such as an Addressables `AssetReference`.

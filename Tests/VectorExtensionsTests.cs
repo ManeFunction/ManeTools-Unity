@@ -88,5 +88,47 @@ namespace Mane.Unity.Tests
             Assert.IsTrue(new Vector3(1f, 1f, 0f).IsInPolygon(triangle));
             Assert.IsFalse(new Vector3(3f, 3f, 0f).IsInPolygon(triangle));
         }
+
+        [Test]
+        public void Vector3_IsInPolygon_EdgeIsInsideItsExtensionIsNot()
+        {
+            Vector3[] triangle =
+            {
+                new(0f, 0f, 0f),
+                new(4f, 0f, 0f),
+                new(0f, 4f, 0f),
+            };
+
+            // On an edge or a vertex
+            Assert.IsTrue(new Vector3(2f, 0f, 0f).IsInPolygon(triangle));
+            Assert.IsTrue(new Vector3(2f, 2f, 0f).IsInPolygon(triangle));
+            Assert.IsTrue(new Vector3(4f, 0f, 0f).IsInPolygon(triangle));
+            Assert.IsTrue(new Vector3(0f, 0f, 0f).IsInPolygon(triangle));
+
+            // On the line of an edge, past its ends
+            Assert.IsFalse(new Vector3(10f, 0f, 0f).IsInPolygon(triangle));
+            Assert.IsFalse(new Vector3(-5f, 0f, 0f).IsInPolygon(triangle));
+            Assert.IsFalse(new Vector3(-3f, 7f, 0f).IsInPolygon(triangle));
+            Assert.IsFalse(new Vector3(0f, -2f, 0f).IsInPolygon(triangle));
+        }
+
+        [Test]
+        public void Vector3_IsInPolygon_RepeatedVertexAndWindingDoNotMatter()
+        {
+            Vector3[] square =
+            {
+                new(0f, 0f, 0f),
+                new(0f, 2f, 0f),
+                new(2f, 2f, 0f),
+                new(2f, 2f, 0f),
+                new(2f, 0f, 0f),
+            };
+
+            Assert.IsTrue(new Vector3(1f, 1f, 5f).IsInPolygon(square));
+            Assert.IsFalse(new Vector3(3f, 1f, 0f).IsInPolygon(square));
+            Array.Reverse(square);
+            Assert.IsTrue(new Vector3(1f, 1f, 5f).IsInPolygon(square));
+            Assert.IsFalse(new Vector3(3f, 1f, 0f).IsInPolygon(square));
+        }
     }
 }

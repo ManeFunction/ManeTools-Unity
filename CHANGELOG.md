@@ -71,6 +71,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - Fixed `SerializeInterface` collection Option hold ignoring (fold / unfold all).
 - `ToCoroutine` now calls back with `(false, default)` when the task faulted or was canceled, instead of throwing from the coroutine.
 - `WaitForSecondsRealtimeWhile` counted scaled time instead of unscaled time.
+- `IsInPolygon` returned true for outside points on the line of an edge past its ends, for example `(10, 0)` for the triangle `(0, 0)`, `(4, 0)`, `(0, 4)`. Points on an edge still count as inside. The edge tolerance is now a distance instead of an area, so it no longer depends on the polygon's size, and a repeated corner is ignored.
 - `UnityRandom.Range01` could return exactly `1f` (about 3 in 100 million calls), breaking its `[0, 1)` range, because the top values of the integer it scaled round up to 1 as a float. It now draws one of the 2^24 float steps below 1.
 - A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
 - Changes made by an `EditorButton` method to the inspected objects were not saved: they were not marked dirty, not kept as prefab overrides, and could not be undone.

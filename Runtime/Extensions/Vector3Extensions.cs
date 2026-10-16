@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mane.DotNet;
 using UnityEngine;
 
@@ -180,24 +179,40 @@ namespace Mane.Unity
 
         // Thanks to Saeed Amiri (https://stackoverflow.com/questions/4243042/c-sharp-point-in-polygon)
         /// <summary>
-        /// Define polygon with points CW or CCW, works with convex polygons
+        /// True when <paramref name="point"/> is inside the convex polygon or on its edge, in the XY plane
+        /// (<c>z</c> is ignored). Define the polygon with points CW or CCW.
+        /// A point on the line of an edge but past its ends is outside.
         /// </summary>
         public static bool IsInPolygon(this Vector3 point, Vector3[] poly)
         {
-            float[] coef = new float[poly.Length];
+            int side = 0;
             for (int i = 0; i < poly.Length; i++)
             {
                 Vector3 prev = poly[i == 0 ? poly.Length - 1 : i - 1];
                 Vector3 cur = poly[i];
-                coef[i] = (point.y - cur.y) * (prev.x - cur.x) 
-                        - (point.x - cur.x) * (prev.y - cur.y);
+                float edgeX = prev.x - cur.x;
+                float edgeY = prev.y - cur.y;
+                float length = Mathf.Sqrt(edgeX * edgeX + edgeY * edgeY);
+                if (length < ManeConst.FloatTolerance)
+                    continue; // A repeated vertex, not an edge.
+
+                // The cross product divided by the edge length is the distance from the edge's line.
+                float cross = (point.y - cur.y) * edgeX - (point.x - cur.x) * edgeY;
+                float tolerance = ManeConst.FloatTolerance * length;
+                if (Math.Abs(cross) <= tolerance)
+                {
+                    // On the line: a convex polygon touches it only along this edge.
+                    float along = (point.x - cur.x) * edgeX + (point.y - cur.y) * edgeY;
+                    return along >= -tolerance && along <= length * length + tolerance;
+                }
+
+                int pointSide = Math.Sign(cross);
+                if (side == 0)
+                    side = pointSide;
+                else if (pointSide != side)
+                    return false;
             }
 
-            if (coef.Any(p => Math.Abs(p) < ManeConst.FloatTolerance)) return true;
-
-            for (int i = 1; i < coef.Length; i++)
-                if (coef[i] * coef[i - 1] < 0) return false;
-            
             return true;
         }
 

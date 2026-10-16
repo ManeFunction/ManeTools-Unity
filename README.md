@@ -29,6 +29,16 @@ Add components from **Add Component → Mane Tools**.
 
 For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!
 
+## Compatibility
+
+This package may conflict with other inspector extensions that replace the whole inspector, such as [Odin Inspector](https://odininspector.com) and [NaughtyAttributes](https://github.com/dbrizov/NaughtyAttributes). Using them together has not been tested yet.
+
+- **One fallback inspector wins.** To draw `EditorButton`s, `Foldout` groups and the `ManeStyle` layout, this package registers a fallback inspector for every `MonoBehaviour` and `ScriptableObject` that has no custom editor of its own. Odin and NaughtyAttributes register fallback inspectors too, and Unity uses only one per type. Whichever one loses stops working for whole-inspector features: NaughtyAttributes' `Button`, `BoxGroup` / `Foldout` and `ShowNonSerializedField` / `ShowNativeProperty`, Odin's own inspector drawing, or this package's `EditorButton`, `Foldout` and `ManeStyle`. There is no error, the features just do nothing.
+- **Field-level attributes keep working.** Attributes drawn on a single field, like `ReadOnly`, `InfoBox`, `Prefix` / `Postfix` or NaughtyAttributes' `MinMaxSlider`, work in any inspector, whichever fallback wins.
+- **Same attribute names.** `ReadOnly` and `InfoBox` exist in all three packages, and NaughtyAttributes also has `Label` and `Foldout`. A script that has `using` for two of their namespaces gets an "ambiguous reference" compile error. Use only one namespace per script, or write the full name, like `[Mane.Unity.ReadOnly]`.
+
+If you like my project, but miss a feature from another package that you can't use because of mine, open an Issue and I will try to resolve the conflict.
+
 ## Installation
 
 I recommend installing this package with the `OpenUPM` CLI. It keeps dependencies and updates easy to manage. If you cannot use `OpenUPM`, download the package and place it anywhere in your Unity project.

@@ -14,7 +14,8 @@ namespace Mane.Unity
         public string Name { get; }
 
         /// <summary>
-        /// Text of a <see cref="UnityEngine.HeaderAttribute"/> or <see cref="FoldoutAttribute"/> to draw the button in,
+        /// Text of a <see cref="UnityEngine.HeaderAttribute"/>, <see cref="FoldoutAttribute"/>, or
+        /// <see cref="FeatureToggleAttribute"/> to draw the button in,
         /// after the last field of that block. The button goes to the end of the inspector when this is null or empty,
         /// or when no such block is found.
         /// </summary>

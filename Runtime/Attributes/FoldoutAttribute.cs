@@ -7,7 +7,7 @@ namespace Mane.Unity
     /// With <see cref="ManeStyleAttribute"/>, starts a <c>FoldoutBlock</c>.
     /// In Unity's default inspector, starts a standard <c>Foldout</c>.
     /// Following fields stay in that foldout until the next <see cref="HeaderAttribute"/>,
-    /// <see cref="SpaceAttribute"/>, or <see cref="FoldoutAttribute"/>.
+    /// <see cref="SpaceAttribute"/>, <see cref="FoldoutAttribute"/>, or <see cref="FeatureToggleAttribute"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class FoldoutAttribute : PropertyAttribute

@@ -8,15 +8,6 @@ Add components from **Add Component → Mane Tools**.
 
 ## Features
 
-<table>
-<tr>
-<td width="40%" valign="top">
-
-<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="100%">
-
-</td>
-<td width="60%" valign="top">
-
 - A few ways to **serialize interfaces**: `SerializeInterface` for data structures and `InterfaceOnly` for `MonoBehaviours`.
 - `SerializableDateTime` and `SerializableDateTimeRange` with a calendar popup in the inspector.
 - `Screenshot.Capture()`, Edit-menu shortcuts to take a game screenshot (F10) and clear the Console (F8), and File-menu shortcuts to unload, remove, and reopen scenes.
@@ -36,11 +27,152 @@ Add components from **Add Component → Mane Tools**.
 - Script creation menu for `MonoBehaviour` starting point without `Start()` and `Update()` placeholders.
 - NUnit coverage for date/time types, color helpers, and some extensions.
 
+For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!
+
+## Showcase
+
+<table>
+<tr>
+<td width="40%" valign="top">
+
+<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="100%">
+
+</td>
+<td width="60%" valign="top">
+
+```csharp
+using System;
+using Mane.DotNet;
+using Mane.Unity;
+using Mane.Unity.UI;
+using UnityEngine;
+
+[ManeStyle]
+public class TestComponentBase : MonoBehaviour
+{
+    [Header("Stats")]
+    [Label("Max Health"), Postfix(" HP")]
+    [SerializeField] private float _health = 100f;
+
+    [LimitedField("Unlimited")]
+    [SerializeField] private int _maxTargets;
+
+    [LimitedField("Instant", allowNegatives: true, negativeLabel: "Default"), Postfix(" (s.)")]
+    [SerializeField] private float _delay = -1f;
+
+    [Postfix(" dmg")]
+    [SerializeField] private MinMaxFloat _damage = new(5f, 12f);
+
+    [SerializeField] private MinMaxInt _levelRange = new(1, 10);
+
+    [NonBreakingSpace]
+    [SerializeField, ReadOnly] private float _computedDps = 42.5f;
+
+    [Header("Setup")]
+    [InfoBox("Assign a prefab or this will spawn nothing.", InfoBoxType.Warning, nameof(IsPrefabAssigned))]
+    [SerializeField] private GameObject _prefab;
+
+    [DropdownList("Easy", "Normal", "Hard")]
+    [SerializeField] private string _difficulty = "Normal";
+
+    [DropdownList(typeof(TestComponentBase), nameof(Levels))]
+    [SerializeField] private int _levelId;
+
+    [LayerSelector]
+    [SerializeField] private int _groundLayer;
+
+    [EasingCurve]
+    [SerializeField] private AnimationCurve _easing = Easing.CubicOut.Clone();
+
+    [SerializeField] private bool _useCustomRadius;
+
+    [InfoBox("Used only when the custom radius is on.", InfoBoxType.Info)]
+    [AvailableIf(nameof(_useCustomRadius))]
+    [Prefix("r = "), Postfix(" m")]
+    [SerializeField] private float _customRadius = 2.5f;
+
+    private const string ShieldBlock = "Shield";
+
+    [FeatureToggle(ShieldBlock)]
+    [SerializeField] private bool _shieldEnabled = true;
+    [SerializeField] private float _shieldPower = 50f;
+    [SerializeField] private Color _shieldColor = new(.3f, .7f, 1f);
+
+    [Foldout("Schedule")]
+    [SerializeField] private SerializableDateTime _opens;
+    [SerializeField] private SerializableDateTimeRange _active;
+
+    [Foldout("Interfaces")]
+    [SerializeReference, SerializeInterface]
+    private IWeapon _weapon = new Sword();
+
+    [SerializeField, InterfaceOnly(typeof(IDamageable))]
+    private MonoBehaviour _target;
+
+    [Foldout("Collections")]
+    [ItemNameFromField(nameof(Wave.name))]
+    [SerializeField] private Wave[] _waves =
+    {
+        new() { name = "Warm-up", count = 5 },
+        new() { name = "Assault", count = 20 },
+        new() { name = "Boss", count = 1 },
+    };
+
+    [ItemNameFromString("Slot {0}", startingIndex: 1)]
+    [Postfix(" (coins)")]
+    [SerializeField] private int[] _prices = { 10, 25, 50 };
+
+    [Foldout("Effects")]
+    [SerializeField] private ParticleSystem.MinMaxCurve _emissionRate = new(10f, 30f);
+
+    private bool IsPrefabAssigned => _prefab != null;
+
+    private static string[] Levels => new[] { "Forest", "Desert", "Castle", "Volcano" };
+
+    [EditorButton("Recharge Shield", ShieldBlock)]
+    private void RechargeShield() => _shieldPower = 100f;
+
+    [EditorButton("Rebuild Cache")]
+    private void RebuildCache() => Debug.Log("Cache rebuilt");
+
+    [EditorButton()]
+    private void Validate() => Debug.Log("Validated");
+
+    
+    #region Showcase types
+
+    public interface IWeapon { }
+
+    public interface IDamageable { }
+
+    [Serializable]
+    public class Bow : IWeapon
+    {
+        public int Damage = 12;
+        public float Range = 30f;
+    }
+
+    [Serializable]
+    public class Sword : IWeapon
+    {
+        public int Damage = 20;
+        public float Speed = 1.5f;
+    }
+
+    [Serializable]
+    public class Wave
+    {
+        public string name;
+        public int count;
+    }
+
+    #endregion
+}
+```
+
 </td>
 </tr>
 </table>
-
-For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!
 
 ## Compatibility
 

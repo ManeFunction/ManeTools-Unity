@@ -13,6 +13,14 @@
     margin-bottom: 0;
 }
 
+/* Row at the end of a FeatureBlock: its fields live in .mie-content, one level below the frame. */
+.mie-block > .mie-content > .mie-editor-buttons {
+    margin-top: 6px;
+    margin-left: 2px;
+    margin-right: -2px;
+    margin-bottom: 0;
+}
+
 .mie-root .mie-editor-buttons > .mie-button {
     margin-top: 0;
     margin-right: 0;

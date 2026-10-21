@@ -33,6 +33,9 @@ For detailed info and usage examples of everything in this package, welcome to [
 
 ![Mane Tools inspector attributes in a ManeStyle inspector](https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png)
 
+<details>
+<summary>Show the code behind this inspector</summary>
+
 ```csharp
 using System;
 using Mane.DotNet;
@@ -162,6 +165,8 @@ public class TestComponentBase : MonoBehaviour
     #endregion
 }
 ```
+
+</details>
 
 ## Compatibility
 

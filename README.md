@@ -31,14 +31,7 @@ For detailed info and usage examples of everything in this package, welcome to [
 
 ## Showcase
 
-<table>
-<tr>
-<td width="40%" valign="top">
-
-<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="100%">
-
-</td>
-<td width="60%" valign="top">
+![Mane Tools inspector attributes in a ManeStyle inspector](https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png)
 
 ```csharp
 using System;
@@ -169,10 +162,6 @@ public class TestComponentBase : MonoBehaviour
     #endregion
 }
 ```
-
-</td>
-</tr>
-</table>
 
 ## Compatibility
 

@@ -8,6 +8,15 @@ Add components from **Add Component → Mane Tools**.
 
 ## Features
 
+<table>
+<tr>
+<td valign="top">
+
+<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="360">
+
+</td>
+<td valign="top">
+
 - A few ways to **serialize interfaces**: `SerializeInterface` for data structures and `InterfaceOnly` for `MonoBehaviours`.
 - `SerializableDateTime` and `SerializableDateTimeRange` with a calendar popup in the inspector.
 - `Screenshot.Capture()`, Edit-menu shortcuts to take a game screenshot (F10) and clear the Console (F8), and File-menu shortcuts to unload, remove, and reopen scenes.
@@ -26,6 +35,10 @@ Add components from **Add Component → Mane Tools**.
 - Animator helpers, such as state randomizers.
 - Script creation menu for `MonoBehaviour` starting point without `Start()` and `Update()` placeholders.
 - NUnit coverage for date/time types, color helpers, and some extensions.
+
+</td>
+</tr>
+</table>
 
 For detailed info and usage examples of everything in this package, welcome to [projects Wiki](https://github.com/ManeFunction/ManeTools-Unity/wiki)!
 

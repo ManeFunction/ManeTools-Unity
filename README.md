@@ -10,12 +10,12 @@ Add components from **Add Component → Mane Tools**.
 
 <table>
 <tr>
-<td valign="top">
+<td width="40%" valign="top">
 
-<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="360">
+<img src="https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/showcase.png" alt="Mane Tools inspector attributes in a ManeStyle inspector" width="100%">
 
 </td>
-<td valign="top">
+<td width="60%" valign="top">
 
 - A few ways to **serialize interfaces**: `SerializeInterface` for data structures and `InterfaceOnly` for `MonoBehaviours`.
 - `SerializableDateTime` and `SerializableDateTimeRange` with a calendar popup in the inspector.

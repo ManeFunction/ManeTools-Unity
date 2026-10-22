@@ -126,15 +126,15 @@ namespace Mane.Unity.Editor
         }
 
         // The root ManeEditor and the fallback inspector both start from: the inspected type in userData and, with
-        // ManeStyle, the styles plus a field layout refresh after every change. Fields that a change creates
-        // (list items, rebuilt rows) appear after it, so the refresh waits a tick.
+        // ManeStyle (or the overlay's ManeStyle for all toggle), the styles plus a field layout refresh after every
+        // change. Fields that a change creates (list items, rebuilt rows) appear after it, so the refresh waits a tick.
         internal static VisualElement CreateInspectorRoot(UnityEditor.Editor editor)
         {
             VisualElement root = new();
             if (editor.serializedObject.targetObject != null)
                 root.userData = editor.serializedObject.targetObject.GetType();
 
-            if (!HasManeStyle(editor))
+            if (!ManeStyleForAll.Enabled && !HasManeStyle(editor))
                 return root;
 
             Apply(root);

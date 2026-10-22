@@ -14,11 +14,11 @@ Add components from **Add Component → Mane Tools**.
 - Missing-reference and asset-reference finders as Assets / GameObject context menus.
 - `UnitySingleton` and `ScriptableSingleton` implementations (in addition to generic `ManeSingleton` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).
 - Easing presets (`Easing.SinIn`, `Easing.ExpoOut`, and the rest of the standard set) as shared `AnimationCurve`s, and `[EasingCurve]` to pick one in the inspector.
-- **ManeStyle** inspector layout: framed blocks, `Space` / `Header` splits, `NonBreakingSpace` for spacing inside a block, `Foldout` groups, and `FeatureToggle`, a header with a checkbox that hides its block while off. Put `[ManeStyle]` on a `MonoBehaviour`, `ScriptableObject`, or a custom inspector.
+- **ManeStyle** inspector layout: framed blocks, `Space` / `Header` splits, `NonBreakingSpace` for spacing inside a block, `Foldout` groups, and `FeatureToggle`, a header with a checkbox that hides its block while off. Put `[ManeStyle]` on a `MonoBehaviour`, `ScriptableObject`, or a custom inspector, or turn on **ManeStyle for all** in the Scene View overlay to use it everywhere.
 - Inspector attributes: `InfoBox`, `ReadOnly`, `Label`, `Prefix` / `Postfix`, `DropdownList`, `LimitedField`, `EasingCurve`, `ItemNameFromField` / `ItemNameFromString`, `AvailableIf`, and others to simplify work with Unity components.
 - `EditorButton`s to call component methods from the inspector.
 - `Color picker` and `Color` / `Color32` helpers (HSL, luma, hex, channel setters).
-- Scene View overlay for editor tools, including children-transform freeze.
+- Scene View overlay for editor tools, including children-transform freeze and ManeStyle for all inspectors.
 - Extensions for `GameObject`, `Transform`, `RectTransform`, `Rect`, `Vector2` / `Vector3`, `Scene`, and coroutines.
 - Custom yield instructions (`WaitForSecondsUntil` / `While`, realtime variants).
 - Unity-backed random helpers: `UnityRandom`, `RandomColor`, `RandomPoint`, `RandomDirection` (in addition to system-based `ManeRandom` from [ManeTools for .Net](https://github.com/ManeFunction/ManeTools-dotNet.git)).

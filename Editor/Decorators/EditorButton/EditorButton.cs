@@ -24,6 +24,9 @@ namespace Mane.Unity.Editor
 
         private static readonly HashSet<string> MissingBlockWarnings = new();
 
+        // Types only change on a domain reload, which clears this cache too.
+        private static readonly Dictionary<Type, ButtonInfo[]> ButtonsByType = new();
+
         /// <summary>
         /// Appends buttons for the inspected type to <paramref name="inspectorRoot"/>.
         /// A button with <see cref="EditorButtonAttribute.Block"/> goes after the last field of that block instead.
@@ -42,8 +45,8 @@ namespace Mane.Unity.Editor
             if (first == null)
                 return;
 
-            List<ButtonInfo> buttons = Collect(first.GetType());
-            if (buttons.Count == 0)
+            ButtonInfo[] buttons = GetButtons(first.GetType());
+            if (buttons.Length == 0)
                 return;
 
             bool maneStyle = inspectorRoot.ClassListContains(ManeEditorStyles.RootClass);
@@ -129,6 +132,17 @@ namespace Mane.Unity.Editor
                 Debug.LogWarning($"[EditorButton] {info.Method.DeclaringType}.{info.Method.Name}: block " +
                                  $"'{info.Block}' was not found in the inspector, the button is drawn at the end.");
             return null;
+        }
+
+        private static ButtonInfo[] GetButtons(Type type)
+        {
+            if (!ButtonsByType.TryGetValue(type, out ButtonInfo[] buttons))
+            {
+                buttons = Collect(type).ToArray();
+                ButtonsByType[type] = buttons;
+            }
+
+            return buttons;
         }
 
         private static List<ButtonInfo> Collect(Type type)

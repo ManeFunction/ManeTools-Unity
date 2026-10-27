@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -30,9 +29,6 @@ namespace Mane.Unity.Editor
         private const int BindRetries = 10;
 
         private static readonly ConditionalWeakTable<PropertyField, PropertyHost> Hosts = new();
-
-        private static readonly FieldInfo LabelField = typeof(PropertyField)
-            .GetField("m_Label", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private string _label;
         private string _prefix;
@@ -360,7 +356,7 @@ namespace Mane.Unity.Editor
 
             // The public label setter calls Rebind() and rebuilds the list. Decorators run after
             // Bind(), so write the backing field and the live ListView header instead.
-            LabelField?.SetValue(Field, title);
+            EditorCompat.SetLabelWithoutRebind(Field, title);
 
             BaseListView list = FindListView(Field);
             if (list != null && list.headerTitle != title)

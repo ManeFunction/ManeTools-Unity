@@ -198,20 +198,12 @@ namespace Mane.Unity.Editor
                 return;
 
             // A missing reference keeps the standard "Missing" text.
-            if (property != null && property.objectReferenceValue == null && HasReferenceId(property))
+            if (property != null && EditorCompat.IsMissingReference(property))
                 return;
 
             if (display.text != noneLabel)
                 display.text = noneLabel;
         }
-
-        // A null reference that still carries an id points to a missing object.
-        private static bool HasReferenceId(SerializedProperty property) =>
-#if UNITY_6000_4_OR_NEWER
-            property.objectReferenceEntityIdValue != EntityId.None;
-#else
-            property.objectReferenceInstanceIDValue != 0;
-#endif
 
         private static bool TryGetWarning(
             SerializedProperty property, Type interfaceType, Type fieldType, out string message)

@@ -28,7 +28,7 @@ namespace Mane.Unity.Editor
                 return;
             }
 
-            List<Scene> scenes = SceneSelection.GetSelectedScenes();
+            List<Scene> scenes = EditorCompat.GetSelectedScenes();
             if (scenes.Count == 0)
             {
                 Scene active = SceneManager.GetActiveScene();
@@ -48,7 +48,7 @@ namespace Mane.Unity.Editor
             if (PrefabStageUtility.GetCurrentPrefabStage() != null)
                 return true;
 
-            if (SceneSelection.GetSelectedScenes().Count > 0)
+            if (EditorCompat.GetSelectedScenes().Count > 0)
                 return true;
 
             Scene active = SceneManager.GetActiveScene();
@@ -150,7 +150,7 @@ namespace Mane.Unity.Editor
                     if (serializedProperty.propertyType != SerializedPropertyType.ObjectReference)
                         continue;
 
-                    if (serializedProperty.objectReferenceValue == null && HasReferenceId(serializedProperty))
+                    if (EditorCompat.IsMissingReference(serializedProperty))
                     {
                         Debug.LogError(
                             $"Missing Ref in: {FullPath(obj)}. Component: {component.GetType().Name}, Property: {ObjectNames.NicifyVariableName(serializedProperty.name)}",
@@ -166,14 +166,6 @@ namespace Mane.Unity.Editor
 
             return hadErrors;
         }
-
-        // A null reference that still carries an id points to a missing object.
-        private static bool HasReferenceId(SerializedProperty property) =>
-#if UNITY_6000_4_OR_NEWER
-            property.objectReferenceEntityIdValue != EntityId.None;
-#else
-            property.objectReferenceInstanceIDValue != 0;
-#endif
 
         private static string FullPath(GameObject go)
         {

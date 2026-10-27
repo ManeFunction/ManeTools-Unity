@@ -40,7 +40,7 @@ namespace Mane.Unity.Editor
 
         private static bool TryGetSelectedScene(out Scene scene)
         {
-            List<Scene> scenes = SceneSelection.GetSelectedScenes();
+            List<Scene> scenes = EditorCompat.GetSelectedScenes();
             if (scenes.Count > 0)
             {
                 scene = scenes[0];

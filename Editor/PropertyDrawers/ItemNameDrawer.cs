@@ -3,7 +3,6 @@
 
 using System;
 using System.Globalization;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -16,9 +15,6 @@ namespace Mane.Unity.Editor
         private const string InvalidLabelMessage =
             "[ItemNameFromString] label must contain \"{0}\" as the item index placeholder.";
         private const string BaseLabelClass = "unity-base-field__label";
-
-        private static readonly FieldInfo LabelField = typeof(PropertyField)
-            .GetField("m_Label", BindingFlags.Instance | BindingFlags.NonPublic);
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -95,8 +91,7 @@ namespace Mane.Unity.Editor
         {
             // PropertyField.label's setter calls Rebind() and destroys the inner TextField
             // mid-edit, so only the first typed character survives until a full rebuild.
-            if (LabelField != null && !Equals(LabelField.GetValue(field), title))
-                LabelField.SetValue(field, title);
+            EditorCompat.SetLabelWithoutRebind(field, title);
 
             Foldout foldout = FindFoldout(field);
             if (foldout != null)

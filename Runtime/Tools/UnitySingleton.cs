@@ -15,6 +15,8 @@ namespace Mane.Unity
 
         /// <summary>
         /// The current singleton instance. Finds or creates one if none has been set.
+        /// Returns null instead of creating one in edit mode or while the application is quitting
+        /// (this includes leaving play mode), so check <see cref="IsReady"/> in <c>OnDisable</c> / <c>OnDestroy</c>.
         /// </summary>
         public static T Instance
         {
@@ -29,6 +31,10 @@ namespace Mane.Unity
                     SetInstance(existing);
                     return _instance;
                 }
+
+                // Creating during teardown leaks an object; creating in edit mode saves it into the scene
+                if (!Application.isPlaying || SingletonLifetime.IsQuitting)
+                    return null;
 
                 CreateInstance();
                 return _instance;
@@ -96,5 +102,22 @@ namespace Mane.Unity
             if (Application.isPlaying)
                 DontDestroyOnLoad(gameObject);
         }
+    }
+
+    // Not generic: RuntimeInitializeOnLoadMethod is ignored in generic classes
+    internal static class SingletonLifetime
+    {
+        public static bool IsQuitting { get; private set; }
+
+        // SubsystemRegistration also resets the flag when domain reload is disabled
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Init()
+        {
+            IsQuitting = false;
+            Application.quitting -= OnQuitting;
+            Application.quitting += OnQuitting;
+        }
+
+        private static void OnQuitting() => IsQuitting = true;
     }
 }

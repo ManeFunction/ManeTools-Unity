@@ -215,7 +215,7 @@ namespace Mane.Unity.Editor
             {
                 PropertyField child = new(iterator.Copy())
                 {
-                    name = "PropertyField:" + iterator.propertyPath
+                    name = ManeInspectorLayout.FieldName(iterator.propertyPath)
                 };
                 child.Bind(property.serializedObject);
                 fields.Add(child);

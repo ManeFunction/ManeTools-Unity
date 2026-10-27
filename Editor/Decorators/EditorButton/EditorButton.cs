@@ -21,7 +21,6 @@ namespace Mane.Unity.Editor
             BindingFlags.DeclaredOnly;
 
         private const string ContainerClass = "mie-editor-buttons";
-        private const string FieldPrefix = "PropertyField:";
 
         private static readonly HashSet<string> MissingBlockWarnings = new();
 
@@ -122,7 +121,7 @@ namespace Mane.Unity.Editor
                 return null;
 
             string path = ManeInspectorLayout.FindBlockEnd(serializedObject, info.Block);
-            VisualElement anchor = path != null ? root.Q(FieldPrefix + path) : null;
+            VisualElement anchor = path != null ? root.Q(ManeInspectorLayout.FieldName(path)) : null;
             if (anchor?.hierarchy.parent != null)
                 return anchor;
 

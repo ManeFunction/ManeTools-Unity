@@ -20,6 +20,8 @@ namespace Mane.Unity.Editor
     {
         private const string BlockClass = "mie-block";
         private const string ScriptPath = "m_Script";
+        // Unity's own name for the PropertyFields of a default inspector.
+        private const string FieldNamePrefix = "PropertyField:";
         // Root of Unity's own MinMaxCurve drawer, the same on 6.0 and later.
         private const string UnityMinMaxCurveRowClass = "unity-particle-system-min-max-curve__row";
         // Unity rebuilds a PropertyField's content on rebind, sometimes without a geometry change to notice it by.
@@ -42,49 +44,27 @@ namespace Mane.Unity.Editor
         public static void Fill(VisualElement root, SerializedObject serializedObject, string firstProperty)
         {
             VisualElement block = null;
-            bool started = string.IsNullOrEmpty(firstProperty);
 
-            SerializedProperty iterator = serializedObject.GetIterator();
-            bool enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
+            foreach (LayoutEntry entry in Walk(serializedObject, firstProperty))
             {
-                enterChildren = false;
-                SerializedProperty property = iterator.Copy();
+                SerializedProperty property = entry.Property;
 
-                if (property.propertyPath == ScriptPath)
-                    continue;
-
-                if (!started)
+                if (block == null || entry.StartsBlock)
                 {
-                    if (property.propertyPath != firstProperty)
-                        continue;
-
-                    started = true;
-                }
-
-                FoldoutAttribute foldout = property.GetAttribute<FoldoutAttribute>();
-                FeatureToggleAttribute feature = GetFeatureToggle(property);
-                HeaderAttribute[] headers = property.GetAttributes<HeaderAttribute>();
-                bool hasFoldout = foldout != null;
-                bool hasFeature = feature != null;
-                bool hasHeader = headers.Length > 0;
-                bool hasSpace = property.GetAttributes<SpaceAttribute>().Length > 0;
-
-                if (block == null || hasHeader || hasSpace || hasFoldout || hasFeature)
-                {
-                    block = hasFeature ? CreateFeatureBlock(feature, property)
-                        : hasFoldout ? CreateFoldout(foldout, property)
+                    block = entry.Feature != null ? CreateFeatureBlock(entry.Feature, property)
+                        : entry.Foldout != null ? CreateFoldout(entry.Foldout, property)
                         : CreateBlock();
                     root.Add(block);
                 }
 
                 // The toggle of a feature block is the field itself; the fields after it go to the block content.
-                if (hasFeature)
+                if (entry.Feature != null)
                     continue;
 
-                if (hasHeader && !hasFoldout)
+                bool hasHeader = entry.Headers.Length > 0;
+                if (hasHeader && entry.Foldout == null)
                 {
-                    foreach (HeaderAttribute header in headers)
+                    foreach (HeaderAttribute header in entry.Headers)
                         block.Add(HeaderDrawer.Create(header.header));
                 }
 
@@ -98,7 +78,7 @@ namespace Mane.Unity.Editor
                 {
                     if (hasHeader)
                         HeaderDrawer.HideUnityDecorator(propertyField);
-                    if (hasSpace)
+                    if (entry.HasSpace)
                         SpaceDrawer.HideUnityDecorator(propertyField);
                     if (nonBreakingSpace != null)
                         NonBreakingSpaceDrawer.HideUnityDecorator(propertyField);
@@ -116,23 +96,23 @@ namespace Mane.Unity.Editor
             if (serializedObject?.targetObject == null)
                 return false;
 
-            SerializedProperty iterator = serializedObject.GetIterator();
-            bool enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
+            foreach (LayoutEntry entry in Walk(serializedObject))
             {
-                enterChildren = false;
-                if (iterator.propertyPath == ScriptPath)
-                    continue;
-
-                if (iterator.GetAttribute<FoldoutAttribute>() != null)
+                if (entry.Foldout != null)
                     return true;
             }
 
             return false;
         }
 
-        // Path of the last field in the first block opened by a Foldout, Header, or FeatureToggle with this text,
-        // or null. A block ends at the next Header, Space, Foldout, or FeatureToggle, as in Fill and FillDefault.
+        /// <summary>
+        /// The name of the element drawn for the field at <paramref name="propertyPath"/>, so it can be found with
+        /// <c>root.Q(FieldName(path))</c>. It is Unity's own <c>PropertyField:</c> name, so it is the same in
+        /// <c>Fill</c>, <see cref="FillDefault"/>, and Unity's default inspector.
+        /// </summary>
+        public static string FieldName(string propertyPath) => FieldNamePrefix + propertyPath;
+
+        // Path of the last field in the first block whose title is this text, or null.
         internal static string FindBlockEnd(SerializedObject serializedObject, string block)
         {
             if (serializedObject?.targetObject == null || string.IsNullOrEmpty(block))
@@ -141,6 +121,58 @@ namespace Mane.Unity.Editor
             string lastPath = null;
             bool inBlock = false;
 
+            foreach (LayoutEntry entry in Walk(serializedObject))
+            {
+                if (entry.StartsBlock)
+                {
+                    if (inBlock)
+                        return lastPath;
+
+                    inBlock = entry.HasTitle(block);
+                }
+
+                if (inBlock)
+                    lastPath = entry.Property.propertyPath;
+            }
+
+            return lastPath;
+        }
+
+        /// <summary>
+        /// Fills <paramref name="root"/> with Unity default fields, using a stock foldout for <see cref="FoldoutAttribute"/>.
+        /// </summary>
+        public static void FillDefault(VisualElement root, SerializedObject serializedObject)
+        {
+            SerializedProperty script = serializedObject.FindProperty(ScriptPath);
+            if (script != null)
+            {
+                PropertyField scriptField = CreateField(script);
+                scriptField.SetEnabled(false);
+                root.Add(scriptField);
+            }
+
+            VisualElement container = root;
+
+            foreach (LayoutEntry entry in Walk(serializedObject))
+            {
+                if (entry.Foldout != null)
+                {
+                    Foldout element = CreateUnityFoldout(entry.Foldout, entry.Property);
+                    root.Add(element);
+                    container = element;
+                }
+                else if (entry.StartsBlock)
+                    container = root;
+
+                container.Add(CreateField(entry.Property));
+            }
+        }
+
+        // Visible fields from firstProperty on (from the first one when it is null or empty), without the script field.
+        private static IEnumerable<LayoutEntry> Walk(SerializedObject serializedObject, string firstProperty = null)
+        {
+            bool started = string.IsNullOrEmpty(firstProperty);
+
             SerializedProperty iterator = serializedObject.GetIterator();
             bool enterChildren = true;
             while (iterator.NextVisible(enterChildren))
@@ -149,64 +181,15 @@ namespace Mane.Unity.Editor
                 if (iterator.propertyPath == ScriptPath)
                     continue;
 
-                FoldoutAttribute foldout = iterator.GetAttribute<FoldoutAttribute>();
-                FeatureToggleAttribute feature = GetFeatureToggle(iterator);
-                HeaderAttribute[] headers = iterator.GetAttributes<HeaderAttribute>();
-                bool hasSpace = iterator.GetAttributes<SpaceAttribute>().Length > 0;
-
-                if (foldout != null || feature != null || headers.Length > 0 || hasSpace)
+                if (!started)
                 {
-                    if (inBlock)
-                        return lastPath;
+                    if (iterator.propertyPath != firstProperty)
+                        continue;
 
-                    inBlock = foldout?.Header == block || (feature != null && FeatureTitle(feature, iterator) == block) ||
-                              Array.Exists(headers, header => header.header == block);
+                    started = true;
                 }
 
-                if (inBlock)
-                    lastPath = iterator.propertyPath;
-            }
-
-            return inBlock ? lastPath : null;
-        }
-
-        /// <summary>
-        /// Fills <paramref name="root"/> with Unity default fields, using a stock foldout for <see cref="FoldoutAttribute"/>.
-        /// </summary>
-        public static void FillDefault(VisualElement root, SerializedObject serializedObject)
-        {
-            VisualElement container = root;
-
-            SerializedProperty iterator = serializedObject.GetIterator();
-            bool enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
-            {
-                enterChildren = false;
-                SerializedProperty property = iterator.Copy();
-
-                if (property.propertyPath == ScriptPath)
-                {
-                    PropertyField scriptField = CreateField(property);
-                    scriptField.SetEnabled(false);
-                    root.Add(scriptField);
-                    continue;
-                }
-
-                FoldoutAttribute foldout = property.GetAttribute<FoldoutAttribute>();
-                bool hasHeader = property.GetAttributes<HeaderAttribute>().Length > 0;
-                bool hasFeature = GetFeatureToggle(property) != null;
-                bool hasSpace = property.GetAttributes<SpaceAttribute>().Length > 0;
-
-                if (foldout != null)
-                {
-                    Foldout element = CreateUnityFoldout(foldout, property);
-                    root.Add(element);
-                    container = element;
-                }
-                else if (hasHeader || hasFeature || hasSpace)
-                    container = root;
-
-                container.Add(CreateField(property));
+                yield return new LayoutEntry(iterator.Copy());
             }
         }
 
@@ -228,8 +211,8 @@ namespace Mane.Unity.Editor
         private static FeatureBlock CreateFeatureBlock(FeatureToggleAttribute feature, SerializedProperty property)
         {
             FeatureBlock block = new() { Header = FeatureTitle(feature, property) };
-            // The name EditorButton looks a block's last field up by, in case the block has no other field.
-            block.Toggle.name = "PropertyField:" + property.propertyPath;
+            // Named as the field, so a lookup by path finds the block even when it has no other field.
+            block.Toggle.name = FieldName(property.propertyPath);
             block.Toggle.tooltip = property.tooltip;
             block.BindToggle(property);
             return block;
@@ -288,7 +271,7 @@ namespace Mane.Unity.Editor
         private static VisualElement CreateNestedClass(SerializedProperty property)
         {
             VisualElement group = SerializeInterfaceDrawer.CreateGroup(property, PropertyHost.DisplayName(property));
-            group.name = "PropertyField:" + property.propertyPath;
+            group.name = FieldName(property.propertyPath);
             group.tooltip = property.tooltip;
             return group;
         }
@@ -391,7 +374,7 @@ namespace Mane.Unity.Editor
                 if (replacement == null)
                 {
                     replacement = isArray ? CreateMinMaxCurveList(tracked) : CreateMinMaxCurveField(tracked);
-                    // The host keeps the field name that EditorButton blocks look up.
+                    // The host keeps the field name, so a lookup by path finds one element.
                     replacement.name = null;
                 }
 
@@ -437,7 +420,7 @@ namespace Mane.Unity.Editor
         {
             MinMaxCurveField field = new(PropertyHost.DisplayName(property))
             {
-                name = "PropertyField:" + property.propertyPath,
+                name = FieldName(property.propertyPath),
                 tooltip = property.tooltip
             };
             field.BindProperty(property);
@@ -451,7 +434,7 @@ namespace Mane.Unity.Editor
 
             ListView list = new()
             {
-                name = "PropertyField:" + property.propertyPath,
+                name = FieldName(property.propertyPath),
                 headerTitle = PropertyHost.CollectionTitle(property),
                 tooltip = property.tooltip,
                 viewDataKey = "Mane.List." + typeName + "." + property.propertyPath,
@@ -478,10 +461,50 @@ namespace Mane.Unity.Editor
         {
             PropertyField field = new(property)
             {
-                name = "PropertyField:" + property.propertyPath
+                name = FieldName(property.propertyPath)
             };
             field.Bind(property.serializedObject);
             return field;
+        }
+
+        // One visible field and the layout attributes that decide which block it goes to.
+        private readonly struct LayoutEntry
+        {
+            public readonly SerializedProperty Property;
+            public readonly FoldoutAttribute Foldout;
+            public readonly FeatureToggleAttribute Feature;
+            public readonly HeaderAttribute[] Headers;
+            public readonly bool HasSpace;
+
+            public LayoutEntry(SerializedProperty property)
+            {
+                Property = property;
+                Foldout = property.GetAttribute<FoldoutAttribute>();
+                Feature = GetFeatureToggle(property);
+                Headers = property.GetAttributes<HeaderAttribute>();
+                HasSpace = property.GetAttributes<SpaceAttribute>().Length > 0;
+            }
+
+            // A Header, Space, Foldout, or FeatureToggle starts a new block; NonBreakingSpace does not.
+            public bool StartsBlock => Foldout != null || Feature != null || Headers.Length > 0 || HasSpace;
+
+            // The title Fill shows for the block this field starts: the feature title over the foldout header,
+            // and either of them over the field's headers, which Fill does not draw then.
+            public bool HasTitle(string title)
+            {
+                if (Feature != null)
+                    return FeatureTitle(Feature, Property) == title;
+                if (Foldout != null)
+                    return Foldout.Header == title;
+
+                foreach (HeaderAttribute header in Headers)
+                {
+                    if (header.header == title)
+                        return true;
+                }
+
+                return false;
+            }
         }
     }
 }

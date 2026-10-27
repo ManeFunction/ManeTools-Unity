@@ -135,6 +135,9 @@ namespace Mane.Unity.Editor
         private static List<ButtonInfo> Collect(Type type)
         {
             List<ButtonInfo> buttons = new();
+            // An override inherits the attribute, so the walk would meet it again at the base declaration.
+            // Keyed by the base definition, the most derived declaration is the one that gets the button.
+            HashSet<RuntimeMethodHandle> added = new();
 
             for (Type current = type;
                  current != null && current != typeof(MonoBehaviour) && current != typeof(ScriptableObject) &&
@@ -147,7 +150,7 @@ namespace Mane.Unity.Editor
                 foreach (MethodInfo method in methods)
                 {
                     EditorButtonAttribute attribute = method.GetCustomAttribute<EditorButtonAttribute>(true);
-                    if (attribute == null)
+                    if (attribute == null || !added.Add(method.GetBaseDefinition().MethodHandle))
                         continue;
 
                     if (method.GetParameters().Length > 0)

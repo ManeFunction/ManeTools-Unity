@@ -76,6 +76,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `UnityRandom.Range01` could return exactly `1f` (about 3 in 100 million calls), breaking its `[0, 1)` range, because the top values of the integer it scaled round up to 1 as a float. It now draws one of the 2^24 float steps below 1.
 - A `UnitySingleton` placed in a scene threw when that scene was loaded again. The new copy now destroys its GameObject.
 - Changes made by an `EditorButton` method to the inspected objects were not saved: they were not marked dirty, not kept as prefab overrides, and could not be undone.
+- An `EditorButton` method that overrides a virtual method also marked with `EditorButton` got two buttons. It now gets one, labelled from the override's attribute when it has its own.
 - Custom `ManeEditor` inspectors did not draw `EditorButton` methods, and did not re-apply the field layout after a change the way `ManeStyle` default inspectors do, so fields created by the change (list items, for example) could keep Unity's label alignment.
 - Children Transform Freeze did not record the children's counter-move as prefab overrides, so prefab instance children could jump back on reload.
 - `ReadOnly` together with `AvailableIf` made the field editable whenever the condition was true, because the last decorator to run decided the enabled state. Decorators on one field now apply together: the field is enabled only when it is not read-only and is available.

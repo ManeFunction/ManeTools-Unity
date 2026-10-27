@@ -54,7 +54,7 @@ Below, you can find a list of changes compared with legacy ManeTools.
 - `Screenshoter` is now available from code via `Screenshot.Capture()` with an optional custom path.
 - `Missing Reference Finder` is now a context menu from `Assets` or `GameObject` menus instead of a separate window.
 - `Asset Reference Finder` is now a context menu from the `Assets` menu instead of a separate window. It finds references from every asset type (materials, ScriptableObjects, animator controllers, and so on), not only scenes and prefabs, using Unity's dependency data instead of searching file text, so binary-serialized assets are covered too. Several selected assets are searched in one pass. A `deep` variant also searches the text of every text file for the asset's GUID, to find GUIDs stored as plain strings, such as an Addressables `AssetReference`.
-- `Scene management` hotkeys moved under the `File` menu with improved selected-scene detection.
+- `Scene management` hotkeys moved under the `File` menu with improved selected-scene detection. `Reopen scene` now also works after `Remove scene`, and is disabled while the scene is already loaded.
 - `GetRequiredComponent` is `GetOrAddComponent` now, for clarity.
 - `ArrayElements` attribute renamed to `ItemNameFromField`.
 - `DropdownList` attribute now works not only with public methods, but also with private members and properties.

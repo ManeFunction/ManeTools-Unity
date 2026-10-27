@@ -8,7 +8,8 @@ namespace Mane.Unity.Editor
 {
     internal static class SceneManagementTools
     {
-        private static Scene _lastClosed;
+        // A removed scene's handle becomes invalid, so keep the asset path instead.
+        private static string _lastClosedPath;
 
         private const string UnloadSceneMenuPath = "File/Unload scene _%w";
 
@@ -77,7 +78,7 @@ namespace Mane.Unity.Editor
 
             if (EditorSceneManager.SaveModifiedScenesIfUserWantsTo(new[] { scene }))
             {
-                _lastClosed = scene;
+                _lastClosedPath = scene.path;
                 EditorSceneManager.CloseScene(scene, unload);
             }
         }
@@ -86,9 +87,12 @@ namespace Mane.Unity.Editor
         private const string ReopenSceneMenuPath = "File/Reopen scene _%t";
 
         [MenuItem(ReopenSceneMenuPath, false, 162)]
-        private static void LoadLastUnloadedScene() => EditorSceneManager.OpenScene(_lastClosed.path, OpenSceneMode.Additive);
+        private static void LoadLastUnloadedScene() => EditorSceneManager.OpenScene(_lastClosedPath, OpenSceneMode.Additive);
 
         [MenuItem(ReopenSceneMenuPath, true)]
-        private static bool LoadLastUnloadedSceneCheck() => _lastClosed.IsValid();
+        private static bool LoadLastUnloadedSceneCheck() =>
+            !string.IsNullOrEmpty(_lastClosedPath)
+            && AssetDatabase.AssetPathExists(_lastClosedPath)
+            && !SceneManager.GetSceneByPath(_lastClosedPath).isLoaded;
     }
 }

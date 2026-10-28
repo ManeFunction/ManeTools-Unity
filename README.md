@@ -182,7 +182,8 @@ public class TestComponentBase : MonoBehaviour
 
 - [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git) is required, and `OpenUPM` installs it.
 
-**Recommended extensions:** [ManeTools-UnityUI](https://github.com/ManeFunction/ManeTools-UnityUI.git) for Unity UI extensions and additional controls.
+**Recommended extensions:**
+- [ManeTools-UnityUI](https://github.com/ManeFunction/ManeTools-UnityUI.git) for Unity UI extensions and additional controls.
 
 **Optional packages:**
 - [Sound Maneger](https://github.com/ManeFunction/sound-maneger.git) for a neat sound setup, that covers basic needs.

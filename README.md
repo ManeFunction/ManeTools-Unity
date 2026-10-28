@@ -2,9 +2,17 @@
 
 Editor enhancements and class extensions for Unity.
 
-The package is supported starting from **Unity 6.0.81** (6000.0.81f1) and depends on [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git).
+The package is supported from **Unity 6.0.81** (6000.0.81f1). It is the core of the whole ManeTools project and has dependencies managed automatically with `OpenUPM`. More information is in [Dependencies](#dependencies) section.
 
 Add components from **Add Component → Mane Tools**.
+
+- [Features](#features)
+- [Showcase](#showcase)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Compatibility](#compatibility)
+- [Why Preview?](#why-preview)
+- [Repository info](#repository-info)
 
 ## Features
 
@@ -167,6 +175,19 @@ public class TestComponentBase : MonoBehaviour
 ```
 
 </details>
+
+## Dependencies
+
+![](https://raw.githubusercontent.com/wiki/ManeFunction/ManeTools-Unity/Images/dependencies.png)
+
+- [ManeTools-dotNET](https://github.com/ManeFunction/ManeTools-dotNet.git) is required, and `OpenUPM` installs it.
+
+**Recommended extensions:** [ManeTools-UnityUI](https://github.com/ManeFunction/ManeTools-UnityUI.git) for Unity UI extensions and additional controls.
+
+**Optional packages:**
+- [Sound Maneger](https://github.com/ManeFunction/sound-maneger.git) for a neat sound setup, that covers basic needs.
+- [DOTween UI Controller](https://github.com/ManeFunction/DOTween-UI-controller.git) for a no-code component to add simple UI animations for DOTween users.
+- [Mane Text](https://github.com/ManeFunction/ManeTools-Text.git) for an example of how to build your own text label.
 
 ## Installation
 

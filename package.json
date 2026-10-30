@@ -1,6 +1,6 @@
 {
   "name": "com.manefunction.tools-unity",
-  "version": "2.0.0-preview.1",
+  "version": "2.0.0-preview.2",
   "displayName": "Mane Tools for Unity",
   "description": "Editor enhancements and class extensions for Unity.\n\nAll extensions can be found under 'Mane.Unity' namespace.\n\nAll components are under Add 'Component -> Mane Tools' section.",
   "unity": "6000.0",
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/ManeFunction/ManeTools-Unity.git"
   },
   "dependencies": {
-    "com.manefunction.tools-dotnet": "2.0.0-preview.2"
+    "com.manefunction.tools-dotnet": "2.0.0-preview.3"
   },
   "keywords": [
     "unity",
